@@ -12,6 +12,17 @@ use App\Http\Controllers\AuthController;
 
 /*
 |--------------------------------------------------------------------------
+| Halaman Utama
+|--------------------------------------------------------------------------
+*/
+
+Route::get('/', function () {
+    return redirect()->route('login');
+});
+
+
+/*
+|--------------------------------------------------------------------------
 | Login
 |--------------------------------------------------------------------------
 */
@@ -28,70 +39,89 @@ Route::post('/logout', [AuthController::class, 'logout'])
 
 /*
 |--------------------------------------------------------------------------
-| Dashboard
+| Halaman yang Wajib Login
 |--------------------------------------------------------------------------
 */
 
-Route::get('/', function () {
-    return redirect()->route('dashboard');
-});
+Route::middleware('auth')->group(function () {
 
-Route::get('/dashboard', [DashboardController::class, 'index'])
-    ->name('dashboard');
+    /*
+    |--------------------------------------------------------------------------
+    | Dashboard
+    |--------------------------------------------------------------------------
+    */
 
-
-/*
-|--------------------------------------------------------------------------
-| Barang
-|--------------------------------------------------------------------------
-*/
-
-Route::resource('barang', BarangController::class);
+    Route::get('/dashboard', [DashboardController::class, 'index'])
+        ->name('dashboard');
 
 
-/*
-|--------------------------------------------------------------------------
-| Stok Masuk
-|--------------------------------------------------------------------------
-*/
+    /*
+    |--------------------------------------------------------------------------
+    | Barang
+    |--------------------------------------------------------------------------
+    */
 
-// Halaman stok masuk
-Route::get('/stok-masuk', [StokMasukController::class, 'index'])
-    ->name('stok-masuk.index');
-
-// Input data barang
-Route::post('/stok-masuk/barang', [StokMasukController::class, 'storeBarang'])
-    ->name('stok-masuk.store-barang');
-
-// Tambah stok barang
-Route::post('/stok-masuk/tambah', [StokMasukController::class, 'tambahStok'])
-    ->name('stok-masuk.tambah');
+    Route::resource('barang', BarangController::class);
 
 
-/*
+    /*
+    |--------------------------------------------------------------------------
+    | Stok Masuk
+    |--------------------------------------------------------------------------
+    */
+
+    Route::get('/stok-masuk',
+        [StokMasukController::class, 'index'])
+        ->name('stok-masuk.index');
+
+    Route::get('/stok-masuk/input-barang',
+        [StokMasukController::class, 'inputBarang'])
+        ->name('stok-masuk.input-barang');
+
+    Route::post('/stok-masuk/barang',
+        [StokMasukController::class, 'storeBarang'])
+        ->name('stok-masuk.store-barang');
+
+    Route::get('/stok-masuk/tambah-stok',
+        [StokMasukController::class, 'tambahStokPage'])
+        ->name('stok-masuk.tambah-stok');
+
+    Route::post('/stok-masuk/tambah',
+        [StokMasukController::class, 'tambahStok'])
+        ->name('stok-masuk.tambah');
+
+
+    /*
 |--------------------------------------------------------------------------
 | Stok Keluar
 |--------------------------------------------------------------------------
 */
 
-// Halaman stok keluar
-Route::get('/stok-keluar', [StokKeluarController::class, 'index'])
+Route::get('/stok-keluar',
+    [StokKeluarController::class, 'index'])
     ->name('stok-keluar.index');
 
-// Proses mengeluarkan stok
-Route::post('/stok-keluar', [StokKeluarController::class, 'store'])
+Route::get('/stok-keluar/keluarkan/{id}',
+    [StokKeluarController::class, 'keluarkan'])
+    ->name('stok-keluar.keluarkan');
+
+Route::post('/stok-keluar',
+    [StokKeluarController::class, 'store'])
     ->name('stok-keluar.store');
 
-// Data/riwayat stok keluar
-Route::get('/stok-keluar/data', [StokKeluarController::class, 'data'])
+Route::get('/stok-keluar/data',
+    [StokKeluarController::class, 'data'])
     ->name('stok-keluar.data');
 
 
-/*
-|--------------------------------------------------------------------------
-| Laporan
-|--------------------------------------------------------------------------
-*/
+    /*
+    |--------------------------------------------------------------------------
+    | Laporan
+    |--------------------------------------------------------------------------
+    */
 
-Route::get('/laporan', [LaporanController::class, 'index'])
-    ->name('laporan.index');
+    Route::get('/laporan',
+        [LaporanController::class, 'index'])
+        ->name('laporan.index');
+
+});

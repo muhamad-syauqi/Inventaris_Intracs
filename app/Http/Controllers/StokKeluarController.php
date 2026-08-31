@@ -12,12 +12,15 @@ class StokKeluarController extends Controller
     // Menampilkan daftar barang yang tersedia
     public function index()
     {
-        $barang = Barang::with('category')
-            ->where('stok', '>', 0)
-            ->orderBy('nama_barang')
-            ->get();
+        $barang = Barang::orderBy('nama_barang')->get();
 
         return view('stok_keluar.index', compact('barang'));
+    }
+    public function keluarkan($id)
+    {
+        $barang = Barang::findOrFail($id);
+
+        return view('stok_keluar.keluarkan', compact('barang'));
     }
 
     // Mengeluarkan stok

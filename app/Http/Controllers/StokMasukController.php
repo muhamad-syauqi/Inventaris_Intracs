@@ -11,19 +11,24 @@ use Illuminate\Support\Facades\DB;
 class StokMasukController extends Controller
 {
     // Halaman stok masuk
-    public function index()
-    {
-        $barang = Barang::with('category')
-            ->orderBy('nama_barang')
-            ->get();
+   public function index()
+{
+    return view('stok_masuk.index');
+}
 
-        $categories = Category::all();
+    public function inputBarang()
+{
+    $categories = Category::orderBy('nama_kategori')->get();
 
-        return view('stok_masuk.index', compact(
-            'barang',
-            'categories'
-        ));
-    }
+    return view('stok_masuk.input-barang', compact('categories'));
+}
+
+public function tambahStokPage()
+{
+    $barang = Barang::orderBy('nama_barang')->get();
+
+    return view('stok_masuk.tambah-stok', compact('barang'));
+}
 
     // Input data barang baru
     public function storeBarang(Request $request)
