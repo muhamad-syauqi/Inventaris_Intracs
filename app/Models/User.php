@@ -29,4 +29,14 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    public function stokMasuk()
+    {
+     return $this->hasMany(StokMasuk::class, 'user_id');
+    }
+
+    public function stokKeluar()
+    {
+     return $this->hasMany(StokKeluar::class, 'user_id');
+    }
 }
+
