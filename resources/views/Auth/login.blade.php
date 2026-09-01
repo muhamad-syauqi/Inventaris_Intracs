@@ -74,14 +74,14 @@
         ========================= */
 
         .login-card {
-            width: 208px;
-            min-height: 356px;
+            width: 350px;
+            min-height: 560px;
 
             background: #ffffff;
 
-            border-radius: 65px;
+            border-radius: 75px;
 
-            padding: 30px 38px;
+            padding: 50px 55px;
 
             position: relative;
             z-index: 2;
@@ -99,11 +99,10 @@
         ========================= */
 
         .logo {
-            width: 145px;
+            width: 180px;
             height: auto;
             margin-top: 5px;
-            margin-bottom: 28px;
-
+            margin-bottom: 30px;
             object-fit: contain;
         }
 
@@ -113,17 +112,17 @@
         ========================= */
 
         .welcome {
-            font-size: 13px;
+            font-size: 20px;
             font-weight: 500;
             color: #111111;
-            margin-bottom: 3px;
+            margin-bottom: 5px;
             text-align: center;
         }
 
         .subtitle {
-            font-size: 7px;
+            font-size: 11px;
             color: #333333;
-            margin-bottom: 39px;
+            margin-bottom: 40px;
             text-align: center;
         }
 
@@ -138,14 +137,14 @@
 
         .form-group {
             width: 100%;
-            margin-bottom: 17px;
+            margin-bottom: 22px;
         }
 
         .form-label {
             display: block;
-            font-size: 7px;
+            font-size: 11px;
             color: #111111;
-            margin-bottom: 4px;
+            margin-bottom: 6px;
         }
 
         .input-wrapper {
@@ -155,24 +154,24 @@
 
         .input-wrapper i {
             position: absolute;
-            left: 7px;
+            left: 12px;
             top: 50%;
             transform: translateY(-50%);
 
-            font-size: 9px;
+            font-size: 14px;
             color: #222222;
         }
 
         .form-input {
             width: 100%;
-            height: 23px;
+            height: 42px;
 
             border: 1px solid #a9a9a9;
             border-radius: 0;
 
-            padding: 4px 7px 4px 22px;
+            padding: 8px 12px 8px 36px;
 
-            font-size: 8px;
+            font-size: 13px;
 
             outline: none;
 
@@ -195,17 +194,18 @@
 
         .login-button {
             width: 100%;
-            height: 27px;
+            height: 44px;
 
-            margin-top: 0;
+            margin-top: 5px;
 
             border: none;
-            border-radius: 20px;
+            border-radius: 25px;
 
             background: #4350ff;
             color: white;
 
-            font-size: 7px;
+            font-size: 13px;
+            font-weight: 500;
 
             cursor: pointer;
 
@@ -227,9 +227,9 @@
 
         .error-message {
             width: 100%;
-            font-size: 7px;
+            font-size: 11px;
             color: #dc3545;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
             text-align: center;
         }
 
@@ -241,8 +241,14 @@
         @media (max-width: 500px) {
 
             .login-card {
-                width: 220px;
-                min-height: 370px;
+                width: 90%;
+                max-width: 350px;
+                min-height: 520px;
+                padding: 45px 35px;
+            }
+
+            .logo {
+                width: 160px;
             }
 
             .circle {
