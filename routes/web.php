@@ -115,13 +115,38 @@ Route::get('/stok-keluar/data',
 
 
     /*
-    |--------------------------------------------------------------------------
-    | Laporan
-    |--------------------------------------------------------------------------
-    */
+|--------------------------------------------------------------------------
+| Laporan
+|--------------------------------------------------------------------------
+*/
 
-    Route::get('/laporan',
-        [LaporanController::class, 'index'])
-        ->name('laporan.index');
+Route::get('/laporan',
+    [LaporanController::class, 'index'])
+    ->name('laporan.index');
+
+Route::get('/laporan/barang',
+    [LaporanController::class, 'barang'])
+    ->name('laporan.barang');
+
+Route::get('/laporan/stok-masuk',
+    [LaporanController::class, 'stokMasuk'])
+    ->name('laporan.stok-masuk');
+
+Route::get('/laporan/stok-keluar',
+    [LaporanController::class, 'stokKeluar'])
+    ->name('laporan.stok-keluar');
+
+// Export
+Route::get('/laporan/barang/export',
+    [LaporanController::class, 'exportBarang'])
+    ->name('laporan.barang.export');
+
+Route::get('/laporan/stok-masuk/export',
+    [LaporanController::class, 'exportStokMasuk'])
+    ->name('laporan.stok-masuk.export');
+
+Route::get('/laporan/stok-keluar/export',
+    [LaporanController::class, 'exportStokKeluar'])
+    ->name('laporan.stok-keluar.export');
 
 });

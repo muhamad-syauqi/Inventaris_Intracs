@@ -9,86 +9,248 @@ use Illuminate\Http\Request;
 
 class LaporanController extends Controller
 {
-    // Halaman laporan
-    public function index(Request $request)
+    public function index()
     {
-        // Laporan stok barang
-        $barang = Barang::with('category')
+        return view('laporan.index');
+    }
+
+    // =========================
+    // LAPORAN BARANG
+    // =========================
+
+    public function barang(Request $request)
+    {
+        $query = Barang::with('category');
+
+        if ($request->filled('dari')) {
+            $query->whereDate('created_at', '>=', $request->dari);
+        }
+
+        if ($request->filled('sampai')) {
+            $query->whereDate('created_at', '<=', $request->sampai);
+        }
+
+        $barang = $query
             ->orderBy('nama_barang')
-            ->paginate(10, ['*'], 'barang_page');
+            ->get();
 
-        // Laporan stok masuk
-        $stokMasukQuery = StokMasuk::with([
-            'barang',
-            'user'
+        return view('laporan.barang', compact('barang'));
+    }
+
+
+    // =========================
+    // LAPORAN STOK MASUK
+    // =========================
+
+    public function stokMasuk(Request $request)
+    {
+        $query = StokMasuk::with('barang');
+
+        if ($request->filled('dari')) {
+            $query->whereDate('created_at', '>=', $request->dari);
+        }
+
+        if ($request->filled('sampai')) {
+            $query->whereDate('created_at', '<=', $request->sampai);
+        }
+
+        $stokMasuk = $query
+            ->latest()
+            ->get();
+
+        return view(
+            'laporan.stok-masuk',
+            compact('stokMasuk')
+        );
+    }
+
+
+    // =========================
+    // LAPORAN STOK KELUAR
+    // =========================
+
+    public function stokKeluar(Request $request)
+    {
+        $query = StokKeluar::with('barang');
+
+        if ($request->filled('dari')) {
+            $query->whereDate('created_at', '>=', $request->dari);
+        }
+
+        if ($request->filled('sampai')) {
+            $query->whereDate('created_at', '<=', $request->sampai);
+        }
+
+        $stokKeluar = $query
+            ->latest()
+            ->get();
+
+        return view(
+            'laporan.stok-keluar',
+            compact('stokKeluar')
+        );
+    }
+
+
+    // =========================
+    // EXPORT BARANG
+    // =========================
+
+    public function exportBarang(Request $request)
+    {
+        $query = Barang::with('category');
+
+        if ($request->filled('dari')) {
+            $query->whereDate('created_at', '>=', $request->dari);
+        }
+
+        if ($request->filled('sampai')) {
+            $query->whereDate('created_at', '<=', $request->sampai);
+        }
+
+        $barang = $query
+            ->orderBy('nama_barang')
+            ->get();
+
+        $filename = 'laporan-barang.csv';
+
+        $handle = fopen('php://temp', 'w');
+
+        fputcsv($handle, [
+            'Kode Barang',
+            'Nama Barang',
+            'Kategori',
+            'Satuan',
+            'Stok'
         ]);
 
-        // Laporan stok keluar
-        $stokKeluarQuery = StokKeluar::with([
-            'barang',
-            'user'
+        foreach ($barang as $item) {
+
+            fputcsv($handle, [
+                $item->kode_barang,
+                $item->nama_barang,
+                $item->category->nama_kategori ?? '-',
+                $item->satuan,
+                $item->stok
+            ]);
+        }
+
+        rewind($handle);
+
+        return response()->streamDownload(
+            function () use ($handle) {
+                fpassthru($handle);
+            },
+            $filename,
+            [
+                'Content-Type' => 'text/csv',
+            ]
+        );
+    }
+
+
+    // =========================
+    // EXPORT STOK MASUK
+    // =========================
+
+    public function exportStokMasuk(Request $request)
+    {
+        $query = StokMasuk::with('barang');
+
+        if ($request->filled('dari')) {
+            $query->whereDate('created_at', '>=', $request->dari);
+        }
+
+        if ($request->filled('sampai')) {
+            $query->whereDate('created_at', '<=', $request->sampai);
+        }
+
+        $data = $query->latest()->get();
+
+        $handle = fopen('php://temp', 'w');
+
+        fputcsv($handle, [
+            'Kode Barang',
+            'Nama Barang',
+            'Jumlah',
+            'Keterangan',
+            'Tanggal'
         ]);
 
-        // Filter tanggal
-        if ($request->filled('tanggal_mulai')) {
+        foreach ($data as $item) {
 
-            $stokMasukQuery->whereDate(
-                'created_at',
-                '>=',
-                $request->tanggal_mulai
-            );
-
-            $stokKeluarQuery->whereDate(
-                'created_at',
-                '>=',
-                $request->tanggal_mulai
-            );
+            fputcsv($handle, [
+                $item->barang->kode_barang ?? '-',
+                $item->barang->nama_barang ?? '-',
+                $item->jumlah,
+                $item->keterangan ?? '-',
+                $item->created_at->format('d/m/Y H:i')
+            ]);
         }
 
-        if ($request->filled('tanggal_akhir')) {
+        rewind($handle);
 
-            $stokMasukQuery->whereDate(
-                'created_at',
-                '<=',
-                $request->tanggal_akhir
-            );
+        return response()->streamDownload(
+            function () use ($handle) {
+                fpassthru($handle);
+            },
+            'laporan-stok-masuk.csv',
+            [
+                'Content-Type' => 'text/csv',
+            ]
+        );
+    }
 
-            $stokKeluarQuery->whereDate(
-                'created_at',
-                '<=',
-                $request->tanggal_akhir
-            );
+
+    // =========================
+    // EXPORT STOK KELUAR
+    // =========================
+
+    public function exportStokKeluar(Request $request)
+    {
+        $query = StokKeluar::with('barang');
+
+        if ($request->filled('dari')) {
+            $query->whereDate('created_at', '>=', $request->dari);
         }
 
-        // Filter barang
-        if ($request->filled('barang_id')) {
-
-            $stokMasukQuery->where(
-                'barang_id',
-                $request->barang_id
-            );
-
-            $stokKeluarQuery->where(
-                'barang_id',
-                $request->barang_id
-            );
+        if ($request->filled('sampai')) {
+            $query->whereDate('created_at', '<=', $request->sampai);
         }
 
-        $stokMasuk = $stokMasukQuery
-            ->latest()
-            ->paginate(10, ['*'], 'masuk_page');
+        $data = $query->latest()->get();
 
-        $stokKeluar = $stokKeluarQuery
-            ->latest()
-            ->paginate(10, ['*'], 'keluar_page');
+        $handle = fopen('php://temp', 'w');
 
-        $daftarBarang = Barang::orderBy('nama_barang')->get();
+        fputcsv($handle, [
+            'Kode Barang',
+            'Nama Barang',
+            'Jumlah',
+            'Keterangan',
+            'Tanggal'
+        ]);
 
-        return view('laporan.index', compact(
-            'barang',
-            'stokMasuk',
-            'stokKeluar',
-            'daftarBarang'
-        ));
+        foreach ($data as $item) {
+
+            fputcsv($handle, [
+                $item->barang->kode_barang ?? '-',
+                $item->barang->nama_barang ?? '-',
+                $item->jumlah,
+                $item->keterangan ?? '-',
+                $item->created_at->format('d/m/Y H:i')
+            ]);
+        }
+
+        rewind($handle);
+
+        return response()->streamDownload(
+            function () use ($handle) {
+                fpassthru($handle);
+            },
+            'laporan-stok-keluar.csv',
+            [
+                'Content-Type' => 'text/csv',
+            ]
+        );
     }
 }

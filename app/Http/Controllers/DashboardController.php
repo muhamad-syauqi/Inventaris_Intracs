@@ -23,18 +23,12 @@ class DashboardController extends Controller
             ->take(5)
             ->get();
 
-        $keluarTerbaru = StokKeluar::with('barang')
-            ->latest()
-            ->take(5)
-            ->get();
-
         return view('dashboard', compact(
             'totalBarang',
             'totalStok',
             'totalStokMasuk',
             'totalStokKeluar',
-            'stokTerbaru',
-            'keluarTerbaru'
+            'stokTerbaru'
         ));
     }
 }

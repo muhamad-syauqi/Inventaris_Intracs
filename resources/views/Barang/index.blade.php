@@ -131,20 +131,6 @@
                             <i class="bi bi-pencil"></i>
                         </a>
 
-                        <form action="{{ route('barang.destroy', $item) }}"
-                              method="POST"
-                              class="d-inline">
-
-                            @csrf
-                            @method('DELETE')
-
-                            <button type="submit"
-                                    class="btn btn-sm btn-danger"
-                                    onclick="return confirm('Hapus barang ini?')">
-                                <i class="bi bi-trash"></i>
-                            </button>
-
-                        </form>
 
                     </td>
 

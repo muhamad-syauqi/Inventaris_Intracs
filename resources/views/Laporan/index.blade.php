@@ -6,400 +6,100 @@
 @section('content')
 
 <div class="mb-4">
-
-    <h2>Laporan Inventaris</h2>
-
+    <h2>Laporan</h2>
     <p class="text-muted">
-        Menampilkan laporan stok barang, stok masuk, dan stok keluar.
+        Pilih jenis laporan yang ingin dilihat.
     </p>
-
 </div>
 
+<div class="row g-4">
 
-{{-- LAPORAN STOK BARANG --}}
+    {{-- LAPORAN BARANG --}}
+    <div class="col-md-4">
 
-<div class="card p-4 mb-4">
+        <div class="card p-4 h-100">
 
-    <div class="d-flex justify-content-between mb-3">
+            <div class="mb-3">
+                <i class="bi bi-box-seam fs-1 text-primary"></i>
+            </div>
 
-        <div>
+            <h4>Laporan Barang</h4>
 
-            <h5>Laporan Stok Barang</h5>
+            <p class="text-muted">
+                Menampilkan daftar seluruh barang,
+                kode barang, kategori, satuan, dan
+                jumlah stok yang tersedia.
+            </p>
 
-            <small class="text-muted">
-                Kondisi stok barang saat ini.
-            </small>
+            <a href="{{ route('laporan.barang') }}"
+               class="btn btn-primary mt-auto">
 
-        </div>
+                <i class="bi bi-eye"></i>
+                Lihat Laporan
 
-        <button class="btn btn-success btn-sm">
-            <i class="bi bi-file-earmark-excel"></i>
-            Export Excel
-        </button>
-
-    </div>
-
-    <form method="GET" class="row g-3 mb-3">
-
-        <div class="col-md-6">
-
-            <input type="text"
-                   name="search"
-                   class="form-control"
-                   placeholder="Cari barang...">
-
-        </div>
-
-        <div class="col-md-3">
-
-            <select name="barang_id"
-                    class="form-select">
-
-                <option value="">
-                    Semua Barang
-                </option>
-
-                @foreach($daftarBarang as $item)
-
-                    <option value="{{ $item->id }}">
-                        {{ $item->nama_barang }}
-                    </option>
-
-                @endforeach
-
-            </select>
-
-        </div>
-
-        <div class="col-md-3">
-
-            <button class="btn btn-primary w-100">
-                <i class="bi bi-filter"></i>
-                Filter
-            </button>
-
-        </div>
-
-    </form>
-
-    <div class="table-responsive">
-
-        <table class="table align-middle">
-
-            <thead>
-
-                <tr>
-                    <th>No</th>
-                    <th>Kode Barang</th>
-                    <th>Nama Barang</th>
-                    <th>Kategori</th>
-                    <th>Satuan</th>
-                    <th>Stok</th>
-                </tr>
-
-            </thead>
-
-            <tbody>
-
-            @foreach($barang as $item)
-
-                <tr>
-
-                    <td>{{ $loop->iteration }}</td>
-
-                    <td>{{ $item->kode_barang }}</td>
-
-                    <td>{{ $item->nama_barang }}</td>
-
-                    <td>{{ $item->category->nama_kategori }}</td>
-
-                    <td>{{ $item->satuan }}</td>
-
-                    <td>
-
-                        @if($item->stok == 0)
-
-                            <span class="badge bg-danger">
-                                Habis
-                            </span>
-
-                        @else
-
-                            <span class="badge bg-success">
-                                {{ $item->stok }}
-                            </span>
-
-                        @endif
-
-                    </td>
-
-                </tr>
-
-            @endforeach
-
-            </tbody>
-
-        </table>
-
-    </div>
-
-    {{ $barang->links() }}
-
-</div>
-
-
-{{-- LAPORAN STOK MASUK --}}
-
-<div class="card p-4 mb-4">
-
-    <div class="d-flex justify-content-between mb-3">
-
-        <div>
-
-            <h5>Laporan Stok Masuk</h5>
-
-            <small class="text-muted">
-                Riwayat barang yang masuk.
-            </small>
-
-        </div>
-
-        <div>
-
-            <button class="btn btn-success btn-sm">
-                <i class="bi bi-file-earmark-excel"></i>
-                Excel
-            </button>
-
-            <button class="btn btn-danger btn-sm">
-                <i class="bi bi-file-earmark-pdf"></i>
-                PDF
-            </button>
+            </a>
 
         </div>
 
     </div>
 
-    <form method="GET" class="row g-3 mb-3">
 
-        <div class="col-md-4">
+    {{-- LAPORAN STOK MASUK --}}
+    <div class="col-md-4">
 
-            <label>Periode Awal</label>
+        <div class="card p-4 h-100">
 
-            <input type="date"
-                   name="tanggal_mulai"
-                   class="form-control">
+            <div class="mb-3">
+                <i class="bi bi-box-arrow-in-down fs-1 text-success"></i>
+            </div>
 
-        </div>
+            <h4>Laporan Stok Masuk</h4>
 
-        <div class="col-md-4">
+            <p class="text-muted">
+                Menampilkan riwayat barang yang masuk
+                beserta jumlah dan waktu transaksi.
+            </p>
 
-            <label>Periode Akhir</label>
+            <a href="{{ route('laporan.stok-masuk') }}"
+               class="btn btn-success mt-auto">
 
-            <input type="date"
-                   name="tanggal_akhir"
-                   class="form-control">
+                <i class="bi bi-eye"></i>
+                Lihat Laporan
 
-        </div>
-
-        <div class="col-md-4 d-flex align-items-end">
-
-            <button class="btn btn-primary w-100">
-                Filter
-            </button>
-
-        </div>
-
-    </form>
-
-    <div class="table-responsive">
-
-        <table class="table align-middle">
-
-            <thead>
-
-                <tr>
-
-                    <th>No</th>
-                    <th>Tanggal & Waktu</th>
-                    <th>Kode</th>
-                    <th>Nama Barang</th>
-                    <th>Jumlah Masuk</th>
-                    <th>Satuan</th>
-                    <th>Keterangan</th>
-
-                </tr>
-
-            </thead>
-
-            <tbody>
-
-            @forelse($stokMasuk as $data)
-
-                <tr>
-
-                    <td>{{ $loop->iteration }}</td>
-
-                    <td>
-                        {{ $data->created_at->format('d/m/Y H:i') }}
-                    </td>
-
-                    <td>
-                        {{ $data->barang->kode_barang }}
-                    </td>
-
-                    <td>
-                        {{ $data->barang->nama_barang }}
-                    </td>
-
-                    <td>
-                        {{ $data->jumlah }}
-                    </td>
-
-                    <td>
-                        {{ $data->barang->satuan }}
-                    </td>
-
-                    <td>
-                        {{ $data->keterangan ?? '-' }}
-                    </td>
-
-                </tr>
-
-            @empty
-
-                <tr>
-
-                    <td colspan="7"
-                        class="text-center">
-
-                        Belum ada transaksi stok masuk.
-
-                    </td>
-
-                </tr>
-
-            @endforelse
-
-            </tbody>
-
-        </table>
-
-    </div>
-
-    {{ $stokMasuk->links() }}
-
-</div>
-
-
-{{-- LAPORAN STOK KELUAR --}}
-
-<div class="card p-4">
-
-    <div class="d-flex justify-content-between mb-3">
-
-        <div>
-
-            <h5>Laporan Stok Keluar</h5>
-
-            <small class="text-muted">
-                Riwayat barang yang keluar.
-            </small>
-
-        </div>
-
-        <div>
-
-            <button class="btn btn-success btn-sm">
-                <i class="bi bi-file-earmark-excel"></i>
-                Excel
-            </button>
-
-            <button class="btn btn-danger btn-sm">
-                <i class="bi bi-file-earmark-pdf"></i>
-                PDF
-            </button>
+            </a>
 
         </div>
 
     </div>
 
-    <div class="table-responsive">
 
-        <table class="table align-middle">
+    {{-- LAPORAN STOK KELUAR --}}
+    <div class="col-md-4">
 
-            <thead>
+        <div class="card p-4 h-100">
 
-                <tr>
+            <div class="mb-3">
+                <i class="bi bi-box-arrow-up fs-1 text-danger"></i>
+            </div>
 
-                    <th>No</th>
-                    <th>Tanggal & Waktu</th>
-                    <th>Kode</th>
-                    <th>Nama Barang</th>
-                    <th>Jumlah Keluar</th>
-                    <th>Satuan</th>
-                    <th>Keterangan</th>
+            <h4>Laporan Stok Keluar</h4>
 
-                </tr>
+            <p class="text-muted">
+                Menampilkan riwayat barang yang keluar
+                beserta jumlah dan waktu transaksi.
+            </p>
 
-            </thead>
+            <a href="{{ route('laporan.stok-keluar') }}"
+               class="btn btn-danger mt-auto">
 
-            <tbody>
+                <i class="bi bi-eye"></i>
+                Lihat Laporan
 
-            @forelse($stokKeluar as $data)
+            </a>
 
-                <tr>
-
-                    <td>{{ $loop->iteration }}</td>
-
-                    <td>
-                        {{ $data->created_at->format('d/m/Y H:i') }}
-                    </td>
-
-                    <td>
-                        {{ $data->barang->kode_barang }}
-                    </td>
-
-                    <td>
-                        {{ $data->barang->nama_barang }}
-                    </td>
-
-                    <td>
-                        {{ $data->jumlah }}
-                    </td>
-
-                    <td>
-                        {{ $data->barang->satuan }}
-                    </td>
-
-                    <td>
-                        {{ $data->keterangan ?? '-' }}
-                    </td>
-
-                </tr>
-
-            @empty
-
-                <tr>
-
-                    <td colspan="7"
-                        class="text-center">
-
-                        Belum ada transaksi stok keluar.
-
-                    </td>
-
-                </tr>
-
-            @endforelse
-
-            </tbody>
-
-        </table>
+        </div>
 
     </div>
-
-    {{ $stokKeluar->links() }}
 
 </div>
 

@@ -32,31 +32,36 @@ public function tambahStokPage()
 
     // Input data barang baru
     public function storeBarang(Request $request)
-    {
-        $request->validate([
-            'kategori_id' => 'required|exists:categories,id',
-            'kode_barang' => 'required|string|max:20|unique:barang,kode_barang',
-            'nama_barang' => 'required|string|max:100',
-            'satuan' => 'required|string|max:20',
-            'stok' => 'required|integer|min:0',
-        ]);
+{
+    $request->validate([
+        'kategori_id' => 'required|exists:categories,id',
+        'kode_barang' => 'required|string|max:20|unique:barang,kode_barang',
+        'nama_barang' => 'required|string|max:255',
+        'satuan' => 'required|string|max:50',
+        'stok' => 'required|integer|min:1',
+        'keterangan' => 'nullable|string',
+    ]);
 
-        DB::transaction(function () use ($request) {
+    // Simpan barang
+    $barang = Barang::create([
+        'kategori_id' => $request->kategori_id,
+        'kode_barang' => $request->kode_barang,
+        'nama_barang' => $request->nama_barang,
+        'satuan' => $request->satuan,
+        'stok' => $request->stok,
+    ]);
 
-            Barang::create([
-                'kategori_id' => $request->kategori_id,
-                'kode_barang' => $request->kode_barang,
-                'nama_barang' => $request->nama_barang,
-                'satuan' => $request->satuan,
-                'stok' => $request->stok,
-            ]);
-        });
+    StokMasuk::create([
+    'barang_id' => $barang->id,
+    'user_id' => auth()->id(),
+    'jumlah' => $request->stok,
+    'keterangan' => $request->keterangan ?? 'Input data barang baru',
+    ]);
 
-        return redirect()
-            ->route('stok-masuk.index')
-            ->with('success', 'Data barang berhasil ditambahkan.');
-    }
-
+    return redirect()
+        ->route('stok-masuk.index')
+        ->with('success', 'Data barang berhasil ditambahkan dan tercatat sebagai stok masuk.');
+}
     // Tambah stok barang yang sudah ada
     public function tambahStok(Request $request)
     {
