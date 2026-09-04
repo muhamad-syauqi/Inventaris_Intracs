@@ -28,7 +28,7 @@ class DashboardController extends Controller
             'totalStok',
             'totalStokMasuk',
             'totalStokKeluar',
-            'stokMasukTerbaru'
+            'stokTerbaru'
         ));
     }
 }
