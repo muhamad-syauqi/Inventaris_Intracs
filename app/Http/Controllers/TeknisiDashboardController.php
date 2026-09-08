@@ -11,13 +11,18 @@ class TeknisiDashboardController extends Controller
     public function index()
     {
         $totalBarang = Barang::count();
+
         $totalStok = Barang::sum('stok');
 
-        $stokMasukSaya = StokMasuk::where('user_id', auth()->id())
-            ->sum('jumlah');
+        $stokMasukSaya = StokMasuk::where(
+            'user_id',
+            auth()->id()
+        )->sum('jumlah');
 
-        $stokKeluarSaya = StokKeluar::where('user_id', auth()->id())
-            ->sum('jumlah');
+        $stokKeluarSaya = StokKeluar::where(
+            'user_id',
+            auth()->id()
+        )->sum('jumlah');
 
         $aktivitasSaya = StokMasuk::with('barang')
             ->where('user_id', auth()->id())
