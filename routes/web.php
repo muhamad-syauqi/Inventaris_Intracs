@@ -50,31 +50,16 @@ Route::middleware('auth')->group(function () {
 
     Route::middleware('role:admin')->group(function () {
 
-        Route::get('/admin/dashboard', [DashboardController::class, 'index'])
+        Route::get('/admin/dashboard',[DashboardController::class, 'index'])
             ->name('admin.dashboard');
 
         Route::resource('barang', BarangController::class);
 
-        Route::get('/laporan', [LaporanController::class, 'index'])
-            ->name('laporan.index');
+        Route::get('/admin/riwayat-stok-masuk',[LaporanController::class, 'riwayatStokMasuk'])
+            ->name('admin.riwayat-stok-masuk');
 
-        Route::get('/laporan/barang', [LaporanController::class, 'barang'])
-            ->name('laporan.barang');
-
-        Route::get('/laporan/stok-masuk', [LaporanController::class, 'stokMasuk'])
-            ->name('laporan.stok-masuk');
-
-        Route::get('/laporan/stok-keluar', [LaporanController::class, 'stokKeluar'])
-            ->name('laporan.stok-keluar');
-
-        Route::get('/laporan/barang/export', [LaporanController::class, 'exportBarang'])
-            ->name('laporan.barang.export');
-
-        Route::get('/laporan/stok-masuk/export', [LaporanController::class, 'exportStokMasuk'])
-            ->name('laporan.stok-masuk.export');
-
-        Route::get('/laporan/stok-keluar/export', [LaporanController::class, 'exportStokKeluar'])
-            ->name('laporan.stok-keluar.export');
+        Route::get('/admin/riwayat-stok-keluar',[LaporanController::class, 'riwayatStokKeluar'])
+            ->name('admin.riwayat-stok-keluar');
     });
 
 

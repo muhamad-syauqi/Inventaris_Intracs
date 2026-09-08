@@ -11,10 +11,20 @@ use Illuminate\Support\Facades\DB;
 class StokMasukController extends Controller
 {
     // Halaman stok masuk
-   public function index()
-{
-    return view('stok_masuk.index');
-}
+    public function index()
+    {
+        $query = StokMasuk::with(['barang', 'user'])
+            ->latest();
+
+        // Teknisi hanya melihat data yang dia input sendiri
+        if (auth()->user()->role === 'teknisi') {
+            $query->where('user_id', auth()->id());
+        }
+
+        $stokMasuk = $query->paginate(10);
+
+        return view('stok_masuk.index', compact('stokMasuk'));
+    }
 
     public function inputBarang()
 {

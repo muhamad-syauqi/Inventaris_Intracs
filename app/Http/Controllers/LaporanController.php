@@ -91,6 +91,24 @@ class LaporanController extends Controller
         );
     }
 
+    public function riwayatStokMasuk()
+    {
+        $stokMasuk = StokMasuk::with(['barang', 'user'])
+            ->latest()
+            ->paginate(15);
+
+        return view('admin.riwayat-stok-masuk', compact('stokMasuk'));
+    }
+
+public function riwayatStokKeluar()
+    {
+        $stokKeluar = StokKeluar::with(['barang', 'user'])
+            ->latest()
+            ->paginate(15);
+
+        return view('admin.riwayat-stok-keluar', compact('stokKeluar'));
+    }
+
 
     // =========================
     // EXPORT BARANG

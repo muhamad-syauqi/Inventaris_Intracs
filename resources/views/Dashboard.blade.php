@@ -102,23 +102,36 @@
 </div>
 
 
-{{-- GRAFIK --}}
-<div class="card p-4 mb-4">
+<div class="row g-4">
 
-    <div class="mb-3">
-        <h5 class="fw-bold mb-1">
-            Grafik Stok
-        </h5>
+    {{-- Grafik Stok --}}
+    <div class="col-lg-8">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-body">
+                <h5 class="fw-bold mb-3">
+                    Grafik Stok Bulanan
+                </h5>
 
-        <small class="text-muted">
-            Perbandingan stok masuk dan stok keluar 6 bulan terakhir
-        </small>
+                <div style="height: 350px;">
+                    <canvas id="stokChart"></canvas>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div style="height: 350px;">
+    {{-- Pie Barang Masuk --}}
+    <div class="col-lg-4">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-body">
+                <h5 class="fw-bold mb-3">
+                    Barang Masuk Bulan Ini
+                </h5>
 
-        <canvas id="stokChart"></canvas>
-
+                <div style="height: 350px;">
+                    <canvas id="barangPieChart"></canvas>
+                </div>
+            </div>
+        </div>
     </div>
 
 </div>
@@ -235,70 +248,77 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
-
 const grafik = @json($grafik);
+const pieBarang = @json($pieBarang);
+
+// =========================
+// GRAFIK STOK
+// =========================
 
 const labels = grafik.map(item => item.bulan);
-
 const stokMasuk = grafik.map(item => item.masuk);
-
 const stokKeluar = grafik.map(item => item.keluar);
 
-
-const ctx = document.getElementById('stokChart');
-
-
-new Chart(ctx, {
-
+new Chart(document.getElementById('stokChart'), {
     type: 'bar',
 
     data: {
-
         labels: labels,
 
         datasets: [
-
             {
                 label: 'Stok Masuk',
                 data: stokMasuk
             },
-
             {
                 label: 'Stok Keluar',
                 data: stokKeluar
             }
-
         ]
-
     },
 
     options: {
-
         responsive: true,
-
         maintainAspectRatio: false,
 
-        interaction: {
-            intersect: false,
-            mode: 'index'
-        },
-
         scales: {
-
             y: {
                 beginAtZero: true,
-
                 ticks: {
                     precision: 0
                 }
             }
-
         }
-
     }
-
 });
 
+
+// =========================
+// PIE BARANG MASUK
+// =========================
+
+new Chart(document.getElementById('barangPieChart'), {
+    type: 'pie',
+
+    data: {
+        labels: pieBarang.map(item => item.nama),
+
+        datasets: [{
+            data: pieBarang.map(item => item.jumlah)
+        }]
+    },
+
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+
+        plugins: {
+            legend: {
+                position: 'bottom'
+            }
+        }
+    }
+});
 </script>
 
 @endpush

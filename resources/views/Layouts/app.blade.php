@@ -114,47 +114,49 @@
     {{-- ================= ADMIN ================= --}}
     @if(auth()->user()->role === 'admin')
 
-        <a href="{{ route('admin.dashboard') }}"
-           class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
-            <i class="bi bi-grid"></i> Dashboard
-        </a>
+    <a href="{{ route('admin.dashboard') }}"
+       class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
+        <i class="bi bi-grid"></i>
+        Dashboard
+    </a>
 
-        <a href="{{ route('barang.index') }}"
-           class="{{ request()->routeIs('barang.*') ? 'active' : '' }}">
-            <i class="bi bi-box"></i> Barang
-        </a>
+    <a href="{{ route('barang.index') }}"
+       class="{{ request()->routeIs('barang.*') ? 'active' : '' }}">
+        <i class="bi bi-box"></i>
+        Barang
+    </a>
 
-        <a href="{{ route('stok-masuk.index') }}"
-           class="{{ request()->routeIs('stok-masuk.*') ? 'active' : '' }}">
-            <i class="bi bi-box-arrow-in-down"></i> Stok Masuk
-        </a>
+    <a href="{{ route('admin.riwayat-stok-masuk') }}"
+       class="{{ request()->routeIs('admin.riwayat-stok-masuk') ? 'active' : '' }}">
+        <i class="bi bi-box-arrow-in-down"></i>
+        Riwayat Stok Masuk
+    </a>
 
-        <a href="{{ route('stok-keluar.index') }}"
-           class="{{ request()->routeIs('stok-keluar.*') ? 'active' : '' }}">
-            <i class="bi bi-box-arrow-up"></i> Stok Keluar
-        </a>
-
-        <a href="{{ route('laporan.index') }}"
-           class="{{ request()->routeIs('laporan.*') ? 'active' : '' }}">
-            <i class="bi bi-file-earmark-text"></i> Laporan
-        </a>
+    <a href="{{ route('admin.riwayat-stok-keluar') }}"
+       class="{{ request()->routeIs('admin.riwayat-stok-keluar') ? 'active' : '' }}">
+        <i class="bi bi-box-arrow-up"></i>
+        Riwayat Stok Keluar
+    </a>
 
     {{-- ================= TEKNISI ================= --}}
     @elseif(auth()->user()->role === 'teknisi')
 
         <a href="{{ route('teknisi.dashboard') }}"
-           class="{{ request()->routeIs('teknisi.dashboard') ? 'active' : '' }}">
-            <i class="bi bi-grid"></i> Dashboard
+        class="{{ request()->routeIs('teknisi.dashboard') ? 'active' : '' }}">
+            <i class="bi bi-grid"></i>
+            Dashboard
         </a>
 
         <a href="{{ route('stok-masuk.index') }}"
-           class="{{ request()->routeIs('stok-masuk.*') ? 'active' : '' }}">
-            <i class="bi bi-box-arrow-in-down"></i> Stok Masuk
+        class="{{ request()->routeIs('stok-masuk.*') ? 'active' : '' }}">
+            <i class="bi bi-box-arrow-in-down"></i>
+            Stok Masuk
         </a>
 
         <a href="{{ route('stok-keluar.index') }}"
-           class="{{ request()->routeIs('stok-keluar.*') ? 'active' : '' }}">
-            <i class="bi bi-box-arrow-up"></i> Stok Keluar
+        class="{{ request()->routeIs('stok-keluar.*') ? 'active' : '' }}">
+            <i class="bi bi-box-arrow-up"></i>
+            Stok Keluar
         </a>
 
     @endif
@@ -167,11 +169,15 @@
             @csrf
 
             <button class="btn btn-link text-white text-decoration-none w-100 text-start">
-                <i class="bi bi-box-arrow-right"></i> Logout
+                <i class="bi bi-box-arrow-right"></i>
+                Logout
             </button>
         </form>
 
     </div>
+
+</div>
+
 
 </div>
 

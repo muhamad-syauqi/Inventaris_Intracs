@@ -1,87 +1,20 @@
 @extends('layouts.app')
 
-@section('title', 'Stok Keluar')
-@section('page-title', 'Stok Keluar')
+@section('title', 'Riwayat Stok Keluar')
+@section('page-title', 'Riwayat Stok Keluar')
 
 @section('content')
 
 <div class="mb-4">
-    <h2>Daftar Barang</h2>
+    <h2>Riwayat Stok Keluar</h2>
     <p class="text-muted">
-        Pilih barang yang ingin dikeluarkan stoknya.
+        Melihat seluruh aktivitas stok keluar yang dilakukan oleh teknisi.
     </p>
 </div>
 
-<div class="row g-4">
-
-    @forelse($barang as $item)
-
-        <div class="col-md-4">
-
-            <div class="card h-100 p-4">
-
-                <div class="d-flex justify-content-between mb-3">
-
-                    <i class="bi bi-box-seam fs-2 text-primary"></i>
-
-                    <span class="badge bg-success">
-                        Stok {{ $item->stok }}
-                    </span>
-
-                </div>
-
-                <h5>
-                    {{ $item->nama_barang }}
-                </h5>
-
-                <p class="text-muted mb-1">
-                    Kode: {{ $item->kode_barang }}
-                </p>
-
-                <p class="text-muted">
-                    Satuan: {{ $item->satuan }}
-                </p>
-
-                @if(auth()->user()->role === 'teknisi')
-                <a href="{{ route('stok-keluar.keluarkan', $item->id) }}"
-                   class="btn btn-danger mt-auto">
-
-                    <i class="bi bi-box-arrow-up"></i>
-                    Keluarkan Stok
-
-                </a>
-
-                @endif
-
-            </div>
-
-        </div>
-
-    @empty
-
-        <div class="col-12">
-
-            <div class="alert alert-info">
-                Belum ada barang yang tersedia.
-            </div>
-
-        </div>
-
-    @endforelse
-
-</div>
-    {{-- RIWAYAT STOK KELUAR --}}
-<div class="card mt-4">
+<div class="card border-0 shadow-sm">
 
     <div class="card-body">
-
-        <div class="mb-3">
-            <h5 class="mb-1">Riwayat Stok Keluar</h5>
-
-            <p class="text-muted mb-0">
-                Daftar barang yang telah dikeluarkan dari inventaris.
-            </p>
-        </div>
 
         <div class="table-responsive">
 
@@ -94,7 +27,7 @@
                         <th>Jumlah</th>
                         <th>Keterangan</th>
                         <th>Dikeluarkan Oleh</th>
-                        <th>Tanggal</th>
+                        <th>Tanggal & Jam</th>
                     </tr>
                 </thead>
 
@@ -112,6 +45,11 @@
                                 <strong>
                                     {{ $item->barang->nama_barang ?? '-' }}
                                 </strong>
+                                <br>
+
+                                <small class="text-muted">
+                                    {{ $item->barang->kode_barang ?? '-' }}
+                                </small>
                             </td>
 
                             <td>
@@ -139,9 +77,11 @@
 
                         <tr>
                             <td colspan="6"
-                                class="text-center text-muted py-4">
+                                class="text-center text-muted py-5">
 
-                                Belum ada data stok keluar.
+                                <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+
+                                Belum ada riwayat stok keluar.
 
                             </td>
                         </tr>
@@ -154,7 +94,6 @@
 
         </div>
 
-        {{-- PAGINATION --}}
         <div class="mt-3">
             {{ $stokKeluar->links() }}
         </div>
@@ -162,6 +101,5 @@
     </div>
 
 </div>
-
 
 @endsection

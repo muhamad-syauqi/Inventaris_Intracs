@@ -14,7 +14,20 @@ class StokKeluarController extends Controller
     {
         $barang = Barang::orderBy('nama_barang')->get();
 
-        return view('stok_keluar.index', compact('barang'));
+        $query = StokKeluar::with(['barang', 'user'])
+            ->latest();
+
+        // Teknisi hanya melihat transaksi miliknya
+        if (auth()->user()->role === 'teknisi') {
+            $query->where('user_id', auth()->id());
+        }
+
+        $stokKeluar = $query->paginate(10);
+
+        return view('Stok_Keluar.index', compact(
+            'barang',
+            'stokKeluar'
+        ));
     }
     public function keluarkan($id)
     {

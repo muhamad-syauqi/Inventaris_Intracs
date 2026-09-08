@@ -11,51 +11,63 @@ class DashboardController extends Controller
     public function index()
     {
         $totalBarang = Barang::count();
-
         $totalStok = Barang::sum('stok');
-
         $totalStokMasuk = StokMasuk::sum('jumlah');
-
         $totalStokKeluar = StokKeluar::sum('jumlah');
 
-        // Data grafik 6 bulan terakhir
+        $pieBarang = StokMasuk::with('barang')
+        ->whereMonth('created_at', now()->month)
+        ->whereYear('created_at', now()->year)
+        ->get()
+        ->groupBy(function ($item) {
+            return $item->barang->nama_barang;
+        })
+        ->map(function ($items) {
+            return $items->sum('jumlah');
+        })
+        ->map(function ($jumlah, $nama) {
+            return [
+                'nama' => $nama,
+                'jumlah' => $jumlah,
+            ];
+        })
+    ->values();
+        // Grafik 6 bulan terakhir
         $grafik = collect();
 
         for ($i = 5; $i >= 0; $i--) {
 
             $tanggal = now()->subMonths($i);
 
-            $masuk = StokMasuk::whereYear(
-                'created_at',
-                $tanggal->year
-            )
-            ->whereMonth(
-                'created_at',
-                $tanggal->month
-            )
-            ->sum('jumlah');
-
-            $keluar = StokKeluar::whereYear(
-                'created_at',
-                $tanggal->year
-            )
-            ->whereMonth(
-                'created_at',
-                $tanggal->month
-            )
-            ->sum('jumlah');
-
             $grafik->push([
-                'bulan' => $tanggal->translatedFormat('M Y'),
-                'masuk' => $masuk,
-                'keluar' => $keluar,
+                'bulan' => $tanggal->format('M Y'),
+
+                'masuk' => StokMasuk::whereYear(
+                    'created_at',
+                    $tanggal->year
+                )
+                ->whereMonth(
+                    'created_at',
+                    $tanggal->month
+                )
+                ->sum('jumlah'),
+
+                'keluar' => StokKeluar::whereYear(
+                    'created_at',
+                    $tanggal->year
+                )
+                ->whereMonth(
+                    'created_at',
+                    $tanggal->month
+                )
+                ->sum('jumlah'),
             ]);
         }
 
-        // Aktivitas terbaru dari stok masuk dan stok keluar
+        // Stok masuk
         $stokMasuk = StokMasuk::with(['barang', 'user'])
             ->latest()
-            ->take(5)
+            ->take(10)
             ->get()
             ->map(function ($item) {
                 return [
@@ -67,9 +79,10 @@ class DashboardController extends Controller
                 ];
             });
 
+        // Stok keluar
         $stokKeluar = StokKeluar::with(['barang', 'user'])
             ->latest()
-            ->take(5)
+            ->take(10)
             ->get()
             ->map(function ($item) {
                 return [
@@ -81,18 +94,21 @@ class DashboardController extends Controller
                 ];
             });
 
+        // Gabungkan aktivitas
         $aktivitas = $stokMasuk
             ->concat($stokKeluar)
             ->sortByDesc('tanggal')
-            ->take(10);
+            ->take(10)
+            ->values();
 
-        return view('dashboard', compact(
+        return view('Dashboard', compact(
             'totalBarang',
             'totalStok',
             'totalStokMasuk',
             'totalStokKeluar',
             'grafik',
-            'aktivitas'
+            'aktivitas',
+            'pieBarang'
         ));
     }
 }
