@@ -1,299 +1,304 @@
-@extends('layouts.app')
+@extends('Layouts.app')
 
-@section('title', 'Dashboard')
-@section('page-title', 'Dashboard')
+@section('title', 'Dashboard Admin')
+@section('page-title', 'Dashboard Admin')
 
 @section('content')
 
-<style>
-    .stat-card {
-        border: none;
-        border-radius: 16px;
-        transition: 0.2s;
-    }
-
-    .stat-card:hover {
-        transform: translateY(-3px);
-    }
-
-    .stat-icon {
-        width: 52px;
-        height: 52px;
-        border-radius: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 24px;
-    }
-
-    .icon-blue {
-        background: #e8f1ff;
-        color: #0d6efd;
-    }
-
-    .icon-green {
-        background: #e8f8ef;
-        color: #198754;
-    }
-
-    .icon-orange {
-        background: #fff3df;
-        color: #fd7e14;
-    }
-
-    .icon-red {
-        background: #fdeaea;
-        color: #dc3545;
-    }
-
-    .dashboard-card {
-        border: none;
-        border-radius: 16px;
-    }
-
-    .table th {
-        font-weight: 600;
-        color: #6c757d;
-    }
-</style>
+<div class="mb-4">
+    <h3 class="fw-bold">Dashboard Admin</h3>
+    <p class="text-muted mb-0">
+        Ringkasan dan aktivitas inventaris peralatan.
+    </p>
+</div>
 
 
-{{-- ========================= --}}
-{{-- KARTU STATISTIK --}}
-{{-- ========================= --}}
-
+{{-- STATISTIK --}}
 <div class="row g-4 mb-4">
 
-    {{-- TOTAL BARANG --}}
-    <div class="col-xl-3 col-md-6">
-
-        <div class="card stat-card shadow-sm h-100 p-3">
-
-            <div class="d-flex align-items-center justify-content-between">
+    <div class="col-md-3">
+        <div class="card stat-card">
+            <div class="d-flex justify-content-between align-items-center">
 
                 <div>
-                    <p class="text-muted mb-2">
+                    <small class="text-muted">
                         Total Barang
-                    </p>
+                    </small>
 
-                    <h2 class="fw-bold mb-0">
+                    <h2 class="fw-bold mt-2 mb-0">
                         {{ $totalBarang }}
                     </h2>
                 </div>
 
-                <div class="stat-icon icon-blue">
-                    <i class="bi bi-box-seam"></i>
-                </div>
+                <i class="bi bi-box fs-1 text-primary"></i>
 
             </div>
-
         </div>
-
     </div>
 
 
-    {{-- TOTAL STOK --}}
-    <div class="col-xl-3 col-md-6">
-
-        <div class="card stat-card shadow-sm h-100 p-3">
-
-            <div class="d-flex align-items-center justify-content-between">
+    <div class="col-md-3">
+        <div class="card stat-card">
+            <div class="d-flex justify-content-between align-items-center">
 
                 <div>
-                    <p class="text-muted mb-2">
+                    <small class="text-muted">
                         Total Stok
-                    </p>
+                    </small>
 
-                    <h2 class="fw-bold mb-0">
+                    <h2 class="fw-bold mt-2 mb-0">
                         {{ $totalStok }}
                     </h2>
                 </div>
 
-                <div class="stat-icon icon-green">
-                    <i class="bi bi-stack"></i>
-                </div>
+                <i class="bi bi-boxes fs-1 text-success"></i>
 
             </div>
-
         </div>
-
     </div>
 
 
-    {{-- STOK MASUK --}}
-    <div class="col-xl-3 col-md-6">
-
-        <div class="card stat-card shadow-sm h-100 p-3">
-
-            <div class="d-flex align-items-center justify-content-between">
+    <div class="col-md-3">
+        <div class="card stat-card">
+            <div class="d-flex justify-content-between align-items-center">
 
                 <div>
-                    <p class="text-muted mb-2">
+                    <small class="text-muted">
                         Stok Masuk
-                    </p>
+                    </small>
 
-                    <h2 class="fw-bold mb-0">
+                    <h2 class="fw-bold mt-2 mb-0">
                         {{ $totalStokMasuk }}
                     </h2>
                 </div>
 
-                <div class="stat-icon icon-orange">
-                    <i class="bi bi-box-arrow-in-down"></i>
-                </div>
+                <i class="bi bi-box-arrow-in-down fs-1 text-info"></i>
 
             </div>
-
         </div>
-
     </div>
 
 
-    {{-- STOK KELUAR --}}
-    <div class="col-xl-3 col-md-6">
-
-        <div class="card stat-card shadow-sm h-100 p-3">
-
-            <div class="d-flex align-items-center justify-content-between">
+    <div class="col-md-3">
+        <div class="card stat-card">
+            <div class="d-flex justify-content-between align-items-center">
 
                 <div>
-                    <p class="text-muted mb-2">
+                    <small class="text-muted">
                         Stok Keluar
-                    </p>
+                    </small>
 
-                    <h2 class="fw-bold mb-0">
+                    <h2 class="fw-bold mt-2 mb-0">
                         {{ $totalStokKeluar }}
                     </h2>
                 </div>
 
-                <div class="stat-icon icon-red">
-                    <i class="bi bi-box-arrow-up"></i>
-                </div>
+                <i class="bi bi-box-arrow-up fs-1 text-warning"></i>
 
             </div>
-
         </div>
+    </div>
+
+</div>
+
+
+{{-- GRAFIK --}}
+<div class="card p-4 mb-4">
+
+    <div class="mb-3">
+        <h5 class="fw-bold mb-1">
+            Grafik Stok
+        </h5>
+
+        <small class="text-muted">
+            Perbandingan stok masuk dan stok keluar 6 bulan terakhir
+        </small>
+    </div>
+
+    <div style="height: 350px;">
+
+        <canvas id="stokChart"></canvas>
 
     </div>
 
 </div>
 
 
-{{-- ========================= --}}
-{{-- STOK MASUK TERBARU --}}
-{{-- ========================= --}}
+{{-- AKTIVITAS --}}
+<div class="card p-4">
 
-<div class="card dashboard-card shadow-sm">
+    <div class="d-flex justify-content-between align-items-center mb-3">
 
-    <div class="card-body p-4">
+        <div>
+            <h5 class="fw-bold mb-1">
+                Aktivitas Terbaru
+            </h5>
 
-        <div class="d-flex justify-content-between align-items-center mb-4">
-
-            <div>
-                <h5 class="fw-bold mb-1">
-                    Stok Masuk Terbaru
-                </h5>
-
-                <p class="text-muted mb-0">
-                    Daftar transaksi stok masuk terbaru
-                </p>
-            </div>
-
-            <a href="{{ route('laporan.stok-masuk') }}"
-               class="btn btn-success">
-
-                <i class="bi bi-file-earmark-text me-1"></i>
-                Lihat Semua
-
-            </a>
-
+            <small class="text-muted">
+                Aktivitas inventaris yang dilakukan pengguna
+            </small>
         </div>
 
+    </div>
 
-        <div class="table-responsive">
 
-            <table class="table table-hover align-middle">
+    <div class="table-responsive">
 
-                <thead>
+        <table class="table align-middle">
+
+            <thead>
+                <tr>
+                    <th>Jenis</th>
+                    <th>Barang</th>
+                    <th>Jumlah</th>
+                    <th>Dilakukan Oleh</th>
+                    <th>Tanggal</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                @forelse($aktivitas as $item)
+
                     <tr>
 
-                        <th>No</th>
+                        <td>
 
-                        <th>Kode Barang</th>
+                            @if($item['jenis'] === 'Stok Masuk')
 
-                        <th>Nama Barang</th>
-
-                        <th>Jumlah</th>
-
-                        <th>Keterangan</th>
-
-                        <th>Tanggal</th>
-
-                    </tr>
-                </thead>
-
-                <tbody>
-
-                    @forelse($stokTerbaru as $item)
-
-                        <tr>
-
-                            <td>
-                                {{ $loop->iteration }}
-                            </td>
-
-                            <td>
-                                {{ $item->barang->kode_barang ?? '-' }}
-                            </td>
-
-                            <td class="fw-semibold">
-                                {{ $item->barang->nama_barang ?? '-' }}
-                            </td>
-
-                            <td>
-
-                                <span class="badge bg-success-subtle text-success">
-
-                                    +{{ $item->jumlah }}
-
+                                <span class="badge bg-success">
+                                    <i class="bi bi-arrow-down"></i>
+                                    Stok Masuk
                                 </span>
 
-                            </td>
+                            @else
 
-                            <td>
-                                {{ $item->keterangan ?? '-' }}
-                            </td>
+                                <span class="badge bg-warning text-dark">
+                                    <i class="bi bi-arrow-up"></i>
+                                    Stok Keluar
+                                </span>
 
-                            <td>
-                                {{ $item->created_at->format('d/m/Y H:i') }}
-                            </td>
+                            @endif
 
-                        </tr>
+                        </td>
 
-                    @empty
 
-                        <tr>
+                        <td class="fw-semibold">
+                            {{ $item['barang'] }}
+                        </td>
 
-                            <td colspan="6"
-                                class="text-center text-muted py-4">
 
-                                <i class="bi bi-inbox fs-3 d-block mb-2"></i>
+                        <td>
+                            {{ $item['jumlah'] }}
+                        </td>
 
-                                Belum ada data stok masuk.
 
-                            </td>
+                        <td>
+                            <i class="bi bi-person-circle me-1"></i>
+                            {{ $item['user'] }}
+                        </td>
 
-                        </tr>
 
-                    @endforelse
+                        <td>
+                            {{ $item['tanggal']->format('d/m/Y H:i') }}
+                        </td>
 
-                </tbody>
+                    </tr>
 
-            </table>
+                @empty
 
-        </div>
+                    <tr>
+                        <td colspan="5"
+                            class="text-center text-muted py-4">
+
+                            Belum ada aktivitas.
+
+                        </td>
+                    </tr>
+
+                @endforelse
+
+            </tbody>
+
+        </table>
 
     </div>
 
 </div>
 
+
 @endsection
+
+
+@push('scripts')
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+
+const grafik = @json($grafik);
+
+const labels = grafik.map(item => item.bulan);
+
+const stokMasuk = grafik.map(item => item.masuk);
+
+const stokKeluar = grafik.map(item => item.keluar);
+
+
+const ctx = document.getElementById('stokChart');
+
+
+new Chart(ctx, {
+
+    type: 'bar',
+
+    data: {
+
+        labels: labels,
+
+        datasets: [
+
+            {
+                label: 'Stok Masuk',
+                data: stokMasuk
+            },
+
+            {
+                label: 'Stok Keluar',
+                data: stokKeluar
+            }
+
+        ]
+
+    },
+
+    options: {
+
+        responsive: true,
+
+        maintainAspectRatio: false,
+
+        interaction: {
+            intersect: false,
+            mode: 'index'
+        },
+
+        scales: {
+
+            y: {
+                beginAtZero: true,
+
+                ticks: {
+                    precision: 0
+                }
+            }
+
+        }
+
+    }
+
+});
+
+</script>
+
+@endpush
