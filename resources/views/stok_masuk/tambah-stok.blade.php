@@ -48,6 +48,67 @@
 
         </div>
 
+        <div class="row g-3">
+
+    <div class="col-md-6">
+
+        <label class="form-label">
+            Nomor DO <span class="text-danger">*</span>
+        </label>
+
+        <input type="text"
+               name="nomor_do"
+               class="form-control"
+               placeholder="Masukkan nomor DO"
+               required>
+
+    </div>
+
+
+    <div class="col-md-6">
+
+        <label class="form-label">
+            Tanggal Request <span class="text-danger">*</span>
+        </label>
+
+        <input type="date"
+               name="tanggal_request"
+               class="form-control"
+               required>
+
+    </div>
+
+
+    <div class="col-md-6">
+
+        <label class="form-label">
+            Nama yang Request <span class="text-danger">*</span>
+        </label>
+
+        <input type="text"
+               name="nama_request"
+               class="form-control"
+               placeholder="Masukkan nama yang request"
+               required>
+
+    </div>
+
+
+    <div class="col-md-6">
+
+        <label class="form-label">
+            Keterangan
+        </label>
+
+        <input type="text"
+               name="keterangan"
+               class="form-control"
+               placeholder="Keterangan tambahan">
+
+    </div>
+
+</div>
+
         <div class="mb-4">
 
             <label class="form-label">

@@ -19,6 +19,82 @@
 
         @csrf
 
+        <div class="row g-3">
+
+    {{-- NOMOR DO --}}
+    <div class="col-md-6">
+        <label class="form-label">
+            Nomor DO <span class="text-danger">*</span>
+        </label>
+
+        <input type="text"
+               name="nomor_do"
+               class="form-control"
+               value="{{ old('nomor_do') }}"
+               placeholder="Masukkan nomor DO"
+               required>
+    </div>
+
+
+    {{-- TANGGAL REQUEST --}}
+    <div class="col-md-6">
+        <label class="form-label">
+            Tanggal Request <span class="text-danger">*</span>
+        </label>
+
+        <input type="date"
+               name="tanggal_request"
+               class="form-control"
+               value="{{ old('tanggal_request') }}"
+               required>
+    </div>
+
+
+    {{-- NAMA REQUEST --}}
+    <div class="col-md-6">
+        <label class="form-label">
+            PIC Request <span class="text-danger">*</span>
+        </label>
+
+        <input type="text"
+               name="nama_request"
+               class="form-control"
+               value="{{ old('nama_request') }}"
+               placeholder="Masukkan nama orang yang mengajukan"
+               required>
+    </div>
+
+
+    {{-- KATEGORI --}}
+    <div class="col-md-6">
+        <label class="form-label">
+            Kategori Barang <span class="text-danger">*</span>
+        </label>
+
+        <select name="kategori_id"
+                class="form-select"
+                required>
+
+            <option value="">
+                -- Pilih Kategori --
+            </option>
+
+            @foreach($categories as $category)
+
+                <option value="{{ $category->id }}"
+                    {{ old('kategori_id') == $category->id ? 'selected' : '' }}>
+
+                    {{ $category->nama_kategori }}
+
+                </option>
+
+            @endforeach
+
+        </select>
+    </div>
+
+</div>
+
         <div class="row">
 
             <div class="col-md-6 mb-3">
@@ -37,28 +113,6 @@
                        name="nama_barang"
                        class="form-control"
                        required>
-            </div>
-
-            <div class="col-md-6 mb-3">
-                <label class="form-label">Kategori</label>
-
-                <select name="kategori_id"
-                        class="form-select"
-                        required>
-
-                    <option value="">
-                        Pilih Kategori
-                    </option>
-
-                    @foreach($categories as $category)
-
-                        <option value="{{ $category->id }}">
-                            {{ $category->nama_kategori }}
-                        </option>
-
-                    @endforeach
-
-                </select>
             </div>
 
             <div class="col-md-3 mb-3">

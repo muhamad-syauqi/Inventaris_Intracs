@@ -92,13 +92,19 @@ class LaporanController extends Controller
     }
 
     public function riwayatStokMasuk()
-    {
-        $stokMasuk = StokMasuk::with(['barang', 'user'])
+        {
+            $stokMasuk = StokMasuk::with([
+                'barang.category',
+                'user'
+            ])
             ->latest()
             ->paginate(15);
 
-        return view('admin.riwayat-stok-masuk', compact('stokMasuk'));
-    }
+            return view(
+                'admin.riwayat-stok-masuk',
+                compact('stokMasuk')
+            );
+        }
 
 public function riwayatStokKeluar()
     {

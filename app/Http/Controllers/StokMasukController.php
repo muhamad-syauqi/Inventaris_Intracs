@@ -49,6 +49,11 @@ public function tambahStokPage()
         'nama_barang' => 'required|string|max:255',
         'satuan' => 'required|string|max:50',
         'stok' => 'required|integer|min:1',
+
+        'nomor_do' => 'required|string|max:100',
+        'tanggal_request' => 'required|date',
+        'nama_request' => 'required|string|max:150',
+
         'keterangan' => 'nullable|string',
     ]);
 
@@ -62,10 +67,15 @@ public function tambahStokPage()
     ]);
 
     StokMasuk::create([
-    'barang_id' => $barang->id,
-    'user_id' => auth()->id(),
-    'jumlah' => $request->stok,
-    'keterangan' => $request->keterangan ?? 'Input data barang baru',
+        'barang_id' => $barang->id,
+        'user_id' => auth()->id(),
+        'jumlah' => $request->stok,
+
+        'nomor_do' => $request->nomor_do,
+        'tanggal_request' => $request->tanggal_request,
+        'nama_request' => $request->nama_request,
+
+        'keterangan' => $request->keterangan ?? 'Input data barang baru',
     ]);
 
     return redirect()
@@ -78,6 +88,11 @@ public function tambahStokPage()
         $request->validate([
             'barang_id' => 'required|exists:barang,id',
             'jumlah' => 'required|integer|min:1',
+
+            'nomor_do' => 'required|string|max:100',
+            'tanggal_request' => 'required|date',
+            'nama_request' => 'required|string|max:150',
+
             'keterangan' => 'nullable|string',
         ]);
 
@@ -87,11 +102,16 @@ public function tambahStokPage()
                 ->findOrFail($request->barang_id);
 
             StokMasuk::create([
-                'barang_id' => $barang->id,
-                'user_id' => auth()->id(),
-                'jumlah' => $request->jumlah,
-                'keterangan' => $request->keterangan,
-            ]);
+            'barang_id' => $barang->id,
+            'user_id' => auth()->id(),
+            'jumlah' => $request->jumlah,
+
+            'nomor_do' => $request->nomor_do,
+            'tanggal_request' => $request->tanggal_request,
+            'nama_request' => $request->nama_request,
+
+            'keterangan' => $request->keterangan,
+        ]);
 
             $barang->increment('stok', $request->jumlah);
         });
