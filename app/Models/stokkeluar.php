@@ -15,6 +15,8 @@ class StokKeluar extends Model
         'barang_id',
         'user_id',
         'jumlah',
+        'gerbang_tol',
+        'nomor_gardu',
         'keterangan',
     ];
 

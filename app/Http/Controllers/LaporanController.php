@@ -2,279 +2,681 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Barang;
 use App\Models\StokMasuk;
 use App\Models\StokKeluar;
 use Illuminate\Http\Request;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpWord\PhpWord;
+use PhpOffice\PhpWord\IOFactory;
 
 class LaporanController extends Controller
 {
-    public function index()
+    /*
+    |--------------------------------------------------------------------------
+    | RIWAYAT STOK MASUK
+    |--------------------------------------------------------------------------
+    */
+
+    public function riwayatStokMasuk(Request $request)
     {
-        return view('laporan.index');
-    }
+        $query = StokMasuk::with([
+            'barang.category',
+            'user'
+        ])->latest();
 
-    // =========================
-    // LAPORAN BARANG
-    // =========================
-
-    public function barang(Request $request)
-    {
-        $query = Barang::with('category');
-
-        if ($request->filled('dari')) {
-            $query->whereDate('created_at', '>=', $request->dari);
-        }
-
-        if ($request->filled('sampai')) {
-            $query->whereDate('created_at', '<=', $request->sampai);
-        }
-
-        $barang = $query
-            ->orderBy('nama_barang')
-            ->get();
-
-        return view('laporan.barang', compact('barang'));
-    }
-
-
-    // =========================
-    // LAPORAN STOK MASUK
-    // =========================
-
-    public function stokMasuk(Request $request)
-    {
-        $query = StokMasuk::with('barang');
-
-        if ($request->filled('dari')) {
-            $query->whereDate('created_at', '>=', $request->dari);
-        }
-
-        if ($request->filled('sampai')) {
-            $query->whereDate('created_at', '<=', $request->sampai);
-        }
-
-        $stokMasuk = $query
-            ->latest()
-            ->get();
-
-        return view(
-            'laporan.stok-masuk',
-            compact('stokMasuk')
-        );
-    }
-
-
-    // =========================
-    // LAPORAN STOK KELUAR
-    // =========================
-
-    public function stokKeluar(Request $request)
-    {
-        $query = StokKeluar::with('barang');
-
-        if ($request->filled('dari')) {
-            $query->whereDate('created_at', '>=', $request->dari);
-        }
-
-        if ($request->filled('sampai')) {
-            $query->whereDate('created_at', '<=', $request->sampai);
-        }
-
-        $stokKeluar = $query
-            ->latest()
-            ->get();
-
-        return view(
-            'laporan.stok-keluar',
-            compact('stokKeluar')
-        );
-    }
-
-    public function riwayatStokMasuk()
-        {
-            $stokMasuk = StokMasuk::with([
-                'barang.category',
-                'user'
-            ])
-            ->latest()
-            ->paginate(15);
-
-            return view(
-                'admin.riwayat-stok-masuk',
-                compact('stokMasuk')
+        if ($request->filled('tanggal_mulai')) {
+            $query->whereDate(
+                'created_at',
+                '>=',
+                $request->tanggal_mulai
             );
         }
 
-public function riwayatStokKeluar()
-    {
-        $stokKeluar = StokKeluar::with(['barang', 'user'])
-            ->latest()
-            ->paginate(15);
+        if ($request->filled('tanggal_sampai')) {
+            $query->whereDate(
+                'created_at',
+                '<=',
+                $request->tanggal_sampai
+            );
+        }
 
-        return view('admin.riwayat-stok-keluar', compact('stokKeluar'));
+        $stokMasuk = $query->paginate(15)->withQueryString();
+
+        $totalTransaksi = $query->toBase()->getCountForPagination();
+
+        $totalJumlah = (clone $query)->sum('jumlah');
+
+        return view(
+            'admin.riwayat-stok-masuk',
+            compact(
+                'stokMasuk',
+                'totalTransaksi',
+                'totalJumlah'
+            )
+        );
     }
 
 
-    // =========================
-    // EXPORT BARANG
-    // =========================
+    /*
+    |--------------------------------------------------------------------------
+    | RIWAYAT STOK KELUAR
+    |--------------------------------------------------------------------------
+    */
 
-    public function exportBarang(Request $request)
+    public function riwayatStokKeluar(Request $request)
     {
-        $query = Barang::with('category');
+        $query = StokKeluar::with([
+            'barang.category',
+            'user'
+        ])->latest();
 
-        if ($request->filled('dari')) {
-            $query->whereDate('created_at', '>=', $request->dari);
+        if ($request->filled('tanggal_mulai')) {
+            $query->whereDate(
+                'created_at',
+                '>=',
+                $request->tanggal_mulai
+            );
         }
 
-        if ($request->filled('sampai')) {
-            $query->whereDate('created_at', '<=', $request->sampai);
+        if ($request->filled('tanggal_sampai')) {
+            $query->whereDate(
+                'created_at',
+                '<=',
+                $request->tanggal_sampai
+            );
         }
 
-        $barang = $query
-            ->orderBy('nama_barang')
-            ->get();
+        $stokKeluar = $query->paginate(15)->withQueryString();
 
-        $filename = 'laporan-barang.csv';
+        $totalTransaksi = $query->toBase()->getCountForPagination();
 
-        $handle = fopen('php://temp', 'w');
+        $totalJumlah = (clone $query)->sum('jumlah');
 
-        fputcsv($handle, [
+        return view(
+            'admin.riwayat-stok-keluar',
+            compact(
+                'stokKeluar',
+                'totalTransaksi',
+                'totalJumlah'
+            )
+        );
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | EXPORT EXCEL STOK MASUK
+    |--------------------------------------------------------------------------
+    */
+
+    public function exportStokMasukExcel(Request $request)
+    {
+        $query = StokMasuk::with([
+            'barang.category',
+            'user'
+        ])->latest();
+
+        $this->filterTanggal(
+            $query,
+            $request
+        );
+
+        $data = $query->get();
+
+        $spreadsheet = new Spreadsheet();
+
+        $sheet = $spreadsheet->getActiveSheet();
+
+        $sheet->setTitle('Stok Masuk');
+
+        $headers = [
+            'No',
+            'Tanggal & Jam',
             'Kode Barang',
             'Nama Barang',
             'Kategori',
+            'Jumlah',
             'Satuan',
-            'Stok'
-        ]);
+            'Nomor DO',
+            'Tanggal Request',
+            'Nama yang Request',
+            'Keterangan',
+            'Diinput Oleh',
+        ];
 
-        foreach ($barang as $item) {
-
-            fputcsv($handle, [
-                $item->kode_barang,
-                $item->nama_barang,
-                $item->category->nama_kategori ?? '-',
-                $item->satuan,
-                $item->stok
-            ]);
+        foreach ($headers as $column => $header) {
+            $sheet->setCellValue(
+                $this->columnLetter($column + 1) . '1',
+                $header
+            );
         }
 
-        rewind($handle);
+        $row = 2;
+
+        foreach ($data as $index => $item) {
+
+            $sheet->setCellValue("A{$row}", $index + 1);
+            $sheet->setCellValue(
+                "B{$row}",
+                $item->created_at?->format('d-m-Y H:i')
+            );
+            $sheet->setCellValue(
+                "C{$row}",
+                $item->barang->kode_barang ?? '-'
+            );
+            $sheet->setCellValue(
+                "D{$row}",
+                $item->barang->nama_barang ?? '-'
+            );
+            $sheet->setCellValue(
+                "E{$row}",
+                $item->barang->category->nama_kategori ?? '-'
+            );
+            $sheet->setCellValue("F{$row}", $item->jumlah);
+            $sheet->setCellValue(
+                "G{$row}",
+                $item->barang->satuan ?? '-'
+            );
+            $sheet->setCellValue(
+                "H{$row}",
+                $item->nomor_do ?? '-'
+            );
+            $sheet->setCellValue(
+                "I{$row}",
+                $item->tanggal_request
+                    ? \Carbon\Carbon::parse(
+                        $item->tanggal_request
+                    )->format('d-m-Y')
+                    : '-'
+            );
+            $sheet->setCellValue(
+                "J{$row}",
+                $item->nama_request ?? '-'
+            );
+            $sheet->setCellValue(
+                "K{$row}",
+                $item->keterangan ?? '-'
+            );
+            $sheet->setCellValue(
+                "L{$row}",
+                $item->user->name ?? '-'
+            );
+
+            $row++;
+        }
+
+        foreach (range('A', 'L') as $column) {
+            $sheet->getColumnDimension($column)
+                ->setAutoSize(true);
+        }
+
+        $filename = 'riwayat-stok-masuk-' .
+            now()->format('Y-m-d-His') .
+            '.xlsx';
+
+        $writer = new Xlsx($spreadsheet);
 
         return response()->streamDownload(
-            function () use ($handle) {
-                fpassthru($handle);
+            function () use ($writer) {
+                $writer->save('php://output');
             },
-            $filename,
-            [
-                'Content-Type' => 'text/csv',
-            ]
+            $filename
         );
     }
 
 
-    // =========================
-    // EXPORT STOK MASUK
-    // =========================
+    /*
+    |--------------------------------------------------------------------------
+    | EXPORT EXCEL STOK KELUAR
+    |--------------------------------------------------------------------------
+    */
 
-    public function exportStokMasuk(Request $request)
+    public function exportStokKeluarExcel(Request $request)
     {
-        $query = StokMasuk::with('barang');
+        $query = StokKeluar::with([
+            'barang.category',
+            'user'
+        ])->latest();
 
-        if ($request->filled('dari')) {
-            $query->whereDate('created_at', '>=', $request->dari);
-        }
+        $this->filterTanggal(
+            $query,
+            $request
+        );
 
-        if ($request->filled('sampai')) {
-            $query->whereDate('created_at', '<=', $request->sampai);
-        }
+        $data = $query->get();
 
-        $data = $query->latest()->get();
+        $spreadsheet = new Spreadsheet();
 
-        $handle = fopen('php://temp', 'w');
+        $sheet = $spreadsheet->getActiveSheet();
 
-        fputcsv($handle, [
+        $sheet->setTitle('Stok Keluar');
+
+        $headers = [
+            'No',
+            'Tanggal & Jam',
             'Kode Barang',
             'Nama Barang',
+            'Kategori',
             'Jumlah',
+            'Satuan',
+            'Gerbang Tol',
+            'Nomor Gardu',
             'Keterangan',
-            'Tanggal'
-        ]);
+            'Dikeluarkan Oleh',
+        ];
 
-        foreach ($data as $item) {
-
-            fputcsv($handle, [
-                $item->barang->kode_barang ?? '-',
-                $item->barang->nama_barang ?? '-',
-                $item->jumlah,
-                $item->keterangan ?? '-',
-                $item->created_at->format('d/m/Y H:i')
-            ]);
+        foreach ($headers as $column => $header) {
+            $sheet->setCellValue(
+                $this->columnLetter($column + 1) . '1',
+                $header
+            );
         }
 
-        rewind($handle);
+        $row = 2;
+
+        foreach ($data as $index => $item) {
+
+            $sheet->setCellValue("A{$row}", $index + 1);
+            $sheet->setCellValue(
+                "B{$row}",
+                $item->created_at?->format('d-m-Y H:i')
+            );
+            $sheet->setCellValue(
+                "C{$row}",
+                $item->barang->kode_barang ?? '-'
+            );
+            $sheet->setCellValue(
+                "D{$row}",
+                $item->barang->nama_barang ?? '-'
+            );
+            $sheet->setCellValue(
+                "E{$row}",
+                $item->barang->category->nama_kategori ?? '-'
+            );
+            $sheet->setCellValue("F{$row}", $item->jumlah);
+            $sheet->setCellValue(
+                "G{$row}",
+                $item->barang->satuan ?? '-'
+            );
+            $sheet->setCellValue(
+                "H{$row}",
+                $item->gerbang_tol ?? '-'
+            );
+            $sheet->setCellValue(
+                "I{$row}",
+                $item->nomor_gardu
+                    ? 'Gardu ' . $item->nomor_gardu
+                    : '-'
+            );
+            $sheet->setCellValue(
+                "J{$row}",
+                $item->keterangan ?? '-'
+            );
+            $sheet->setCellValue(
+                "K{$row}",
+                $item->user->name ?? '-'
+            );
+
+            $row++;
+        }
+
+        foreach (range('A', 'K') as $column) {
+            $sheet->getColumnDimension($column)
+                ->setAutoSize(true);
+        }
+
+        $filename = 'riwayat-stok-keluar-' .
+            now()->format('Y-m-d-His') .
+            '.xlsx';
+
+        $writer = new Xlsx($spreadsheet);
 
         return response()->streamDownload(
-            function () use ($handle) {
-                fpassthru($handle);
+            function () use ($writer) {
+                $writer->save('php://output');
             },
-            'laporan-stok-masuk.csv',
-            [
-                'Content-Type' => 'text/csv',
-            ]
+            $filename
         );
     }
 
 
-    // =========================
-    // EXPORT STOK KELUAR
-    // =========================
+    /*
+    |--------------------------------------------------------------------------
+    | EXPORT WORD STOK MASUK
+    |--------------------------------------------------------------------------
+    */
 
-    public function exportStokKeluar(Request $request)
+    public function exportStokMasukWord(Request $request)
     {
-        $query = StokKeluar::with('barang');
+        $query = StokMasuk::with([
+            'barang.category',
+            'user'
+        ])->latest();
 
-        if ($request->filled('dari')) {
-            $query->whereDate('created_at', '>=', $request->dari);
+        $this->filterTanggal(
+            $query,
+            $request
+        );
+
+        $data = $query->get();
+
+        $word = new PhpWord();
+
+        $section = $word->addSection();
+
+        $section->addTitle(
+            'RIWAYAT STOK MASUK',
+            1
+        );
+
+        $section->addText(
+            'Tanggal Cetak: ' .
+            now()->format('d-m-Y H:i') .
+            ' WIB'
+        );
+
+        if (
+            $request->filled('tanggal_mulai') ||
+            $request->filled('tanggal_sampai')
+        ) {
+
+            $mulai = $request->tanggal_mulai
+                ? \Carbon\Carbon::parse(
+                    $request->tanggal_mulai
+                )->format('d-m-Y')
+                : '-';
+
+            $sampai = $request->tanggal_sampai
+                ? \Carbon\Carbon::parse(
+                    $request->tanggal_sampai
+                )->format('d-m-Y')
+                : '-';
+
+            $section->addText(
+                "Periode: {$mulai} s/d {$sampai}"
+            );
         }
 
-        if ($request->filled('sampai')) {
-            $query->whereDate('created_at', '<=', $request->sampai);
-        }
-
-        $data = $query->latest()->get();
-
-        $handle = fopen('php://temp', 'w');
-
-        fputcsv($handle, [
-            'Kode Barang',
-            'Nama Barang',
-            'Jumlah',
-            'Keterangan',
-            'Tanggal'
+        $table = $section->addTable([
+            'borderSize' => 6,
+            'borderColor' => '999999',
+            'cellMargin' => 80,
         ]);
 
-        foreach ($data as $item) {
+        $headers = [
+            'No',
+            'Tanggal',
+            'Barang',
+            'Jumlah',
+            'DO',
+            'Tgl Request',
+            'Nama Request',
+            'Input Oleh',
+        ];
 
-            fputcsv($handle, [
-                $item->barang->kode_barang ?? '-',
-                $item->barang->nama_barang ?? '-',
-                $item->jumlah,
-                $item->keterangan ?? '-',
-                $item->created_at->format('d/m/Y H:i')
-            ]);
+        $table->addRow();
+
+        foreach ($headers as $header) {
+            $table->addCell(1200)
+                ->addText($header);
         }
 
-        rewind($handle);
+        foreach ($data as $index => $item) {
 
-        return response()->streamDownload(
-            function () use ($handle) {
-                fpassthru($handle);
-            },
-            'laporan-stok-keluar.csv',
-            [
-                'Content-Type' => 'text/csv',
-            ]
+            $table->addRow();
+
+            $table->addCell(500)
+                ->addText((string) ($index + 1));
+
+            $table->addCell(1300)
+                ->addText(
+                    $item->created_at?->format('d-m-Y H:i') ?? '-'
+                );
+
+            $table->addCell(1800)
+                ->addText(
+                    $item->barang->nama_barang ?? '-'
+                );
+
+            $table->addCell(800)
+                ->addText(
+                    $item->jumlah . ' ' .
+                    ($item->barang->satuan ?? '')
+                );
+
+            $table->addCell(1200)
+                ->addText(
+                    $item->nomor_do ?? '-'
+                );
+
+            $table->addCell(1200)
+                ->addText(
+                    $item->tanggal_request
+                        ? \Carbon\Carbon::parse(
+                            $item->tanggal_request
+                        )->format('d-m-Y')
+                        : '-'
+                );
+
+            $table->addCell(1600)
+                ->addText(
+                    $item->nama_request ?? '-'
+                );
+
+            $table->addCell(1400)
+                ->addText(
+                    $item->user->name ?? '-'
+                );
+        }
+
+        $filename = 'riwayat-stok-masuk-' .
+            now()->format('Y-m-d-His') .
+            '.docx';
+
+        $tempFile = tempnam(
+            sys_get_temp_dir(),
+            'stok_masuk_'
         );
+
+        $writer = IOFactory::createWriter(
+            $word,
+            'Word2007'
+        );
+
+        $writer->save($tempFile);
+
+        return response()
+            ->download(
+                $tempFile,
+                $filename
+            )
+            ->deleteFileAfterSend(true);
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | EXPORT WORD STOK KELUAR
+    |--------------------------------------------------------------------------
+    */
+
+    public function exportStokKeluarWord(Request $request)
+    {
+        $query = StokKeluar::with([
+            'barang.category',
+            'user'
+        ])->latest();
+
+        $this->filterTanggal(
+            $query,
+            $request
+        );
+
+        $data = $query->get();
+
+        $word = new PhpWord();
+
+        $section = $word->addSection();
+
+        $section->addTitle(
+            'RIWAYAT STOK KELUAR',
+            1
+        );
+
+        $section->addText(
+            'Tanggal Cetak: ' .
+            now()->format('d-m-Y H:i') .
+            ' WIB'
+        );
+
+        $table = $section->addTable([
+            'borderSize' => 6,
+            'borderColor' => '999999',
+            'cellMargin' => 80,
+        ]);
+
+        $headers = [
+            'No',
+            'Tanggal',
+            'Barang',
+            'Jumlah',
+            'Gerbang Tol',
+            'Gardu',
+            'Keterangan',
+            'Dikeluarkan Oleh',
+        ];
+
+        $table->addRow();
+
+        foreach ($headers as $header) {
+            $table->addCell(1300)
+                ->addText($header);
+        }
+
+        foreach ($data as $index => $item) {
+
+            $table->addRow();
+
+            $table->addCell(500)
+                ->addText((string) ($index + 1));
+
+            $table->addCell(1300)
+                ->addText(
+                    $item->created_at?->format('d-m-Y H:i') ?? '-'
+                );
+
+            $table->addCell(1800)
+                ->addText(
+                    $item->barang->nama_barang ?? '-'
+                );
+
+            $table->addCell(800)
+                ->addText(
+                    $item->jumlah . ' ' .
+                    ($item->barang->satuan ?? '')
+                );
+
+            $table->addCell(1600)
+                ->addText(
+                    $item->gerbang_tol ?? '-'
+                );
+
+            $table->addCell(1000)
+                ->addText(
+                    $item->nomor_gardu
+                        ? 'Gardu ' . $item->nomor_gardu
+                        : '-'
+                );
+
+            $table->addCell(1800)
+                ->addText(
+                    $item->keterangan ?? '-'
+                );
+
+            $table->addCell(1400)
+                ->addText(
+                    $item->user->name ?? '-'
+                );
+        }
+
+        $filename = 'riwayat-stok-keluar-' .
+            now()->format('Y-m-d-His') .
+            '.docx';
+
+        $tempFile = tempnam(
+            sys_get_temp_dir(),
+            'stok_keluar_'
+        );
+
+        $writer = IOFactory::createWriter(
+            $word,
+            'Word2007'
+        );
+
+        $writer->save($tempFile);
+
+        return response()
+            ->download(
+                $tempFile,
+                $filename
+            )
+            ->deleteFileAfterSend(true);
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | FILTER TANGGAL
+    |--------------------------------------------------------------------------
+    */
+
+    private function filterTanggal($query, Request $request)
+    {
+        if ($request->filled('tanggal_mulai')) {
+
+            $query->whereDate(
+                'created_at',
+                '>=',
+                $request->tanggal_mulai
+            );
+        }
+
+        if ($request->filled('tanggal_sampai')) {
+
+            $query->whereDate(
+                'created_at',
+                '<=',
+                $request->tanggal_sampai
+            );
+        }
+
+        return $query;
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | KOLOM EXCEL
+    |--------------------------------------------------------------------------
+    */
+
+    private function columnLetter($number)
+    {
+        $letter = '';
+
+        while ($number > 0) {
+
+            $mod = ($number - 1) % 26;
+
+            $letter = chr(65 + $mod) . $letter;
+
+            $number = intdiv(
+                $number - $mod,
+                26
+            ) - 1;
+        }
+
+        return $letter;
     }
 }

@@ -144,21 +144,27 @@
     @elseif(auth()->user()->role === 'teknisi')
 
         <a href="{{ route('teknisi.dashboard') }}"
-           class="{{ request()->routeIs('teknisi.dashboard') ? 'active' : '' }}">
+        class="{{ request()->routeIs('teknisi.dashboard') ? 'active' : '' }}">
             <i class="bi bi-grid"></i>
             Dashboard
         </a>
 
         <a href="{{ route('stok-masuk.index') }}"
-           class="{{ request()->routeIs('stok-masuk.*') ? 'active' : '' }}">
+        class="{{ request()->routeIs('stok-masuk.*') ? 'active' : '' }}">
             <i class="bi bi-box-arrow-in-down"></i>
             Stok Masuk
         </a>
 
         <a href="{{ route('stok-keluar.index') }}"
-           class="{{ request()->routeIs('stok-keluar.*') ? 'active' : '' }}">
+        class="{{ request()->routeIs('stok-keluar.*') ? 'active' : '' }}">
             <i class="bi bi-box-arrow-up"></i>
             Stok Keluar
+        </a>
+
+        <a href="{{ route('teknisi.riwayat') }}"
+        class="{{ request()->routeIs('teknisi.riwayat') ? 'active' : '' }}">
+            <i class="bi bi-clock-history"></i>
+            Riwayat Saya
         </a>
 
     @endif
@@ -190,7 +196,7 @@
     <div class="topbar">
 
         <div>
-            <h5 class="mb-0">@yield('page-title', 'Dashboard')</h5>
+            <h5 class="mb-0">@yield('page-title')</h5>
         </div>
 
         <div>

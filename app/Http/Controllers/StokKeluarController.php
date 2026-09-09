@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\DB;
 
 class StokKeluarController extends Controller
 {
-    // Menampilkan daftar barang yang tersedia
     public function index()
     {
         $barang = Barang::orderBy('nama_barang')->get();
@@ -17,7 +16,6 @@ class StokKeluarController extends Controller
         $query = StokKeluar::with(['barang', 'user'])
             ->latest();
 
-        // Teknisi hanya melihat transaksi miliknya
         if (auth()->user()->role === 'teknisi') {
             $query->where('user_id', auth()->id());
         }
@@ -29,6 +27,7 @@ class StokKeluarController extends Controller
             'stokKeluar'
         ));
     }
+
     public function keluarkan($id)
     {
         $barang = Barang::findOrFail($id);
@@ -36,12 +35,13 @@ class StokKeluarController extends Controller
         return view('stok_keluar.keluarkan', compact('barang'));
     }
 
-    // Mengeluarkan stok
     public function store(Request $request)
     {
         $request->validate([
             'barang_id' => 'required|exists:barang,id',
             'jumlah' => 'required|integer|min:1',
+            'gerbang_tol' => 'required|string|max:100',
+            'nomor_gardu' => 'required|string|max:50',
             'keterangan' => 'nullable|string',
         ]);
 
@@ -50,7 +50,6 @@ class StokKeluarController extends Controller
             $barang = Barang::lockForUpdate()
                 ->findOrFail($request->barang_id);
 
-            // Mengecek stok
             if ($barang->stok < $request->jumlah) {
                 abort(
                     redirect()
@@ -59,36 +58,20 @@ class StokKeluarController extends Controller
                 );
             }
 
-            // Simpan transaksi
             StokKeluar::create([
                 'barang_id' => $barang->id,
                 'user_id' => auth()->id(),
                 'jumlah' => $request->jumlah,
+                'gerbang_tol' => $request->gerbang_tol,
+                'nomor_gardu' => $request->nomor_gardu,
                 'keterangan' => $request->keterangan,
             ]);
 
-            // Kurangi stok
             $barang->decrement('stok', $request->jumlah);
         });
 
         return redirect()
             ->route('stok-keluar.index')
             ->with('success', 'Stok berhasil dikeluarkan.');
-    }
-
-    // Data stok keluar
-    public function data()
-    {
-        $stokKeluar = StokKeluar::with([
-            'barang',
-            'user'
-        ])
-        ->latest()
-        ->paginate(10);
-
-        return view(
-            'stok_keluar.data',
-            compact('stokKeluar')
-        );
     }
 }

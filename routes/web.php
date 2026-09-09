@@ -8,6 +8,7 @@ use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\StokMasukController;
 use App\Http\Controllers\StokKeluarController;
 use App\Http\Controllers\TeknisiDashboardController;
+use App\Http\Controllers\TeknisiRiwayatController;
 
 
 /*
@@ -36,30 +37,39 @@ Route::post('/logout', [AuthController::class, 'logout'])
 |--------------------------------------------------------------------------
 */
 
-Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::middleware(['auth', 'role:admin'])->group(function () {
 
-    // Dashboard Admin
     Route::get('/admin/dashboard',
         [DashboardController::class, 'index']
     )->name('admin.dashboard');
 
-
-    // Barang - Admin hanya melihat data
     Route::resource('barang', BarangController::class)
-        ->only(['index', 'show']);
+        ->only(['index', 'show', 'edit', 'update']);
 
-
-    // Riwayat Stok Masuk
     Route::get('/admin/riwayat-stok-masuk',
         [LaporanController::class, 'riwayatStokMasuk']
     )->name('admin.riwayat-stok-masuk');
 
+    Route::get('/admin/riwayat-stok-masuk/excel',
+        [LaporanController::class, 'exportStokMasukExcel']
+    )->name('admin.riwayat-stok-masuk.excel');
 
-    // Riwayat Stok Keluar
+    Route::get('/admin/riwayat-stok-masuk/word',
+        [LaporanController::class, 'exportStokMasukWord']
+    )->name('admin.riwayat-stok-masuk.word');
+
+
     Route::get('/admin/riwayat-stok-keluar',
         [LaporanController::class, 'riwayatStokKeluar']
     )->name('admin.riwayat-stok-keluar');
 
+    Route::get('/admin/riwayat-stok-keluar/excel',
+        [LaporanController::class, 'exportStokKeluarExcel']
+    )->name('admin.riwayat-stok-keluar.excel');
+
+    Route::get('/admin/riwayat-stok-keluar/word',
+        [LaporanController::class, 'exportStokKeluarWord']
+    )->name('admin.riwayat-stok-keluar.word');
 });
 
 
@@ -82,6 +92,9 @@ Route::middleware(['auth', 'role:teknisi'])->group(function () {
     | STOK MASUK
     |--------------------------------------------------------------------------
     */
+
+   Route::get('/teknisi/riwayat',[TeknisiRiwayatController::class, 'index']
+    )->name('teknisi.riwayat');
 
     Route::get('/stok-masuk',
         [StokMasukController::class, 'index']
