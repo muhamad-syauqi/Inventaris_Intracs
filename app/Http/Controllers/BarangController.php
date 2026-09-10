@@ -45,28 +45,30 @@ class BarangController extends Controller
     }
 
     // Menyimpan barang baru
-    public function store(Request $request)
-    {
-        $request->validate([
-            'kategori_id' => 'required|exists:categories,id',
-            'kode_barang' => 'required|string|max:20|unique:barang,kode_barang',
-            'nama_barang' => 'required|string|max:100',
-            'satuan' => 'required|string|max:20',
-            'stok' => 'required|integer|min:0',
-        ]);
+public function store(Request $request)
+{
+    $request->validate([
+        'kode_barang' => 'required|string|max:50|unique:barang,kode_barang',
+        'nama_barang' => 'required|string|max:255|unique:barang,nama_barang',
+        'kategori_id' => 'required|exists:categories,id',
+        'satuan' => 'required|string|max:50',
+    ], [
+        'kode_barang.unique' => 'Data barang sudah tersedia. Silakan menambah data barang dengan kode barang yang berbeda.',
+        'nama_barang.unique' => 'Data barang sudah tersedia. Silakan menambah data barang dengan nama barang yang berbeda.',
+    ]);
 
-        Barang::create([
-            'kategori_id' => $request->kategori_id,
-            'kode_barang' => $request->kode_barang,
-            'nama_barang' => $request->nama_barang,
-            'satuan' => $request->satuan,
-            'stok' => $request->stok,
-        ]);
+    Barang::create([
+        'kode_barang' => $request->kode_barang,
+        'nama_barang' => $request->nama_barang,
+        'kategori_id' => $request->kategori_id,
+        'satuan' => $request->satuan,
+        'stok' => 0,
+    ]);
 
-        return redirect()
-            ->route('barang.index')
-            ->with('success', 'Data barang berhasil ditambahkan.');
-    }
+    return redirect()
+        ->route('stok-masuk.input-barang')
+        ->with('success', 'Data barang berhasil ditambahkan.');
+}
 
     // Menampilkan detail barang
     public function show(Barang $barang)
@@ -88,22 +90,25 @@ class BarangController extends Controller
     }
 
     // Update barang
-    public function update(Request $request, Barang $barang)
+   public function update(Request $request, $id)
     {
+        $barang = Barang::findOrFail($id);
+
         $request->validate([
-            'kategori_id' => 'required|exists:categories,id',
-            'kode_barang' => 'required|string|max:20|unique:barang,kode_barang,' . $barang->id,
-            'nama_barang' => 'required|string|max:100',
-            'satuan' => 'required|string|max:20',
-            'stok' => 'required|integer|min:0',
+            'kode_barang' => 'required|string|max:50|unique:barang,kode_barang,' . $barang->id,
+            'nama_barang' => 'required|string|max:255|unique:barang,nama_barang,' . $barang->id,
+            'kategori_id' => 'required|exists:category,id',
+            'satuan' => 'required|string|max:50',
+        ], [
+            'kode_barang.unique' => 'Kode barang sudah digunakan oleh barang lain.',
+            'nama_barang.unique' => 'Nama barang sudah digunakan oleh barang lain.',
         ]);
 
         $barang->update([
-            'kategori_id' => $request->kategori_id,
             'kode_barang' => $request->kode_barang,
             'nama_barang' => $request->nama_barang,
+            'kategori_id' => $request->kategori_id,
             'satuan' => $request->satuan,
-            'stok' => $request->stok,
         ]);
 
         return redirect()

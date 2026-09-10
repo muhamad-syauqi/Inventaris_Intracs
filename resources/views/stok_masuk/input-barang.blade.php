@@ -14,6 +14,28 @@
 
 <div class="card p-4">
 
+    @if ($errors->any())
+    <div class="alert alert-danger">
+        <div class="d-flex align-items-start">
+            <i class="bi bi-exclamation-circle-fill me-2"></i>
+
+            <div>
+                <strong>Data barang sudah tersedia</strong>
+
+                <ul class="mb-0 mt-1">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+
+                <div class="mt-2">
+                    Silakan menambah data barang dengan kode atau nama barang yang berbeda.
+                </div>
+            </div>
+        </div>
+    </div>
+@endif
+
     <form method="POST"
           action="{{ route('stok-masuk.store-barang') }}">
 

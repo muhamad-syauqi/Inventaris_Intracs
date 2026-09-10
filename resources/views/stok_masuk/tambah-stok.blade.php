@@ -82,13 +82,13 @@
     <div class="col-md-6">
 
         <label class="form-label">
-            Nama yang Request <span class="text-danger">*</span>
+            PIC REQUEST <span class="text-danger">*</span>
         </label>
 
         <input type="text"
-               name="nama_request"
+               name="PIC_REQUEST"
                class="form-control"
-               placeholder="Masukkan nama yang request"
+               placeholder="Masukkan nama orang yang mengajukan"
                required>
 
     </div>
@@ -123,18 +123,6 @@
 
         </div>
 
-        <div class="mb-4">
-
-            <label class="form-label">
-                Keterangan
-            </label>
-
-            <textarea name="keterangan"
-                      class="form-control"
-                      rows="3"
-                      placeholder="Contoh: Pembelian barang"></textarea>
-
-        </div>
 
         <div class="alert alert-info">
             <i class="bi bi-info-circle"></i>
