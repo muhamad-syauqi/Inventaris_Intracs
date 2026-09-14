@@ -149,12 +149,10 @@
             Dashboard
         </a>
 
-        <a href="{{ route('stok-masuk.index') }}"
-        class="{{ request()->routeIs('stok-masuk.*') ? 'active' : '' }}">
+        <a href="{{ route('stok-masuk.tambah-stok') }}">
             <i class="bi bi-box-arrow-in-down"></i>
-            Stok Masuk
-        </a>
-
+             Tambah Stok
+            </a>
         <a href="{{ route('stok-keluar.index') }}"
         class="{{ request()->routeIs('stok-keluar.*') ? 'active' : '' }}">
             <i class="bi bi-box-arrow-up"></i>

@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PublicDashboardController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BarangController;
 use App\Http\Controllers\DashboardController;
@@ -13,13 +14,19 @@ use App\Http\Controllers\TeknisiRiwayatController;
 
 /*
 |--------------------------------------------------------------------------
-| Halaman Login
+| Halaman Awal
 |--------------------------------------------------------------------------
 */
 
-Route::get('/', function () {
-    return redirect()->route('login');
-});
+Route::get('/', [PublicDashboardController::class, 'index'])
+    ->name('public.dashboard');
+
+
+/*
+|--------------------------------------------------------------------------
+| Login
+|--------------------------------------------------------------------------
+*/
 
 Route::get('/login', [AuthController::class, 'showLogin'])
     ->name('login');
@@ -37,14 +44,56 @@ Route::post('/logout', [AuthController::class, 'logout'])
 |--------------------------------------------------------------------------
 */
 
-    Route::middleware(['auth', 'role:admin'])->group(function () {
+Route::middleware(['auth', 'role:admin'])->group(function () {
 
+    // Dashboard Admin
     Route::get('/admin/dashboard',
         [DashboardController::class, 'index']
     )->name('admin.dashboard');
 
-    Route::resource('barang', BarangController::class)
-        ->only(['index', 'show', 'edit', 'update']);
+
+    /*
+    |--------------------------------------------------------------------------
+    | Barang
+    |--------------------------------------------------------------------------
+    */
+
+    // Daftar barang
+    Route::get('/barang',
+        [BarangController::class, 'index']
+    )->name('barang.index');
+
+    // Form tambah barang
+    Route::get('/barang/create',
+        [BarangController::class, 'create']
+    )->name('barang.create');
+
+    // Simpan barang
+    Route::post('/barang',
+        [BarangController::class, 'store']
+    )->name('barang.store');
+
+    // Detail barang
+    Route::get('/barang/{id}',
+        [BarangController::class, 'show']
+    )->name('barang.show');
+
+    // Form edit barang
+    Route::get('/barang/{id}/edit',
+        [BarangController::class, 'edit']
+    )->name('barang.edit');
+
+    // Update barang
+    Route::put('/barang/{id}',
+        [BarangController::class, 'update']
+    )->name('barang.update');
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Riwayat Stok Masuk Admin
+    |--------------------------------------------------------------------------
+    */
 
     Route::get('/admin/riwayat-stok-masuk',
         [LaporanController::class, 'riwayatStokMasuk']
@@ -59,6 +108,12 @@ Route::post('/logout', [AuthController::class, 'logout'])
     )->name('admin.riwayat-stok-masuk.word');
 
 
+    /*
+    |--------------------------------------------------------------------------
+    | Riwayat Stok Keluar Admin
+    |--------------------------------------------------------------------------
+    */
+
     Route::get('/admin/riwayat-stok-keluar',
         [LaporanController::class, 'riwayatStokKeluar']
     )->name('admin.riwayat-stok-keluar');
@@ -70,6 +125,7 @@ Route::post('/logout', [AuthController::class, 'logout'])
     Route::get('/admin/riwayat-stok-keluar/word',
         [LaporanController::class, 'exportStokKeluarWord']
     )->name('admin.riwayat-stok-keluar.word');
+
 });
 
 
@@ -89,31 +145,16 @@ Route::middleware(['auth', 'role:teknisi'])->group(function () {
 
     /*
     |--------------------------------------------------------------------------
-    | STOK MASUK
+    | Tambah Stok
     |--------------------------------------------------------------------------
     */
 
-   Route::get('/teknisi/riwayat',[TeknisiRiwayatController::class, 'index']
-    )->name('teknisi.riwayat');
-
-    Route::get('/stok-masuk',
-        [StokMasukController::class, 'index']
-    )->name('stok-masuk.index');
-
-    // Input barang baru
-    Route::get('/stok-masuk/input-barang',
-        [StokMasukController::class, 'inputBarang']
-    )->name('stok-masuk.input-barang');
-
-    Route::post('/stok-masuk/barang',
-        [StokMasukController::class, 'storeBarang']
-    )->name('stok-masuk.store-barang');
-
-    // Tambah stok
+    // Halaman tambah stok
     Route::get('/stok-masuk/tambah-stok',
         [StokMasukController::class, 'tambahStokPage']
     )->name('stok-masuk.tambah-stok');
 
+    // Proses tambah stok
     Route::post('/stok-masuk/tambah',
         [StokMasukController::class, 'tambahStok']
     )->name('stok-masuk.tambah');
@@ -121,7 +162,7 @@ Route::middleware(['auth', 'role:teknisi'])->group(function () {
 
     /*
     |--------------------------------------------------------------------------
-    | STOK KELUAR
+    | Stok Keluar
     |--------------------------------------------------------------------------
     */
 
@@ -136,5 +177,16 @@ Route::middleware(['auth', 'role:teknisi'])->group(function () {
     Route::post('/stok-keluar',
         [StokKeluarController::class, 'store']
     )->name('stok-keluar.store');
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Riwayat Teknisi
+    |--------------------------------------------------------------------------
+    */
+
+    Route::get('/teknisi/riwayat',
+        [TeknisiRiwayatController::class, 'index']
+    )->name('teknisi.riwayat');
 
 });
