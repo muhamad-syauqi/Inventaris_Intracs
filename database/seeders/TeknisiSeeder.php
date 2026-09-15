@@ -103,7 +103,7 @@ class TeknisiSeeder extends Seeder
             ],
              [
                 'name' => 'Rahmat',
-                'email' => 'tahmatsodik@gmail.com',
+                'email' => 'rahmatsodik@gmail.com',
                 'password' => 'teknisi4222',
             ],
              [
