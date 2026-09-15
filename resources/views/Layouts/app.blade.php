@@ -12,10 +12,26 @@
           href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+
         body {
             background: #f5f7fb;
             font-family: Arial, sans-serif;
         }
+
+        /* =========================
+           SIDEBAR DESKTOP
+           ========================= */
 
         .sidebar {
             width: 245px;
@@ -26,12 +42,15 @@
             background: #08213f;
             color: white;
             padding: 25px 15px;
+            z-index: 1050;
+            overflow-y: auto;
         }
 
         .brand {
             font-size: 20px;
             font-weight: 700;
             margin-bottom: 35px;
+            line-height: 1.3;
         }
 
         .sidebar a {
@@ -41,6 +60,7 @@
             padding: 13px 15px;
             border-radius: 8px;
             margin-bottom: 7px;
+            transition: .2s;
         }
 
         .sidebar a:hover,
@@ -53,9 +73,21 @@
             margin-right: 10px;
         }
 
+        .sidebar-logout {
+            position: absolute;
+            bottom: 25px;
+            left: 15px;
+            right: 15px;
+        }
+
+        /* =========================
+           MAIN
+           ========================= */
+
         .main {
             margin-left: 245px;
             min-height: 100vh;
+            width: calc(100% - 245px);
         }
 
         .topbar {
@@ -70,22 +102,46 @@
 
         .content {
             padding: 30px;
+            width: 100%;
         }
+
+        /* =========================
+           CARD
+           ========================= */
 
         .card {
             border: none;
             border-radius: 12px;
             box-shadow: 0 3px 15px rgba(0,0,0,.05);
+            max-width: 100%;
         }
 
         .stat-card {
             padding: 22px;
         }
 
+        /* =========================
+           TABLE
+           ========================= */
+
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .table {
+            min-width: 650px;
+        }
+
         .table th {
             background: #f1f5f9;
             white-space: nowrap;
         }
+
+        /* =========================
+           BUTTON
+           ========================= */
 
         .btn-primary {
             background: #1473e6;
@@ -96,6 +152,184 @@
             padding: 7px 12px;
             border-radius: 7px;
         }
+
+        /* =========================
+           MOBILE HEADER BUTTON
+           ========================= */
+
+        .mobile-menu-btn {
+            display: none;
+        }
+
+        /* =========================
+           MOBILE
+           ========================= */
+
+        @media (max-width: 991.98px) {
+
+            .sidebar {
+                width: 270px;
+                transform: translateX(-100%);
+                transition: transform .3s ease;
+                box-shadow: 5px 0 20px rgba(0,0,0,.15);
+            }
+
+            .sidebar.show {
+                transform: translateX(0);
+            }
+
+            .main {
+                margin-left: 0;
+                width: 100%;
+            }
+
+            .topbar {
+                height: 65px;
+                padding: 0 18px;
+                gap: 10px;
+            }
+
+            .mobile-menu-btn {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                width: 42px;
+                height: 42px;
+                border: none;
+                border-radius: 8px;
+                background: #1473e6;
+                color: white;
+                font-size: 20px;
+            }
+
+            .topbar-left {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+            }
+
+            .topbar-title {
+                font-size: 17px;
+            }
+
+            .topbar-user {
+                font-size: 14px;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            /* Overlay */
+
+            .sidebar-overlay {
+                display: none;
+                position: fixed;
+                inset: 0;
+                background: rgba(0,0,0,.45);
+                z-index: 1040;
+            }
+
+            .sidebar-overlay.show {
+                display: block;
+            }
+        }
+
+        /* =========================
+           SMALL PHONE
+           ========================= */
+
+        @media (max-width: 575.98px) {
+
+            .sidebar {
+                width: 250px;
+            }
+
+            .topbar {
+                height: 60px;
+                padding: 0 12px;
+            }
+
+            .mobile-menu-btn {
+                width: 38px;
+                height: 38px;
+                font-size: 18px;
+            }
+
+            .topbar-title {
+                font-size: 15px;
+            }
+
+            .topbar-user {
+                font-size: 13px;
+            }
+
+            .topbar-user .bi-bell {
+                display: none;
+            }
+
+            .content {
+                padding: 15px;
+            }
+
+            .card-body {
+                padding: 15px;
+            }
+
+            .table {
+                font-size: 13px;
+            }
+
+            .btn {
+                font-size: 14px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            h2 {
+                font-size: 21px;
+            }
+
+            h3 {
+                font-size: 19px;
+            }
+
+            h4 {
+                font-size: 18px;
+            }
+
+            h5 {
+                font-size: 16px;
+            }
+
+            .alert {
+                font-size: 14px;
+            }
+        }
+
+        /* =========================
+           FORM RESPONSIVE
+           ========================= */
+
+        .form-control,
+        .form-select {
+            max-width: 100%;
+        }
+
+        /* =========================
+           IMAGE & CHART
+           ========================= */
+
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        canvas {
+            max-width: 100% !important;
+        }
     </style>
 
     @stack('styles')
@@ -103,7 +337,15 @@
 
 <body>
 
-<div class="sidebar">
+{{-- OVERLAY MOBILE --}}
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+
+{{-- =========================
+     SIDEBAR
+     ========================= --}}
+
+<div class="sidebar" id="sidebar">
 
     <div class="brand">
         <i class="bi bi-box-seam"></i>
@@ -113,6 +355,7 @@
 
 
     {{-- ================= ADMIN ================= --}}
+
     @if(auth()->user()->role === 'admin')
 
         <a href="{{ route('admin.dashboard') }}"
@@ -141,26 +384,29 @@
 
 
     {{-- ================= TEKNISI ================= --}}
+
     @elseif(auth()->user()->role === 'teknisi')
 
         <a href="{{ route('teknisi.dashboard') }}"
-        class="{{ request()->routeIs('teknisi.dashboard') ? 'active' : '' }}">
+           class="{{ request()->routeIs('teknisi.dashboard') ? 'active' : '' }}">
             <i class="bi bi-grid"></i>
             Dashboard
         </a>
 
-        <a href="{{ route('stok-masuk.tambah-stok') }}">
+        <a href="{{ route('stok-masuk.tambah-stok') }}"
+           class="{{ request()->routeIs('stok-masuk.*') ? 'active' : '' }}">
             <i class="bi bi-box-arrow-in-down"></i>
-             Tambah Stok
-            </a>
+            Tambah Stok
+        </a>
+
         <a href="{{ route('stok-keluar.index') }}"
-        class="{{ request()->routeIs('stok-keluar.*') ? 'active' : '' }}">
+           class="{{ request()->routeIs('stok-keluar.*') ? 'active' : '' }}">
             <i class="bi bi-box-arrow-up"></i>
             Stok Keluar
         </a>
 
         <a href="{{ route('teknisi.riwayat') }}"
-        class="{{ request()->routeIs('teknisi.riwayat') ? 'active' : '' }}">
+           class="{{ request()->routeIs('teknisi.riwayat') ? 'active' : '' }}">
             <i class="bi bi-clock-history"></i>
             Riwayat Saya
         </a>
@@ -170,13 +416,13 @@
 
     {{-- ================= LOGOUT ================= --}}
 
-    <div style="position:absolute; bottom:25px; width:calc(100% - 30px);">
+    <div class="sidebar-logout">
 
         <form method="POST" action="{{ route('logout') }}">
             @csrf
 
             <button type="submit"
-                    class="btn btn-link text-white text-decoration-none w-100 text-start">
+                    class="btn btn-link text-white text-decoration-none w-100 text-start p-0">
 
                 <i class="bi bi-box-arrow-right"></i>
                 Logout
@@ -189,39 +435,68 @@
 
 </div>
 
+
+{{-- =========================
+     MAIN CONTENT
+     ========================= --}}
+
 <div class="main">
 
     <div class="topbar">
 
-        <div>
-            <h5 class="mb-0">@yield('page-title')</h5>
+        <div class="topbar-left">
+
+            {{-- Tombol menu HP --}}
+            <button class="mobile-menu-btn"
+                    type="button"
+                    id="mobileMenuBtn"
+                    aria-label="Buka menu">
+
+                <i class="bi bi-list"></i>
+
+            </button>
+
+            <h5 class="mb-0 topbar-title">
+                @yield('page-title')
+            </h5>
+
         </div>
 
-        <div>
+
+        <div class="topbar-user">
+
             <i class="bi bi-bell fs-5 me-3"></i>
 
             <strong>
                 {{ auth()->user()->name ?? 'Admin' }}
             </strong>
+
         </div>
 
     </div>
 
+
     <div class="content">
 
         @if(session('success'))
+
             <div class="alert alert-success">
                 <i class="bi bi-check-circle"></i>
                 {{ session('success') }}
             </div>
+
         @endif
 
+
         @if(session('error'))
+
             <div class="alert alert-danger">
                 <i class="bi bi-exclamation-circle"></i>
                 {{ session('error') }}
             </div>
+
         @endif
+
 
         @yield('content')
 
@@ -229,7 +504,49 @@
 
 </div>
 
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+
+    const menuBtn = document.getElementById('mobileMenuBtn');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+
+    function openSidebar() {
+        sidebar.classList.add('show');
+        overlay.classList.add('show');
+    }
+
+    function closeSidebar() {
+        sidebar.classList.remove('show');
+        overlay.classList.remove('show');
+    }
+
+    if (menuBtn) {
+        menuBtn.addEventListener('click', function () {
+            if (sidebar.classList.contains('show')) {
+                closeSidebar();
+            } else {
+                openSidebar();
+            }
+        });
+    }
+
+    if (overlay) {
+        overlay.addEventListener('click', closeSidebar);
+    }
+
+    // Tutup sidebar setelah memilih menu di HP
+    document.querySelectorAll('.sidebar a').forEach(function (link) {
+        link.addEventListener('click', function () {
+            if (window.innerWidth <= 991) {
+                closeSidebar();
+            }
+        });
+    });
+
+</script>
 
 @stack('scripts')
 

@@ -1,0 +1,255 @@
+/* =========================================
+   GLOBAL RESPONSIVE - INVENTARIS INTRACS
+   ========================================= */
+
+html,
+body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+.container,
+.container-fluid {
+    width: 100%;
+}
+
+/* ===============================
+   SIDEBAR
+   =============================== */
+
+.sidebar {
+    transition: all 0.3s ease;
+}
+
+/* Desktop */
+@media (min-width: 992px) {
+    .sidebar {
+        width: 250px;
+        min-height: 100vh;
+        position: fixed;
+        left: 0;
+        top: 0;
+    }
+
+    .main-content {
+        margin-left: 250px;
+        width: calc(100% - 250px);
+    }
+}
+
+/* ===============================
+   TABLE
+   =============================== */
+
+.table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.table {
+    white-space: nowrap;
+}
+
+@media (max-width: 767.98px) {
+
+    .table {
+        font-size: 13px;
+    }
+
+    .table th,
+    .table td {
+        padding: 8px;
+        vertical-align: middle;
+    }
+}
+
+/* ===============================
+   CARD
+   =============================== */
+
+.card {
+    max-width: 100%;
+}
+
+@media (max-width: 767.98px) {
+
+    .card-body {
+        padding: 15px;
+    }
+
+    .card-title {
+        font-size: 18px;
+    }
+}
+
+/* ===============================
+   FORM
+   =============================== */
+
+.form-control,
+.form-select,
+.btn {
+    max-width: 100%;
+}
+
+@media (max-width: 767.98px) {
+
+    .form-label {
+        font-size: 14px;
+    }
+
+    .form-control,
+    .form-select {
+        font-size: 14px;
+    }
+
+    .btn {
+        font-size: 14px;
+    }
+}
+
+/* ===============================
+   DASHBOARD
+   =============================== */
+
+@media (max-width: 767.98px) {
+
+    .dashboard-title {
+        font-size: 24px;
+    }
+
+    .stat-card {
+        margin-bottom: 15px;
+    }
+}
+
+/* ===============================
+   FILTER
+   =============================== */
+
+@media (max-width: 767.98px) {
+
+    .filter-row {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .filter-row > * {
+        width: 100% !important;
+    }
+}
+
+/* ===============================
+   BUTTON
+   =============================== */
+
+@media (max-width: 575.98px) {
+
+    .btn-group-responsive {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        width: 100%;
+    }
+
+    .btn-group-responsive .btn {
+        width: 100%;
+    }
+}
+
+/* ===============================
+   NAVBAR
+   =============================== */
+
+@media (max-width: 991.98px) {
+
+    .navbar-brand {
+        font-size: 18px;
+    }
+
+    .navbar-nav {
+        padding-top: 10px;
+    }
+}
+
+/* ===============================
+   LOGIN
+   =============================== */
+
+@media (max-width: 575.98px) {
+
+    .login-container {
+        padding: 15px;
+    }
+
+    .login-card {
+        width: 100% !important;
+        max-width: 100%;
+        margin: 0;
+    }
+
+    .login-card .card-body {
+        padding: 20px;
+    }
+
+    .login-title {
+        font-size: 24px;
+    }
+}
+
+/* ===============================
+   MODAL
+   =============================== */
+
+@media (max-width: 575.98px) {
+
+    .modal-dialog {
+        margin: 10px;
+    }
+
+    .modal-content {
+        border-radius: 12px;
+    }
+}
+
+/* ===============================
+   PAGINATION
+   =============================== */
+
+@media (max-width: 575.98px) {
+
+    .pagination {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .pagination .page-link {
+        padding: 6px 10px;
+        font-size: 13px;
+    }
+}
+
+/* ===============================
+   SPACING
+   =============================== */
+
+@media (max-width: 767.98px) {
+
+    .page-container {
+        padding: 15px !important;
+    }
+
+    .content-wrapper {
+        padding: 15px !important;
+    }
+
+    .mobile-full {
+        width: 100% !important;
+    }
+}
