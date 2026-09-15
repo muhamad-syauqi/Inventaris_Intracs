@@ -9,55 +9,56 @@ use Illuminate\Http\Request;
 class BarangController extends Controller
 {
     public function index(Request $request)
-{
-    $query = Barang::with('category');
+    {
+        $query = Barang::with('category');
 
-    if ($request->filled('search')) {
-        $query->where(function ($q) use ($request) {
-            $q->where('kode_barang', 'like', '%' . $request->search . '%')
-              ->orWhere('nama_barang', 'like', '%' . $request->search . '%');
-        });
+        if ($request->filled('search')) {
+            $query->where(function ($q) use ($request) {
+                $q->where('kode_barang', 'like', '%' . $request->search . '%')
+                  ->orWhere('nama_barang', 'like', '%' . $request->search . '%');
+            });
+        }
+
+        if ($request->filled('kategori_id')) {
+            $query->where('kategori_id', $request->kategori_id);
+        }
+
+        $barang = $query
+            ->latest()
+            ->paginate(10)
+            ->withQueryString();
+
+        $categories = Category::whereIn(
+            'nama_kategori',
+            ['Proyek', 'Maintenance']
+        )
+        ->orderBy('nama_kategori')
+        ->get();
+
+        return view('Barang.index', compact(
+            'barang',
+            'categories'
+        ));
     }
-
-    if ($request->filled('kategori_id')) {
-        $query->where('kategori_id', $request->kategori_id);
-    }
-
-    $barang = $query
-        ->latest()
-        ->paginate(10)
-        ->withQueryString();
-
-    $categories = Category::whereIn(
-        'nama_kategori',
-        ['Proyek', 'Maintenance']
-    )
-    ->orderBy('nama_kategori')
-    ->get();
-
-    return view('Barang.index', compact(
-        'barang',
-        'categories'
-    ));
-}
 
     public function create()
     {
         $kategori = Category::whereIn(
             'nama_kategori',
             ['Proyek', 'Maintenance']
-        )->orderBy('nama_kategori')->get();
+        )
+        ->orderBy('nama_kategori')
+        ->get();
 
         return view('Barang.create', compact('kategori'));
     }
-
 
     public function store(Request $request)
     {
         $request->validate([
             'kode_barang' => 'required|string|max:50|unique:barang,kode_barang',
             'nama_barang' => 'required|string|max:255|unique:barang,nama_barang',
-            'kategori_id' => 'required|exists:category,id',
+            'kategori_id' => 'required|exists:categories,id',
             'satuan' => 'required|string|max:50',
         ], [
             'kode_barang.unique' =>
@@ -80,14 +81,12 @@ class BarangController extends Controller
             ->with('success', 'Data barang berhasil ditambahkan.');
     }
 
-
     public function show($id)
     {
         $barang = Barang::with('category')->findOrFail($id);
 
         return view('Barang.show', compact('barang'));
     }
-
 
     public function edit($id)
     {
@@ -96,14 +95,15 @@ class BarangController extends Controller
         $kategori = Category::whereIn(
             'nama_kategori',
             ['Proyek', 'Maintenance']
-        )->orderBy('nama_kategori')->get();
+        )
+        ->orderBy('nama_kategori')
+        ->get();
 
         return view('Barang.edit', compact(
             'barang',
             'kategori'
         ));
     }
-
 
     public function update(Request $request, $id)
     {
@@ -117,7 +117,7 @@ class BarangController extends Controller
                 'required|string|max:255|unique:barang,nama_barang,' . $barang->id,
 
             'kategori_id' =>
-                'required|exists:category,id',
+                'required|exists:categories,id',
 
             'satuan' =>
                 'required|string|max:50',

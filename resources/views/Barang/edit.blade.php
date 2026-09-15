@@ -72,7 +72,7 @@
                         class="form-select"
                         required>
 
-                    @foreach($categories as $category)
+                    @foreach($kategori as $category)
 
                         <option value="{{ $category->id }}"
                             {{ old('kategori_id', $barang->kategori_id) == $category->id ? 'selected' : '' }}>
