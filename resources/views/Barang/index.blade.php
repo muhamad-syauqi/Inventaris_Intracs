@@ -56,7 +56,7 @@
             <div class="row g-3">
 
                 {{-- SEARCH --}}
-                <div class="col-md-6">
+                <div class="col-12 col-md-6">
 
                     <label class="form-label fw-semibold">
                         Pencarian
@@ -80,7 +80,7 @@
 
 
                 {{-- KATEGORI --}}
-                <div class="col-md-4">
+                <div class="col-12 col-md-4">
 
                     <label class="form-label fw-semibold">
                         Kategori
@@ -110,7 +110,7 @@
 
 
                 {{-- BUTTON --}}
-                <div class="col-md-2 d-flex align-items-end">
+                <div class="col-12 col-md-2 d-flex align-items-end">
 
                     <button type="submit"
                             class="btn btn-primary w-100">

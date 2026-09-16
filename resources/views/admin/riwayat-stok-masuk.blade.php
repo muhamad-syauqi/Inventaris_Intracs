@@ -85,7 +85,7 @@
     {{-- STAT --}}
     <div class="row g-3 mb-4">
 
-        <div class="col-md-6">
+        <div class="col-12 col-md-6">
 
             <div class="stat-card">
 
@@ -114,7 +114,7 @@
         </div>
 
 
-        <div class="col-md-6">
+        <div class="col-12 col-md-6">
 
             <div class="stat-card">
 
@@ -153,7 +153,7 @@
 
             <div class="row g-3 align-items-end">
 
-                <div class="col-md-4">
+                <div class="col-12 col-md-4">
 
                     <label class="form-label fw-semibold">
                         Dari Tanggal
@@ -167,7 +167,7 @@
                 </div>
 
 
-                <div class="col-md-4">
+                <div class="col-12 col-md-4">
 
                     <label class="form-label fw-semibold">
                         Sampai Tanggal
@@ -181,7 +181,7 @@
                 </div>
 
 
-                <div class="col-md-4 d-flex gap-2">
+                <div class="col-12 col-md-4 d-flex gap-2">
 
                     <button class="btn btn-primary">
                         <i class="bi bi-search"></i>

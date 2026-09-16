@@ -100,6 +100,111 @@
             margin-top: 60px;
         }
 
+
+    /* Mobile responsiveness - desktop styles remain unchanged */
+    @media (max-width: 767.98px) {
+        html, body {
+            width: 100%;
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 100%;
+            padding-left: 15px;
+            padding-right: 15px;
+        }
+
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .table-responsive .table {
+            min-width: 650px;
+        }
+
+        .hero {
+            padding: 45px 0 !important;
+        }
+
+        .hero h1 {
+            font-size: 32px;
+        }
+
+        .hero p {
+            font-size: 16px;
+        }
+
+        .stat-card {
+            height: auto;
+        }
+    }
+
+    @media (max-width: 575.98px) {
+        .navbar .container {
+            padding-left: 12px;
+            padding-right: 12px;
+        }
+
+        .navbar-brand {
+            font-size: 15px;
+            white-space: nowrap;
+        }
+
+        .navbar-brand .bi {
+            margin-right: 4px !important;
+        }
+
+        .navbar .btn {
+            font-size: 13px;
+            padding: 7px 10px;
+        }
+
+        .hero {
+            padding: 35px 0 !important;
+        }
+
+        .hero h1 {
+            font-size: 26px;
+        }
+
+        .hero p {
+            font-size: 15px;
+        }
+
+        .hero .btn-lg {
+            width: 100%;
+            font-size: 15px;
+        }
+
+        /* Public dashboard statistics */
+        .stat-card {
+            padding: 16px !important;
+        }
+
+        .icon-box {
+            flex: 0 0 45px;
+            width: 45px !important;
+            height: 45px !important;
+        }
+
+        /* Public data table */
+        .table-card {
+            overflow: hidden;
+        }
+
+        /* Login */
+        .login-card,
+        .login-container,
+        .login-box {
+            width: 100% !important;
+            max-width: 100% !important;
+        }
+    }
+
     </style>
 
 </head>

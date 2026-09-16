@@ -27,7 +27,7 @@
 
         <div class="row align-items-end">
 
-            <div class="col-md-4">
+            <div class="col-12 col-md-4">
                 <label class="form-label">
                     Dari Tanggal
                 </label>
@@ -38,7 +38,7 @@
                        value="{{ request('dari') }}">
             </div>
 
-            <div class="col-md-4">
+            <div class="col-12 col-md-4">
                 <label class="form-label">
                     Sampai Tanggal
                 </label>
@@ -49,7 +49,7 @@
                        value="{{ request('sampai') }}">
             </div>
 
-            <div class="col-md-4">
+            <div class="col-12 col-md-4">
 
                 <button class="btn btn-primary">
                     <i class="bi bi-filter"></i>

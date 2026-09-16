@@ -44,7 +44,7 @@
         <div class="row g-3">
 
     {{-- NOMOR DO --}}
-    <div class="col-md-6">
+    <div class="col-12 col-md-6">
         <label class="form-label">
             Nomor DO <span class="text-danger">*</span>
         </label>
@@ -59,7 +59,7 @@
 
 
     {{-- TANGGAL REQUEST --}}
-    <div class="col-md-6">
+    <div class="col-12 col-md-6">
         <label class="form-label">
             Tanggal Request <span class="text-danger">*</span>
         </label>
@@ -73,7 +73,7 @@
 
 
     {{-- NAMA REQUEST --}}
-    <div class="col-md-6">
+    <div class="col-12 col-md-6">
         <label class="form-label">
             PIC Request <span class="text-danger">*</span>
         </label>
@@ -88,7 +88,7 @@
 
 
     {{-- KATEGORI --}}
-    <div class="col-md-6">
+    <div class="col-12 col-md-6">
         <label class="form-label">
             Kategori Barang <span class="text-danger">*</span>
         </label>
@@ -119,7 +119,7 @@
 
         <div class="row">
 
-            <div class="col-md-6 mb-3">
+            <div class="col-12 col-md-6 mb-3">
                 <label class="form-label">Kode Barang</label>
 
                 <input type="text"
@@ -128,7 +128,7 @@
                        required>
             </div>
 
-            <div class="col-md-6 mb-3">
+            <div class="col-12 col-md-6 mb-3">
                 <label class="form-label">Nama Barang</label>
 
                 <input type="text"
@@ -137,7 +137,7 @@
                        required>
             </div>
 
-            <div class="col-md-3 mb-3">
+            <div class="col-12 col-md-3 mb-3">
                 <label class="form-label">Satuan</label>
 
                 <input type="text"
@@ -147,7 +147,7 @@
                        required>
             </div>
 
-            <div class="col-md-3 mb-3">
+            <div class="col-12 col-md-3 mb-3">
                 <label class="form-label">Stok Awal</label>
 
                 <input type="number"

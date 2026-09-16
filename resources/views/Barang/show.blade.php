@@ -29,27 +29,27 @@
 
     <div class="row">
 
-        <div class="col-md-6 mb-4">
+        <div class="col-12 col-md-6 mb-4">
             <small class="text-muted">Kode Barang</small>
             <h5>{{ $barang->kode_barang }}</h5>
         </div>
 
-        <div class="col-md-6 mb-4">
+        <div class="col-12 col-md-6 mb-4">
             <small class="text-muted">Nama Barang</small>
             <h5>{{ $barang->nama_barang }}</h5>
         </div>
 
-        <div class="col-md-6 mb-4">
+        <div class="col-12 col-md-6 mb-4">
             <small class="text-muted">Kategori</small>
             <h5>{{ $barang->category->nama_kategori }}</h5>
         </div>
 
-        <div class="col-md-3 mb-4">
+        <div class="col-12 col-md-3 mb-4">
             <small class="text-muted">Satuan</small>
             <h5>{{ $barang->satuan }}</h5>
         </div>
 
-        <div class="col-md-3 mb-4">
+        <div class="col-12 col-md-3 mb-4">
             <small class="text-muted">Stok</small>
             <h5>
                 @if($barang->stok == 0)

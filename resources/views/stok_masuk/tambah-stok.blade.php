@@ -78,7 +78,7 @@
         <div class="row g-3">
 
 
-            <div class="col-md-6">
+            <div class="col-12 col-md-6">
 
                 <label class="form-label">
                     Nomor DO
@@ -95,7 +95,7 @@
             </div>
 
 
-            <div class="col-md-6">
+            <div class="col-12 col-md-6">
 
                 <label class="form-label">
                     Tanggal Request
@@ -111,7 +111,7 @@
             </div>
 
 
-            <div class="col-md-6">
+            <div class="col-12 col-md-6">
 
                 <label class="form-label">
                     PIC Request
@@ -128,7 +128,7 @@
             </div>
 
 
-            <div class="col-md-6">
+            <div class="col-12 col-md-6">
 
                 <label class="form-label">
                     Keterangan

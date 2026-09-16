@@ -336,7 +336,7 @@
                         @if($item->jenis === 'Stok Masuk')
 
                             {{-- NOMOR DO --}}
-                            <div class="col-md-4">
+                            <div class="col-12 col-md-4">
 
                                 <div class="detail-item">
 
@@ -355,7 +355,7 @@
 
 
                             {{-- TANGGAL REQUEST --}}
-                            <div class="col-md-4">
+                            <div class="col-12 col-md-4">
 
                                 <div class="detail-item">
 
@@ -384,7 +384,7 @@
 
 
                             {{-- NAMA REQUEST --}}
-                            <div class="col-md-4">
+                            <div class="col-12 col-md-4">
 
                                 <div class="detail-item">
 
@@ -404,7 +404,7 @@
                         @else
 
                             {{-- GERBANG --}}
-                            <div class="col-md-6">
+                            <div class="col-12 col-md-6">
 
                                 <div class="detail-item">
 
@@ -423,7 +423,7 @@
 
 
                             {{-- GARDU --}}
-                            <div class="col-md-6">
+                            <div class="col-12 col-md-6">
 
                                 <div class="detail-item">
 
@@ -448,7 +448,7 @@
 
 
                         {{-- KETERANGAN --}}
-                        <div class="col-md-8">
+                        <div class="col-12 col-md-8">
 
                             <div class="detail-item">
 
@@ -467,7 +467,7 @@
 
 
                         {{-- TANGGAL INPUT --}}
-                        <div class="col-md-4">
+                        <div class="col-12 col-md-4">
 
                             <div class="detail-item">
 

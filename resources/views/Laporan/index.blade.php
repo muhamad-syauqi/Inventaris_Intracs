@@ -15,7 +15,7 @@
 <div class="row g-4">
 
     {{-- LAPORAN BARANG --}}
-    <div class="col-md-4">
+    <div class="col-12 col-md-4">
 
         <div class="card p-4 h-100">
 
@@ -45,7 +45,7 @@
 
 
     {{-- LAPORAN STOK MASUK --}}
-    <div class="col-md-4">
+    <div class="col-12 col-md-4">
 
         <div class="card p-4 h-100">
 
@@ -74,7 +74,7 @@
 
 
     {{-- LAPORAN STOK KELUAR --}}
-    <div class="col-md-4">
+    <div class="col-12 col-md-4">
 
         <div class="card p-4 h-100">
 

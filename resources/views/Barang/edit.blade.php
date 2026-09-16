@@ -22,7 +22,7 @@
 
         <div class="row">
 
-            <div class="col-md-6 mb-3">
+            <div class="col-12 col-md-6 mb-3">
 
                 <label class="form-label">
                     Kode Barang
@@ -42,7 +42,7 @@
 
             </div>
 
-            <div class="col-md-6 mb-3">
+            <div class="col-12 col-md-6 mb-3">
 
                 <label class="form-label">
                     Nama Barang
@@ -62,7 +62,7 @@
 
             </div>
 
-            <div class="col-md-6 mb-3">
+            <div class="col-12 col-md-6 mb-3">
 
                 <label class="form-label">
                     Kategori
@@ -93,7 +93,7 @@
 
             </div>
 
-            <div class="col-md-3 mb-3">
+            <div class="col-12 col-md-3 mb-3">
 
                 <label class="form-label">
                     Satuan
@@ -107,7 +107,7 @@
 
             </div>
 
-            <div class="col-md-3 mb-3">
+            <div class="col-12 col-md-3 mb-3">
 
                 <label class="form-label">
                     Stok

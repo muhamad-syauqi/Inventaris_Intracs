@@ -25,7 +25,7 @@
 <div class="row g-4 mb-4">
 
     {{-- TOTAL BARANG --}}
-    <div class="col-md-3">
+    <div class="col-12 col-md-3">
 
         <div class="card border-0 shadow-sm h-100">
 
@@ -57,7 +57,7 @@
 
 
     {{-- TOTAL STOK --}}
-    <div class="col-md-3">
+    <div class="col-12 col-md-3">
 
         <div class="card border-0 shadow-sm h-100">
 
@@ -89,7 +89,7 @@
 
 
     {{-- STOK MASUK --}}
-    <div class="col-md-3">
+    <div class="col-12 col-md-3">
 
         <div class="card border-0 shadow-sm h-100">
 
@@ -121,7 +121,7 @@
 
 
     {{-- STOK KELUAR --}}
-    <div class="col-md-3">
+    <div class="col-12 col-md-3">
 
         <div class="card border-0 shadow-sm h-100">
 

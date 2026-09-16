@@ -330,6 +330,142 @@
         canvas {
             max-width: 100% !important;
         }
+
+        /* =====================================================
+           RESPONSIVE PAGES - MOBILE ONLY
+           Desktop appearance remains unchanged.
+           ===================================================== */
+
+        @media (max-width: 767.98px) {
+
+            /* General page spacing */
+            .content > .container-fluid {
+                padding-left: 0 !important;
+                padding-right: 0 !important;
+            }
+
+            /* Page headers used by history pages */
+            .page-header {
+                padding: 18px !important;
+                border-radius: 14px !important;
+            }
+
+            .page-header h3 {
+                font-size: 20px;
+            }
+
+            /* Cards used by history/report pages */
+            .filter-card,
+            .table-card {
+                padding: 14px !important;
+                border-radius: 12px !important;
+            }
+
+            .stat-card {
+                padding: 15px !important;
+            }
+
+            /* Make filter/export controls stack naturally */
+            .filter-card .d-flex.gap-2 {
+                flex-wrap: wrap;
+            }
+
+            .filter-card .d-flex.gap-2 .btn {
+                flex: 1 1 auto;
+            }
+
+            /* History tables remain readable and scroll horizontally */
+            .table-responsive {
+                border-radius: 8px;
+            }
+
+            .table-responsive > .table {
+                min-width: 720px;
+            }
+
+            /* Dashboard chart cards */
+            .chart-container,
+            .chart-box {
+                width: 100% !important;
+                max-width: 100% !important;
+            }
+
+            /* Forms */
+            .card.p-4 {
+                padding: 18px !important;
+            }
+
+            /* Headers with a button: stack on narrow screens */
+            .content .d-flex.justify-content-between.align-items-center.mb-4 {
+                flex-wrap: wrap;
+                gap: 12px;
+            }
+
+            .content .d-flex.justify-content-between.align-items-center.mb-4 > * {
+                max-width: 100%;
+            }
+
+            .content .d-flex.justify-content-between.align-items-center.mb-4 > a.btn {
+                width: 100%;
+            }
+
+            /* Pagination */
+            .pagination {
+                flex-wrap: wrap;
+            }
+
+            /* Action buttons */
+            .btn-group {
+                flex-wrap: wrap;
+            }
+        }
+
+        @media (max-width: 575.98px) {
+
+            /* Compact mobile typography */
+            .content h2 {
+                font-size: 21px;
+            }
+
+            .content h3 {
+                font-size: 19px;
+            }
+
+            .content h4 {
+                font-size: 18px;
+            }
+
+            /* History export buttons */
+            .filter-card .mt-3.pt-3.border-top {
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+                gap: 6px;
+            }
+
+            .filter-card .mt-3.pt-3.border-top .me-2 {
+                width: 100%;
+                margin-right: 0 !important;
+                margin-bottom: 2px;
+            }
+
+            /* Keep card contents inside viewport */
+            .card {
+                max-width: 100%;
+                overflow: hidden;
+            }
+
+            /* Buttons in forms */
+            .card form .btn {
+                min-height: 40px;
+            }
+
+            /* Long headings */
+            .page-header p {
+                font-size: 14px;
+            }
+        }
+
     </style>
 
     @stack('styles')
