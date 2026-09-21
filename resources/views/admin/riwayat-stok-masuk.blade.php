@@ -242,7 +242,7 @@
                         <th>Tanggal Request</th>
                         <th>Nama Request</th>
                         <th>Keterangan</th>
-                        <th>Diinput Oleh</th>
+                        <th>Diambil Oleh</th>
                     </tr>
 
                 </thead>
