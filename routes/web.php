@@ -91,6 +91,23 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
     /*
     |--------------------------------------------------------------------------
+    | Tambah Stok
+    |--------------------------------------------------------------------------
+    */
+
+    // Halaman tambah stok
+    Route::get('/stok-masuk/tambah-stok',
+        [StokMasukController::class, 'tambahStokPage']
+    )->name('stok-masuk.tambah-stok');
+
+    // Proses tambah stok
+    Route::post('/stok-masuk/tambah',
+        [StokMasukController::class, 'tambahStok']
+    )->name('stok-masuk.tambah');
+
+
+    /*
+    |--------------------------------------------------------------------------
     | Riwayat Stok Masuk Admin
     |--------------------------------------------------------------------------
     */
@@ -141,23 +158,6 @@ Route::middleware(['auth', 'role:teknisi'])->group(function () {
     Route::get('/teknisi/dashboard',
         [TeknisiDashboardController::class, 'index']
     )->name('teknisi.dashboard');
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Tambah Stok
-    |--------------------------------------------------------------------------
-    */
-
-    // Halaman tambah stok
-    Route::get('/stok-masuk/tambah-stok',
-        [StokMasukController::class, 'tambahStokPage']
-    )->name('stok-masuk.tambah-stok');
-
-    // Proses tambah stok
-    Route::post('/stok-masuk/tambah',
-        [StokMasukController::class, 'tambahStok']
-    )->name('stok-masuk.tambah');
 
 
     /*

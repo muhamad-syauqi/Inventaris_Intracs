@@ -1,5 +1,8 @@
 @extends('layouts.app')
 
+@section('title', 'Riwayat')
+@section('page-title', 'Riwayat')
+
 @section('content')
 
 <style>
@@ -35,28 +38,6 @@
         font-size: 25px;
     }
 
-    .filter-box {
-        background: white;
-        border-radius: 15px;
-        padding: 15px;
-        margin-bottom: 20px;
-        box-shadow: 0 3px 15px rgba(0,0,0,.06);
-    }
-
-    .filter-btn {
-        border-radius: 10px;
-        padding: 8px 18px;
-        border: none;
-        background: #f1f3f5;
-        color: #555;
-        margin-right: 6px;
-    }
-
-    .filter-btn.active {
-        background: #0d6efd;
-        color: white;
-    }
-
     .history-card {
         background: white;
         border-radius: 16px;
@@ -64,12 +45,6 @@
         margin-bottom: 15px;
         box-shadow: 0 3px 15px rgba(0,0,0,.06);
         border: 1px solid #eef0f3;
-        transition: .2s;
-    }
-
-    .history-card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(0,0,0,.09);
     }
 
     .transaction-icon {
@@ -81,14 +56,6 @@
         justify-content: center;
         font-size: 22px;
         flex-shrink: 0;
-    }
-
-    .icon-masuk {
-        background: #d1e7dd;
-        color: #198754;
-    }
-
-    .icon-keluar {
         background: #f8d7da;
         color: #dc3545;
     }
@@ -101,11 +68,6 @@
     .transaction-code {
         color: #6c757d;
         font-size: 13px;
-    }
-
-    .badge-masuk {
-        background: #d1e7dd;
-        color: #146c43;
     }
 
     .badge-keluar {
@@ -146,12 +108,6 @@
         color: #212529;
     }
 
-    .date-box {
-        color: #6c757d;
-        font-size: 13px;
-        text-align: right;
-    }
-
     .empty-history {
         background: white;
         border-radius: 16px;
@@ -176,14 +132,9 @@
             width: 100%;
         }
 
-        .quantity-box,
-        .date-box {
+        .quantity-box {
             text-align: left;
             margin-top: 12px;
-        }
-
-        .filter-btn {
-            margin-bottom: 7px;
         }
     }
 </style>
@@ -199,44 +150,20 @@
             <div>
                 <h3>
                     <i class="bi bi-clock-history me-2"></i>
-                    Riwayat Saya
+                    Riwayat
                 </h3>
 
                 <p>
-                    Riwayat transaksi stok yang Anda input
+                    Riwayat transaksi stok keluar yang Anda lakukan
                 </p>
             </div>
 
             <div class="total-box">
-                <span>Total Aktivitas</span>
+                <span>Total Riwayat</span>
                 <strong>{{ $riwayat->count() }}</strong>
             </div>
 
         </div>
-
-    </div>
-
-
-    {{-- FILTER --}}
-    <div class="filter-box">
-
-        <button class="filter-btn active"
-                onclick="filterHistory('semua', this)">
-            <i class="bi bi-list me-1"></i>
-            Semua
-        </button>
-
-        <button class="filter-btn"
-                onclick="filterHistory('masuk', this)">
-            <i class="bi bi-box-arrow-in-down me-1"></i>
-            Stok Masuk
-        </button>
-
-        <button class="filter-btn"
-                onclick="filterHistory('keluar', this)">
-            <i class="bi bi-box-arrow-up me-1"></i>
-            Stok Keluar
-        </button>
 
     </div>
 
@@ -246,8 +173,7 @@
 
         @forelse($riwayat as $item)
 
-            <div class="history-card history-item"
-                 data-type="{{ $item->jenis === 'Stok Masuk' ? 'masuk' : 'keluar' }}">
+            <div class="history-card">
 
                 {{-- BAGIAN ATAS --}}
                 <div class="row align-items-center">
@@ -256,17 +182,8 @@
 
                         <div class="d-flex align-items-center">
 
-                            <div class="transaction-icon
-                                {{ $item->jenis === 'Stok Masuk'
-                                    ? 'icon-masuk'
-                                    : 'icon-keluar' }}">
-
-                                @if($item->jenis === 'Stok Masuk')
-                                    <i class="bi bi-box-arrow-in-down"></i>
-                                @else
-                                    <i class="bi bi-box-arrow-up"></i>
-                                @endif
-
+                            <div class="transaction-icon">
+                                <i class="bi bi-box-arrow-up"></i>
                             </div>
 
                             <div class="ms-3">
@@ -288,21 +205,10 @@
 
                     <div class="col-lg-3 mt-2 mt-lg-0">
 
-                        @if($item->jenis === 'Stok Masuk')
-
-                            <span class="badge badge-masuk rounded-pill px-3 py-2">
-                                <i class="bi bi-box-arrow-in-down me-1"></i>
-                                Stok Masuk
-                            </span>
-
-                        @else
-
-                            <span class="badge badge-keluar rounded-pill px-3 py-2">
-                                <i class="bi bi-box-arrow-up me-1"></i>
-                                Stok Keluar
-                            </span>
-
-                        @endif
+                        <span class="badge badge-keluar rounded-pill px-3 py-2">
+                            <i class="bi bi-box-arrow-up me-1"></i>
+                            Stok Keluar
+                        </span>
 
                     </div>
 
@@ -333,118 +239,48 @@
 
                     <div class="row g-3">
 
-                        @if($item->jenis === 'Stok Masuk')
+                        {{-- GERBANG --}}
+                        <div class="col-12 col-md-6">
 
-                            {{-- NOMOR DO --}}
-                            <div class="col-12 col-md-4">
+                            <div class="detail-item">
 
-                                <div class="detail-item">
+                                <span class="detail-label">
+                                    <i class="bi bi-signpost-2 me-1"></i>
+                                    Gerbang Tol
+                                </span>
 
-                                    <span class="detail-label">
-                                        <i class="bi bi-file-earmark-text me-1"></i>
-                                        Nomor DO
-                                    </span>
-
-                                    <span class="detail-value">
-                                        {{ $item->nomor_do ?? '-' }}
-                                    </span>
-
-                                </div>
+                                <span class="detail-value">
+                                    {{ $item->gerbang_tol ?? '-' }}
+                                </span>
 
                             </div>
 
+                        </div>
 
-                            {{-- TANGGAL REQUEST --}}
-                            <div class="col-12 col-md-4">
 
-                                <div class="detail-item">
+                        {{-- GARDU --}}
+                        <div class="col-12 col-md-6">
 
-                                    <span class="detail-label">
-                                        <i class="bi bi-calendar-event me-1"></i>
-                                        Tanggal Request
-                                    </span>
+                            <div class="detail-item">
 
-                                    <span class="detail-value">
+                                <span class="detail-label">
+                                    <i class="bi bi-building me-1"></i>
+                                    Nomor Gardu
+                                </span>
 
-                                        @if($item->tanggal_request)
+                                <span class="detail-value">
 
-                                            {{ \Carbon\Carbon::parse($item->tanggal_request)->format('d M Y') }}
+                                    @if($item->nomor_gardu)
+                                        Gardu {{ $item->nomor_gardu }}
+                                    @else
+                                        -
+                                    @endif
 
-                                        @else
-
-                                            -
-
-                                        @endif
-
-                                    </span>
-
-                                </div>
+                                </span>
 
                             </div>
 
-
-                            {{-- NAMA REQUEST --}}
-                            <div class="col-12 col-md-4">
-
-                                <div class="detail-item">
-
-                                    <span class="detail-label">
-                                        <i class="bi bi-person me-1"></i>
-                                        Nama yang Request
-                                    </span>
-
-                                    <span class="detail-value">
-                                        {{ $item->nama_request ?? '-' }}
-                                    </span>
-
-                                </div>
-
-                            </div>
-
-                        @else
-
-                            {{-- GERBANG --}}
-                            <div class="col-12 col-md-6">
-
-                                <div class="detail-item">
-
-                                    <span class="detail-label">
-                                        <i class="bi bi-signpost-2 me-1"></i>
-                                        Gerbang Tol
-                                    </span>
-
-                                    <span class="detail-value">
-                                        {{ $item->gerbang_tol ?? '-' }}
-                                    </span>
-
-                                </div>
-
-                            </div>
-
-
-                            {{-- GARDU --}}
-                            <div class="col-12 col-md-6">
-
-                                <div class="detail-item">
-
-                                    <span class="detail-label">
-                                        <i class="bi bi-building me-1"></i>
-                                        Nomor Gardu
-                                    </span>
-
-                                    <span class="detail-value">
-                                        @if($item->nomor_gardu)
-                                            Gardu {{ $item->nomor_gardu }}
-                                        @else
-                                            -
-                                        @endif
-                                    </span>
-
-                                </div>
-
-                            </div>
-
-                        @endif
+                        </div>
 
 
                         {{-- KETERANGAN --}}
@@ -509,7 +345,7 @@
                 </h5>
 
                 <p class="text-muted mb-0">
-                    Transaksi yang Anda input akan muncul di halaman ini.
+                    Transaksi stok keluar yang Anda lakukan akan muncul di halaman ini.
                 </p>
 
             </div>
@@ -519,42 +355,5 @@
     </div>
 
 </div>
-
-
-<script>
-
-function filterHistory(type, button) {
-
-    const items = document.querySelectorAll('.history-item');
-
-    const buttons = document.querySelectorAll('.filter-btn');
-
-    buttons.forEach(btn => {
-        btn.classList.remove('active');
-    });
-
-    button.classList.add('active');
-
-    items.forEach(item => {
-
-        if (type === 'semua') {
-
-            item.style.display = '';
-
-        } else {
-
-            if (item.dataset.type === type) {
-                item.style.display = '';
-            } else {
-                item.style.display = 'none';
-            }
-
-        }
-
-    });
-
-}
-
-</script>
 
 @endsection

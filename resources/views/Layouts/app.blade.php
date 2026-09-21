@@ -506,6 +506,12 @@
             Barang
         </a>
 
+        <a href="{{ route('stok-masuk.tambah-stok') }}"
+            class="{{ request()->routeIs('stok-masuk.*') ? 'active' : '' }}">
+                <i class="bi bi-box-arrow-in-down"></i>
+             Tambah Stok
+        </a>
+
         <a href="{{ route('admin.riwayat-stok-masuk') }}"
            class="{{ request()->routeIs('admin.riwayat-stok-masuk') ? 'active' : '' }}">
             <i class="bi bi-box-arrow-in-down"></i>
@@ -527,12 +533,6 @@
            class="{{ request()->routeIs('teknisi.dashboard') ? 'active' : '' }}">
             <i class="bi bi-grid"></i>
             Dashboard
-        </a>
-
-        <a href="{{ route('stok-masuk.tambah-stok') }}"
-           class="{{ request()->routeIs('stok-masuk.*') ? 'active' : '' }}">
-            <i class="bi bi-box-arrow-in-down"></i>
-            Tambah Stok
         </a>
 
         <a href="{{ route('stok-keluar.index') }}"
