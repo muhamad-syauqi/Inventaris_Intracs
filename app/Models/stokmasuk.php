@@ -20,6 +20,7 @@ class StokMasuk extends Model
         'nomor_do',
         'tanggal_request',
         'nama_request',
+        'pengambil',
     ];
 
     public function barang()

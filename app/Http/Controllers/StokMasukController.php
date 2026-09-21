@@ -13,10 +13,11 @@ class StokMasukController extends Controller
     {
         $barang = Barang::orderBy('nama_barang')->get();
 
-        return view(
-            'stok_masuk.tambah-stok',
-            compact('barang')
-        );
+        $teknisi = \App\Models\User::where('role', 'teknisi')
+            ->orderBy('name')
+            ->get();
+
+        return view('stok_masuk.tambah-stok', compact('barang', 'teknisi'));
     }
 
 
@@ -28,6 +29,7 @@ class StokMasukController extends Controller
             'nomor_do' => 'required|string|max:100',
             'tanggal_request' => 'required|date',
             'nama_request' => 'required|string|max:150',
+            'pengambil' => 'required|string|max:150',
             'keterangan' => 'nullable|string',
         ]);
 
@@ -45,6 +47,7 @@ class StokMasukController extends Controller
                 'nomor_do' => $request->nomor_do,
                 'tanggal_request' => $request->tanggal_request,
                 'nama_request' => $request->nama_request,
+                'pengambil' => $request->pengambil,
                 'keterangan' => $request->keterangan,
             ]);
 

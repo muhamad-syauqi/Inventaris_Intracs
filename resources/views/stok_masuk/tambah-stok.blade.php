@@ -127,6 +127,29 @@
 
             </div>
 
+            <div class="mb-3">
+                <label for="pengambil" class="form-label">
+                    Pengambil
+                </label>
+
+                <select name="pengambil" id="pengambil" class="form-select" required>
+                <option value="">-- Pilih Teknisi --</option>
+
+        @foreach($teknisi as $item)
+                <option value="{{ $item->name }}"
+                    {{ old('pengambil') == $item->name ? 'selected' : '' }}>
+                    {{ $item->name }}
+                </option>
+        @endforeach
+                </select>
+
+    @error('pengambil')
+            <div class="text-danger small mt-1">
+                 {{ $message }}
+            </div>
+    @enderror
+            </div>
+
 
             <div class="col-12 col-md-6">
 
