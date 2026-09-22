@@ -105,9 +105,6 @@
                         <option value="KALITAMA 1">KALITAMA 1</option>
                         <option value="KALITAMA 2">KALITAMA 2</option>
                         <option value="KALITAMA 3">KALITAMA 3</option>
-                        <option value="KALITAMA 4">KALITAMA 4</option>
-                        <option value="KALITAMA 5">KALITAMA 5</option>
-                        <option value="KALITAMA 6">KALITAMA 6</option>
 
                         <option value="SADANG">SADANG</option>
                         <option value="JATILUHUR">JATILUHUR</option>
@@ -115,8 +112,7 @@
                         <option value="PADALARANG">PADALARANG</option>
                         <option value="BAROS 1">BAROS 1</option>
                         <option value="BAROS 2">BAROS 2</option>
-                        <option value="PASTEUR 1">PASTEUR 1</option>
-                        <option value="PASTEUR 2">PASTEUR 2</option>
+                        <option value="PASTEUR">PASTEUR</option>
                         <option value="PASIR KOJA">PASIR KOJA</option>
                         <option value="KOPO">KOPO</option>
                         <option value="MUHAMAD TOHA">MUHAMAD TOHA</option>
@@ -257,7 +253,7 @@ document.addEventListener('DOMContentLoaded', function () {
             "05", "07", "09", "08", "10", "14"
         ],
 
-        "PASTEUR 1": [
+        "PASTEUR": [
             "13", "15", "17", "19", "21", "02", "04", "06", "08",
             "10", "12", "14", "16", "09", "11", "18", "20", "22"
         ],
