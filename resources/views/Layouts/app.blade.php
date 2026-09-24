@@ -128,6 +128,169 @@
             white-space: nowrap;
         }
 
+        /* =====================================================
+        PROFILE DROPDOWN
+        ===================================================== */
+
+        .profile-dropdown {
+            position: relative;
+        }
+
+        .profile-button {
+            display: flex;
+            align-items: center;
+
+            gap: 10px;
+
+            padding: 5px 8px;
+
+            border: none;
+            background: transparent;
+
+            border-radius: 10px;
+
+            cursor: pointer;
+
+            transition: .2s;
+        }
+
+        .profile-button:hover {
+            background: #f5f7fb;
+        }
+
+        .profile-arrow {
+            margin-left: 3px;
+
+            font-size: 12px;
+
+            color: #98a2b3;
+
+            transition: transform .2s;
+        }
+
+        .profile-dropdown.open .profile-arrow {
+            transform: rotate(180deg);
+        }
+
+
+        /* Dropdown */
+
+        .profile-menu {
+            position: absolute;
+
+            top: calc(100% + 10px);
+            right: 0;
+
+            width: 210px;
+
+            background: #ffffff;
+
+            border: 1px solid #e8edf3;
+
+            border-radius: 12px;
+
+            padding: 7px;
+
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .10);
+
+            opacity: 0;
+            visibility: hidden;
+
+            transform: translateY(-5px);
+
+            transition: .2s;
+
+            z-index: 1200;
+        }
+
+        .profile-dropdown.open .profile-menu {
+            opacity: 1;
+            visibility: visible;
+
+            transform: translateY(0);
+        }
+
+
+        /* Menu */
+
+        .profile-menu a,
+        .profile-menu form button {
+
+            width: 100%;
+
+            display: flex;
+            align-items: center;
+
+            gap: 10px;
+
+            padding: 10px 11px;
+
+            border: none;
+
+            background: transparent;
+
+            border-radius: 8px;
+
+            color: #475467;
+
+            text-decoration: none;
+
+            font-size: 14px;
+
+            text-align: left;
+
+            cursor: pointer;
+        }
+
+        .profile-menu a:hover,
+        .profile-menu form button:hover {
+            background: #f4f7fb;
+            color: #1769e0;
+        }
+
+        .profile-menu a.active {
+            background: #eef5ff;
+            color: #1769e0;
+        }
+
+        .profile-menu i {
+            width: 20px;
+
+            font-size: 17px;
+        }
+
+
+        /* Logout */
+
+        .profile-menu form button {
+            color: #dc3545;
+        }
+
+        .profile-menu form button:hover {
+            background: #fff1f2;
+            color: #c82333;
+        }
+
+
+        /* HP */
+
+        @media (max-width: 575.98px) {
+
+            .profile-menu {
+                right: -5px;
+                width: 195px;
+            }
+
+            .profile-button {
+                padding: 3px;
+            }
+
+            .profile-arrow {
+                display: none;
+            }
+
+        }
+
 
         /* =====================================================
            SIDEBAR MENU
@@ -947,31 +1110,70 @@
 
         <!-- USER -->
 
-        @auth
+       @auth
 
-            <div class="topbar-user">
+    <div class="profile-dropdown">
 
-                <div class="user-avatar">
+        <button
+            type="button"
+            class="profile-button"
+            onclick="toggleProfileMenu()"
+        >
 
-                    {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+            <div class="user-avatar">
+                {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+            </div>
 
+            <div class="user-info">
+
+                <div class="user-name">
+                    {{ auth()->user()->name }}
                 </div>
 
-                <div class="user-info">
-
-                    <div class="user-name">
-                        {{ auth()->user()->name }}
-                    </div>
-
-                    <div class="user-role">
-                        {{ auth()->user()->role }}
-                    </div>
-
+                <div class="user-role">
+                    {{ auth()->user()->role }}
                 </div>
 
             </div>
 
-        @endauth
+            <i class="bi bi-chevron-down profile-arrow"></i>
+
+        </button>
+
+
+        <div
+            id="profileMenu"
+            class="profile-menu"
+        >
+
+            <a
+                href="{{ route('password.edit') }}"
+                class="{{ request()->routeIs('password.*') ? 'active' : '' }}"
+            >
+                <i class="bi bi-key"></i>
+                <span>Ganti Password</span>
+            </a>
+
+
+            <form
+                action="{{ route('logout') }}"
+                method="POST"
+            >
+
+                @csrf
+
+                <button type="submit">
+                    <i class="bi bi-box-arrow-right"></i>
+                    <span>Logout</span>
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    @endauth
 
 
     </header>
@@ -1057,6 +1259,28 @@
         }
 
     });
+
+    function toggleProfileMenu() {
+
+    const dropdown = document.querySelector('.profile-dropdown');
+
+    if (dropdown) {
+        dropdown.classList.toggle('open');
+    }
+}
+
+
+document.addEventListener('click', function(event) {
+
+    const dropdown = document.querySelector('.profile-dropdown');
+
+    if (!dropdown) return;
+
+    if (!dropdown.contains(event.target)) {
+        dropdown.classList.remove('open');
+    }
+
+});
 
 </script>
 
