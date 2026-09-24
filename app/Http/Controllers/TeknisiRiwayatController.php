@@ -13,7 +13,7 @@ class TeknisiRiwayatController extends Controller
         $riwayat = StokKeluar::with('barang')
             ->where('user_id', $userId)
             ->latest()
-            ->get();
+            ->paginate(5);
 
         return view('teknisi.riwayat', compact('riwayat'));
     }

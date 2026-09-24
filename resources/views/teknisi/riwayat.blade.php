@@ -352,6 +352,12 @@
 
         @endforelse
 
+        @if($riwayat->hasPages())
+        <div class="d-flex justify-content-center mt-4">
+                {{ $riwayat->links() }}
+        </div>
+        @endif
+
     </div>
 
 </div>
