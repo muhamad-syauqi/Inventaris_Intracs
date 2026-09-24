@@ -9,18 +9,38 @@ use Illuminate\Support\Facades\DB;
 
 class StokKeluarController extends Controller
 {
-    public function index()
+
+    public function index(Request $request)
     {
-        $barang = Barang::orderBy('nama_barang')->get();
+        // Daftar barang untuk dipilih
+        $queryBarang = Barang::orderBy('nama_barang');
 
-        $query = StokKeluar::with(['barang', 'user'])
-            ->latest();
-
-        if (auth()->user()->role === 'teknisi') {
-            $query->where('user_id', auth()->id());
+        // Pencarian berdasarkan kode atau nama barang
+        if ($request->filled('search')) {
+            $queryBarang->where(function ($q) use ($request) {
+                $q->where('kode_barang', 'like', '%' . $request->search . '%')
+                ->orWhere('nama_barang', 'like', '%' . $request->search . '%');
+            });
         }
 
-        $stokKeluar = $query->paginate(10);
+        $barang = $queryBarang
+            ->paginate(12)
+            ->withQueryString();
+
+
+        // Riwayat stok keluar
+        $queryStokKeluar = StokKeluar::with(['barang', 'user'])
+            ->latest();
+
+        // Teknisi hanya melihat transaksi miliknya
+        if (auth()->user()->role === 'teknisi') {
+            $queryStokKeluar->where('user_id', auth()->id());
+        }
+
+        $stokKeluar = $queryStokKeluar
+            ->paginate(10, ['*'], 'riwayat_page')
+            ->withQueryString();
+
 
         return view('Stok_Keluar.index', compact(
             'barang',

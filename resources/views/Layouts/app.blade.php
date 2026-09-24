@@ -2,16 +2,32 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>@yield('title', 'Inventaris Peralatan')</title>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>
+        @yield('title', 'Inventaris Intracs')
+    </title>
 
-    <link rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Bootstrap -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+    <!-- Bootstrap Icons -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+        rel="stylesheet"
+    >
 
     <style>
+
+        /* =====================================================
+           GLOBAL
+        ===================================================== */
+
         * {
             box-sizing: border-box;
         }
@@ -20,448 +36,592 @@
         body {
             margin: 0;
             padding: 0;
-            max-width: 100%;
+            min-height: 100%;
             overflow-x: hidden;
         }
 
         body {
             background: #f5f7fb;
-            font-family: Arial, sans-serif;
+            color: #1f2937;
+            font-family: "Segoe UI", Arial, sans-serif;
         }
 
-        /* =========================
-           SIDEBAR DESKTOP
-           ========================= */
+
+        /* =====================================================
+           SIDEBAR
+        ===================================================== */
 
         .sidebar {
-            width: 245px;
-            height: 100vh;
             position: fixed;
-            left: 0;
             top: 0;
-            background: #08213f;
-            color: white;
-            padding: 25px 15px;
-            z-index: 1050;
-            overflow-y: auto;
+            left: 0;
+
+            width: 250px;
+            height: 100vh;
+
+            background: #ffffff;
+
+            border-right: 1px solid #e8edf3;
+
+            display: flex;
+            flex-direction: column;
+
+            z-index: 1100;
+
+            transition:
+                transform .3s ease,
+                box-shadow .3s ease;
         }
 
-        .brand {
-            font-size: 20px;
-            font-weight: 700;
-            margin-bottom: 35px;
-            line-height: 1.3;
-        }
 
-        .sidebar a {
-            color: #dbe5f1;
-            text-decoration: none;
-            display: block;
-            padding: 13px 15px;
-            border-radius: 8px;
-            margin-bottom: 7px;
-            transition: .2s;
-        }
+        /* Logo */
 
-        .sidebar a:hover,
-        .sidebar a.active {
-            background: #1473e6;
-            color: white;
-        }
+        .sidebar-header {
+            height: 76px;
 
-        .sidebar i {
-            margin-right: 10px;
-        }
+            padding: 0 22px;
 
-        .sidebar-logout {
-            position: absolute;
-            bottom: 25px;
-            left: 15px;
-            right: 15px;
-        }
-
-        /* =========================
-           MAIN
-           ========================= */
-
-        .main {
-            margin-left: 245px;
-            min-height: 100vh;
-            width: calc(100% - 245px);
-        }
-
-        .topbar {
-            height: 75px;
-            background: white;
-            border-bottom: 1px solid #e5e7eb;
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            padding: 0 30px;
+
+            border-bottom: 1px solid #edf0f5;
+
+            flex-shrink: 0;
         }
 
-        .content {
-            padding: 30px;
-            width: 100%;
+        .sidebar-brand {
+            display: flex;
+            align-items: center;
+
+            gap: 10px;
+
+            text-decoration: none;
+            color: #172033;
+
+            min-width: 0;
         }
 
-        /* =========================
-           CARD
-           ========================= */
+        .sidebar-logo {
+            width: 40px;
+            height: 40px;
 
-        .card {
-            border: none;
-            border-radius: 12px;
-            box-shadow: 0 3px 15px rgba(0,0,0,.05);
-            max-width: 100%;
+            object-fit: contain;
+
+            flex-shrink: 0;
         }
 
-        .stat-card {
-            padding: 22px;
+        .brand-text {
+            min-width: 0;
         }
 
-        /* =========================
-           TABLE
-           ========================= */
+        .brand-title {
+            font-size: 17px;
+            font-weight: 700;
 
-        .table-responsive {
-            width: 100%;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        .table {
-            min-width: 650px;
-        }
-
-        .table th {
-            background: #f1f5f9;
             white-space: nowrap;
         }
 
-        /* =========================
-           BUTTON
-           ========================= */
+        .brand-subtitle {
+            font-size: 10px;
+            color: #8a94a6;
 
-        .btn-primary {
-            background: #1473e6;
-            border-color: #1473e6;
+            white-space: nowrap;
         }
 
-        .badge-stock {
-            padding: 7px 12px;
-            border-radius: 7px;
+
+        /* =====================================================
+           SIDEBAR MENU
+        ===================================================== */
+
+        .sidebar-menu {
+            flex: 1;
+
+            overflow-y: auto;
+            overflow-x: hidden;
+
+            padding: 18px 13px 12px;
         }
 
-        /* =========================
-           MOBILE HEADER BUTTON
-           ========================= */
+        .sidebar-menu::-webkit-scrollbar {
+            width: 5px;
+        }
 
-        .mobile-menu-btn {
+        .sidebar-menu::-webkit-scrollbar-thumb {
+            background: #d8dee8;
+            border-radius: 10px;
+        }
+
+        .menu-label {
+            padding: 8px 12px;
+
+            font-size: 10px;
+            font-weight: 700;
+
+            color: #9aa4b2;
+
+            text-transform: uppercase;
+            letter-spacing: .8px;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+
+            width: 100%;
+
+            min-height: 46px;
+
+            padding: 11px 13px;
+
+            margin-bottom: 5px;
+
+            border-radius: 10px;
+
+            color: #667085;
+
+            text-decoration: none;
+
+            font-size: 14px;
+            font-weight: 500;
+
+            transition:
+                background .2s ease,
+                color .2s ease,
+                transform .2s ease;
+        }
+
+        .sidebar-menu a i {
+            width: 22px;
+
+            margin-right: 10px;
+
+            font-size: 17px;
+
+            flex-shrink: 0;
+        }
+
+        .sidebar-menu a:hover {
+            background: #f0f5ff;
+            color: #1769e0;
+
+            transform: translateX(2px);
+        }
+
+        .sidebar-menu a.active {
+            background: #1769e0;
+            color: #ffffff;
+
+            box-shadow: 0 5px 12px rgba(23, 105, 224, .18);
+        }
+
+
+        /* =====================================================
+           LOGOUT
+        ===================================================== */
+
+        .sidebar-footer {
+            flex-shrink: 0;
+
+            padding: 12px 13px 15px;
+
+            border-top: 1px solid #edf0f5;
+
+            background: #ffffff;
+        }
+
+        .logout-button {
+            width: 100%;
+
+            display: flex;
+            align-items: center;
+
+            min-height: 46px;
+
+            padding: 11px 13px;
+
+            border: none;
+            border-radius: 10px;
+
+            background: transparent;
+
+            color: #dc3545;
+
+            font-size: 14px;
+            font-weight: 600;
+
+            text-align: left;
+
+            cursor: pointer;
+
+            transition: .2s;
+        }
+
+        .logout-button i {
+            width: 22px;
+
+            margin-right: 10px;
+
+            font-size: 17px;
+        }
+
+        .logout-button:hover {
+            background: #fff0f1;
+            color: #c82333;
+        }
+
+
+        /* =====================================================
+           OVERLAY
+        ===================================================== */
+
+        .sidebar-overlay {
             display: none;
+
+            position: fixed;
+
+            inset: 0;
+
+            background: rgba(15, 23, 42, .45);
+
+            z-index: 1050;
         }
 
-        /* =========================
+        .sidebar-overlay.show {
+            display: block;
+        }
+
+
+        /* =====================================================
+           MAIN CONTENT
+        ===================================================== */
+
+        .main-content {
+            min-height: 100vh;
+
+            margin-left: 250px;
+
+            width: calc(100% - 250px);
+        }
+
+
+        /* =====================================================
+           TOPBAR
+        ===================================================== */
+
+        .topbar {
+            height: 76px;
+
+            background: #ffffff;
+
+            border-bottom: 1px solid #e8edf3;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 0 30px;
+
+            position: sticky;
+            top: 0;
+
+            z-index: 900;
+        }
+
+        .topbar-left {
+            display: flex;
+            align-items: center;
+
+            min-width: 0;
+        }
+
+        .mobile-menu-button {
+            display: none;
+
+            width: 42px;
+            height: 42px;
+
+            border: 1px solid #e2e7ef;
+
+            background: #ffffff;
+
+            border-radius: 10px;
+
+            align-items: center;
+            justify-content: center;
+
+            color: #344054;
+
+            font-size: 20px;
+
+            cursor: pointer;
+        }
+
+        .page-heading {
+            min-width: 0;
+        }
+
+        .page-heading h5 {
+            margin: 0;
+
+            font-size: 17px;
+            font-weight: 700;
+
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .page-heading small {
+            color: #98a2b3;
+            font-size: 12px;
+        }
+
+
+        /* User */
+
+        .topbar-user {
+            display: flex;
+            align-items: center;
+
+            gap: 10px;
+
+            flex-shrink: 0;
+        }
+
+        .user-avatar {
+            width: 38px;
+            height: 38px;
+
+            border-radius: 50%;
+
+            background: #eaf2ff;
+
+            color: #1769e0;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-weight: 700;
+        }
+
+        .user-info {
+            line-height: 1.2;
+        }
+
+        .user-name {
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .user-role {
+            font-size: 11px;
+            color: #98a2b3;
+            text-transform: capitalize;
+        }
+
+
+        /* =====================================================
+           CONTENT
+        ===================================================== */
+
+        .content-wrapper {
+            padding: 30px;
+        }
+
+
+        /* =====================================================
+           RESPONSIVE TABLE
+        ===================================================== */
+
+        .table-responsive {
+            width: 100%;
+
+            overflow-x: auto;
+
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .table-responsive table {
+            min-width: 650px;
+        }
+
+
+        /* =====================================================
            MOBILE
-           ========================= */
+        ===================================================== */
 
         @media (max-width: 991.98px) {
 
+            /* Sidebar */
+
             .sidebar {
-                width: 270px;
+                width: 280px;
+
                 transform: translateX(-100%);
-                transition: transform .3s ease;
-                box-shadow: 5px 0 20px rgba(0,0,0,.15);
+
+                box-shadow: none;
             }
 
             .sidebar.show {
                 transform: translateX(0);
+
+                box-shadow: 10px 0 30px rgba(0,0,0,.12);
             }
 
-            .main {
+
+            /* Main */
+
+            .main-content {
                 margin-left: 0;
+
                 width: 100%;
             }
 
+
+            /* Topbar */
+
             .topbar {
-                height: 65px;
+                height: 68px;
+
                 padding: 0 18px;
-                gap: 10px;
             }
 
-            .mobile-menu-btn {
-                display: inline-flex;
-                align-items: center;
-                justify-content: center;
-                width: 42px;
-                height: 42px;
-                border: none;
-                border-radius: 8px;
-                background: #1473e6;
-                color: white;
-                font-size: 20px;
-            }
-
-            .topbar-left {
+            .mobile-menu-button {
                 display: flex;
-                align-items: center;
-                gap: 12px;
+
+                margin-right: 12px;
             }
 
-            .topbar-title {
-                font-size: 17px;
-            }
 
-            .topbar-user {
-                font-size: 14px;
-            }
+            /* Content */
 
-            .content {
-                padding: 20px;
-            }
-
-            /* Overlay */
-
-            .sidebar-overlay {
-                display: none;
-                position: fixed;
-                inset: 0;
-                background: rgba(0,0,0,.45);
-                z-index: 1040;
-            }
-
-            .sidebar-overlay.show {
-                display: block;
+            .content-wrapper {
+                padding: 22px 18px;
             }
         }
 
-        /* =========================
-           SMALL PHONE
-           ========================= */
+
+        /* =====================================================
+           MOBILE SMALL
+        ===================================================== */
 
         @media (max-width: 575.98px) {
 
             .sidebar {
-                width: 250px;
+                width: min(290px, 88vw);
             }
 
-            .topbar {
-                height: 60px;
-                padding: 0 12px;
+            .sidebar-header {
+                height: 68px;
+
+                padding: 0 18px;
             }
 
-            .mobile-menu-btn {
-                width: 38px;
-                height: 38px;
-                font-size: 18px;
+            .sidebar-logo {
+                width: 36px;
+                height: 36px;
             }
 
-            .topbar-title {
-                font-size: 15px;
-            }
-
-            .topbar-user {
-                font-size: 13px;
-            }
-
-            .topbar-user .bi-bell {
-                display: none;
-            }
-
-            .content {
-                padding: 15px;
-            }
-
-            .card-body {
-                padding: 15px;
-            }
-
-            .table {
-                font-size: 13px;
-            }
-
-            .btn {
-                font-size: 14px;
-            }
-
-            h1 {
-                font-size: 24px;
-            }
-
-            h2 {
-                font-size: 21px;
-            }
-
-            h3 {
-                font-size: 19px;
-            }
-
-            h4 {
-                font-size: 18px;
-            }
-
-            h5 {
+            .brand-title {
                 font-size: 16px;
             }
 
-            .alert {
-                font-size: 14px;
-            }
-        }
 
-        /* =========================
-           FORM RESPONSIVE
-           ========================= */
-
-        .form-control,
-        .form-select {
-            max-width: 100%;
-        }
-
-        /* =========================
-           IMAGE & CHART
-           ========================= */
-
-        img {
-            max-width: 100%;
-            height: auto;
-        }
-
-        canvas {
-            max-width: 100% !important;
-        }
-
-        /* =====================================================
-           RESPONSIVE PAGES - MOBILE ONLY
-           Desktop appearance remains unchanged.
-           ===================================================== */
-
-        @media (max-width: 767.98px) {
-
-            /* General page spacing */
-            .content > .container-fluid {
-                padding-left: 0 !important;
-                padding-right: 0 !important;
+            .topbar {
+                padding: 0 13px;
             }
 
-            /* Page headers used by history pages */
-            .page-header {
-                padding: 18px !important;
-                border-radius: 14px !important;
+            .mobile-menu-button {
+                width: 40px;
+                height: 40px;
+
+                margin-right: 9px;
             }
 
-            .page-header h3 {
-                font-size: 20px;
+            .page-heading h5 {
+                font-size: 15px;
             }
 
-            /* Cards used by history/report pages */
-            .filter-card,
-            .table-card {
-                padding: 14px !important;
-                border-radius: 12px !important;
+            .page-heading small {
+                display: none;
             }
 
-            .stat-card {
-                padding: 15px !important;
+
+            /* Hide detailed user info */
+
+            .user-info {
+                display: none;
             }
 
-            /* Make filter/export controls stack naturally */
-            .filter-card .d-flex.gap-2 {
-                flex-wrap: wrap;
+            .user-avatar {
+                width: 36px;
+                height: 36px;
             }
 
-            .filter-card .d-flex.gap-2 .btn {
-                flex: 1 1 auto;
+
+            .content-wrapper {
+                padding: 17px 13px;
             }
 
-            /* History tables remain readable and scroll horizontally */
-            .table-responsive {
-                border-radius: 8px;
-            }
 
-            .table-responsive > .table {
-                min-width: 720px;
-            }
+            /* Cards */
 
-            /* Dashboard chart cards */
-            .chart-container,
-            .chart-box {
-                width: 100% !important;
-                max-width: 100% !important;
-            }
-
-            /* Forms */
-            .card.p-4 {
-                padding: 18px !important;
-            }
-
-            /* Headers with a button: stack on narrow screens */
-            .content .d-flex.justify-content-between.align-items-center.mb-4 {
-                flex-wrap: wrap;
-                gap: 12px;
-            }
-
-            .content .d-flex.justify-content-between.align-items-center.mb-4 > * {
-                max-width: 100%;
-            }
-
-            .content .d-flex.justify-content-between.align-items-center.mb-4 > a.btn {
-                width: 100%;
-            }
-
-            /* Pagination */
-            .pagination {
-                flex-wrap: wrap;
-            }
-
-            /* Action buttons */
-            .btn-group {
-                flex-wrap: wrap;
-            }
-        }
-
-        @media (max-width: 575.98px) {
-
-            /* Compact mobile typography */
-            .content h2 {
-                font-size: 21px;
-            }
-
-            .content h3 {
-                font-size: 19px;
-            }
-
-            .content h4 {
-                font-size: 18px;
-            }
-
-            /* History export buttons */
-            .filter-card .mt-3.pt-3.border-top {
-                display: flex;
-                flex-wrap: wrap;
-                align-items: center;
-                gap: 6px;
-            }
-
-            .filter-card .mt-3.pt-3.border-top .me-2 {
-                width: 100%;
-                margin-right: 0 !important;
-                margin-bottom: 2px;
-            }
-
-            /* Keep card contents inside viewport */
             .card {
-                max-width: 100%;
-                overflow: hidden;
+                border-radius: 12px;
             }
 
-            /* Buttons in forms */
-            .card form .btn {
+            .card-body {
+                padding: 16px;
+            }
+
+
+            /* Buttons */
+
+            .btn {
                 min-height: 40px;
             }
 
-            /* Long headings */
-            .page-header p {
+
+            /* Form */
+
+            .form-control,
+            .form-select {
+                min-height: 43px;
+            }
+
+
+            /* Table */
+
+            .table-responsive table {
+                min-width: 700px;
+            }
+        }
+
+
+        /* =====================================================
+           VERY SMALL SCREEN
+        ===================================================== */
+
+        @media (max-width: 360px) {
+
+            .sidebar {
+                width: 86vw;
+            }
+
+            .content-wrapper {
+                padding: 14px 10px;
+            }
+
+            .topbar {
+                padding: 0 10px;
+            }
+
+            .mobile-menu-button {
+                margin-right: 7px;
+            }
+
+            .page-heading h5 {
                 font-size: 14px;
             }
         }
@@ -473,216 +633,433 @@
 
 <body>
 
-{{-- OVERLAY MOBILE --}}
-<div class="sidebar-overlay" id="sidebarOverlay"></div>
 
+<!-- =========================================================
+     OVERLAY
+========================================================= -->
 
-{{-- =========================
-     SIDEBAR
-     ========================= --}}
-
-<div class="sidebar" id="sidebar">
-
-    <div class="brand">
-        <i class="bi bi-box-seam"></i>
-        INVENTARIS<br>
-        PERALATAN
-    </div>
-
-
-    {{-- ================= ADMIN ================= --}}
-
-    @if(auth()->user()->role === 'admin')
-
-        <a href="{{ route('admin.dashboard') }}"
-           class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
-            <i class="bi bi-grid"></i>
-            Dashboard
-        </a>
-
-        <a href="{{ route('barang.index') }}"
-           class="{{ request()->routeIs('barang.*') ? 'active' : '' }}">
-            <i class="bi bi-box"></i>
-            Barang
-        </a>
-
-        <a href="{{ route('stok-masuk.tambah-stok') }}"
-            class="{{ request()->routeIs('stok-masuk.*') ? 'active' : '' }}">
-                <i class="bi bi-box-arrow-in-down"></i>
-             Tambah Stok
-        </a>
-
-        <a href="{{ route('admin.riwayat-stok-masuk') }}"
-           class="{{ request()->routeIs('admin.riwayat-stok-masuk') ? 'active' : '' }}">
-            <i class="bi bi-box-arrow-in-down"></i>
-            Riwayat Stok Masuk
-        </a>
-
-        <a href="{{ route('admin.riwayat-stok-keluar') }}"
-           class="{{ request()->routeIs('admin.riwayat-stok-keluar') ? 'active' : '' }}">
-            <i class="bi bi-box-arrow-up"></i>
-            Riwayat Stok Keluar
-        </a>
-
-
-    {{-- ================= TEKNISI ================= --}}
-
-    @elseif(auth()->user()->role === 'teknisi')
-
-        <a href="{{ route('teknisi.dashboard') }}"
-           class="{{ request()->routeIs('teknisi.dashboard') ? 'active' : '' }}">
-            <i class="bi bi-grid"></i>
-            Dashboard
-        </a>
-
-        <a href="{{ route('stok-keluar.index') }}"
-           class="{{ request()->routeIs('stok-keluar.*') ? 'active' : '' }}">
-            <i class="bi bi-box-arrow-up"></i>
-            Stok Keluar
-        </a>
-
-        <a href="{{ route('teknisi.riwayat') }}"
-           class="{{ request()->routeIs('teknisi.riwayat') ? 'active' : '' }}">
-            <i class="bi bi-clock-history"></i>
-            Riwayat Saya
-        </a>
-
-    @endif
-
-
-    {{-- ================= LOGOUT ================= --}}
-
-    <div class="sidebar-logout">
-
-        <form method="POST" action="{{ route('logout') }}">
-            @csrf
-
-            <button type="submit"
-                    class="btn btn-link text-white text-decoration-none w-100 text-start p-0">
-
-                <i class="bi bi-box-arrow-right"></i>
-                Logout
-
-            </button>
-
-        </form>
-
-    </div>
-
+<div
+    id="sidebarOverlay"
+    class="sidebar-overlay"
+    onclick="closeSidebar()">
 </div>
 
 
-{{-- =========================
+<!-- =========================================================
+     SIDEBAR
+========================================================= -->
+
+<aside id="sidebar" class="sidebar">
+
+
+    <!-- LOGO -->
+
+    <div class="sidebar-header">
+
+        <a
+            href="{{ auth()->check()
+                ? (auth()->user()->role === 'admin'
+                    ? route('admin.dashboard')
+                    : route('teknisi.dashboard'))
+                : route('public.dashboard') }}"
+            class="sidebar-brand"
+        >
+
+            <!--
+                Jika memiliki logo:
+                public/images/logo.png
+            -->
+
+            <img
+                src="{{ asset('images/logo.png') }}"
+                alt="Logo Intracs"
+                class="sidebar-logo"
+                onerror="this.style.display='none'"
+            >
+
+            <div class="brand-text">
+
+                <div class="brand-title">
+                    Inventaris Intracs
+                </div>
+
+                <div class="brand-subtitle">
+                    Sistem Informasi Inventaris
+                </div>
+
+            </div>
+
+        </a>
+
+    </div>
+
+
+    <!-- =====================================================
+         MENU
+    ===================================================== -->
+
+    <div class="sidebar-menu">
+
+
+        @if(auth()->check() && auth()->user()->role === 'admin')
+
+            <div class="menu-label">
+                Menu Admin
+            </div>
+
+
+            <!-- Dashboard -->
+
+            <a
+                href="{{ route('admin.dashboard') }}"
+                class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}"
+                onclick="closeSidebarMobile()"
+            >
+
+                <i class="bi bi-grid"></i>
+
+                <span>
+                    Dashboard
+                </span>
+
+            </a>
+
+
+            <!-- Barang -->
+
+            <a
+                href="{{ route('barang.index') }}"
+                class="{{ request()->routeIs('barang.*') ? 'active' : '' }}"
+                onclick="closeSidebarMobile()"
+            >
+
+                <i class="bi bi-box-seam"></i>
+
+                <span>
+                    Barang
+                </span>
+
+            </a>
+
+
+            <!-- Tambah Stok -->
+
+            <a
+                href="{{ route('stok-masuk.tambah-stok') }}"
+                class="{{ request()->routeIs('stok-masuk.*') ? 'active' : '' }}"
+                onclick="closeSidebarMobile()"
+            >
+
+                <i class="bi bi-box-arrow-in-down"></i>
+
+                <span>
+                    Tambah Stok
+                </span>
+
+            </a>
+
+
+            <!-- Riwayat Stok Masuk -->
+
+            <a
+                href="{{ route('admin.riwayat-stok-masuk') }}"
+                class="{{ request()->routeIs('admin.riwayat-stok-masuk*') ? 'active' : '' }}"
+                onclick="closeSidebarMobile()"
+            >
+
+                <i class="bi bi-clock-history"></i>
+
+                <span>
+                    Riwayat Stok Masuk
+                </span>
+
+            </a>
+
+
+            <!-- Riwayat Stok Keluar -->
+
+            <a
+                href="{{ route('admin.riwayat-stok-keluar') }}"
+                class="{{ request()->routeIs('admin.riwayat-stok-keluar*') ? 'active' : '' }}"
+                onclick="closeSidebarMobile()"
+            >
+
+                <i class="bi bi-box-arrow-up"></i>
+
+                <span>
+                    Riwayat Stok Keluar
+                </span>
+
+            </a>
+
+
+        @elseif(auth()->check() && auth()->user()->role === 'teknisi')
+
+
+            <div class="menu-label">
+                Menu Teknisi
+            </div>
+
+
+            <!-- Dashboard -->
+
+            <a
+                href="{{ route('teknisi.dashboard') }}"
+                class="{{ request()->routeIs('teknisi.dashboard') ? 'active' : '' }}"
+                onclick="closeSidebarMobile()"
+            >
+
+                <i class="bi bi-grid"></i>
+
+                <span>
+                    Dashboard
+                </span>
+
+            </a>
+
+
+            <!-- Stok Keluar -->
+
+            <a
+                href="{{ route('stok-keluar.index') }}"
+                class="{{ request()->routeIs('stok-keluar.*') ? 'active' : '' }}"
+                onclick="closeSidebarMobile()"
+            >
+
+                <i class="bi bi-box-arrow-up"></i>
+
+                <span>
+                    Stok Keluar
+                </span>
+
+            </a>
+
+
+            <!-- Riwayat -->
+
+            <a
+                href="{{ route('teknisi.riwayat') }}"
+                class="{{ request()->routeIs('teknisi.riwayat') ? 'active' : '' }}"
+                onclick="closeSidebarMobile()"
+            >
+
+                <i class="bi bi-clock-history"></i>
+
+                <span>
+                    Riwayat
+                </span>
+
+            </a>
+
+
+        @endif
+
+
+    </div>
+
+
+    <!-- =====================================================
+         LOGOUT
+    ===================================================== -->
+
+    <div class="sidebar-footer">
+
+        @auth
+
+            <form
+                action="{{ route('logout') }}"
+                method="POST"
+            >
+
+                @csrf
+
+                <button
+                    type="submit"
+                    class="logout-button"
+                >
+
+                    <i class="bi bi-box-arrow-right"></i>
+
+                    <span>
+                        Logout
+                    </span>
+
+                </button>
+
+            </form>
+
+        @endauth
+
+    </div>
+
+
+</aside>
+
+
+<!-- =========================================================
      MAIN CONTENT
-     ========================= --}}
+========================================================= -->
 
-<div class="main">
+<main class="main-content">
 
-    <div class="topbar">
+
+    <!-- =====================================================
+         TOPBAR
+    ===================================================== -->
+
+    <header class="topbar">
+
 
         <div class="topbar-left">
 
-            {{-- Tombol menu HP --}}
-            <button class="mobile-menu-btn"
-                    type="button"
-                    id="mobileMenuBtn"
-                    aria-label="Buka menu">
+
+            <!-- MOBILE MENU -->
+
+            <button
+                type="button"
+                class="mobile-menu-button"
+                onclick="openSidebar()"
+                aria-label="Buka menu"
+            >
 
                 <i class="bi bi-list"></i>
 
             </button>
 
-            <h5 class="mb-0 topbar-title">
-                @yield('page-title')
-            </h5>
+
+            <!-- PAGE TITLE -->
+
+            <div class="page-heading">
+
+                <h5>
+                    @yield('page-title', 'Dashboard')
+                </h5>
+
+                <small>
+                    Sistem Informasi Inventaris
+                </small>
+
+            </div>
+
 
         </div>
 
 
-        <div class="topbar-user">
+        <!-- USER -->
 
-            <i class="bi bi-bell fs-5 me-3"></i>
+        @auth
 
-            <strong>
-                {{ auth()->user()->name ?? 'Admin' }}
-            </strong>
+            <div class="topbar-user">
 
-        </div>
+                <div class="user-avatar">
 
-    </div>
+                    {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
 
+                </div>
 
-    <div class="content">
+                <div class="user-info">
 
-        @if(session('success'))
+                    <div class="user-name">
+                        {{ auth()->user()->name }}
+                    </div>
 
-            <div class="alert alert-success">
-                <i class="bi bi-check-circle"></i>
-                {{ session('success') }}
+                    <div class="user-role">
+                        {{ auth()->user()->role }}
+                    </div>
+
+                </div>
+
             </div>
 
-        @endif
+        @endauth
 
 
-        @if(session('error'))
+    </header>
 
-            <div class="alert alert-danger">
-                <i class="bi bi-exclamation-circle"></i>
-                {{ session('error') }}
-            </div>
 
-        @endif
+    <!-- =====================================================
+         PAGE CONTENT
+    ===================================================== -->
 
+    <div class="content-wrapper">
 
         @yield('content')
 
     </div>
 
-</div>
+
+</main>
 
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- =========================================================
+     JAVASCRIPT
+========================================================= -->
 
 <script>
 
-    const menuBtn = document.getElementById('mobileMenuBtn');
     const sidebar = document.getElementById('sidebar');
-    const overlay = document.getElementById('sidebarOverlay');
+    const sidebarOverlay = document.getElementById('sidebarOverlay');
+
 
     function openSidebar() {
+
+        if (!sidebar) return;
+
         sidebar.classList.add('show');
-        overlay.classList.add('show');
+
+        if (sidebarOverlay) {
+            sidebarOverlay.classList.add('show');
+        }
+
+        document.body.style.overflow = 'hidden';
     }
+
 
     function closeSidebar() {
+
+        if (!sidebar) return;
+
         sidebar.classList.remove('show');
-        overlay.classList.remove('show');
+
+        if (sidebarOverlay) {
+            sidebarOverlay.classList.remove('show');
+        }
+
+        document.body.style.overflow = '';
     }
 
-    if (menuBtn) {
-        menuBtn.addEventListener('click', function () {
-            if (sidebar.classList.contains('show')) {
-                closeSidebar();
-            } else {
-                openSidebar();
-            }
-        });
+
+    function closeSidebarMobile() {
+
+        if (window.innerWidth <= 991) {
+            closeSidebar();
+        }
     }
 
-    if (overlay) {
-        overlay.addEventListener('click', closeSidebar);
-    }
 
-    // Tutup sidebar setelah memilih menu di HP
-    document.querySelectorAll('.sidebar a').forEach(function (link) {
-        link.addEventListener('click', function () {
-            if (window.innerWidth <= 991) {
-                closeSidebar();
-            }
-        });
+    /* ESC untuk menutup sidebar */
+
+    document.addEventListener('keydown', function(event) {
+
+        if (event.key === 'Escape') {
+            closeSidebar();
+        }
+
+    });
+
+
+    /* Jika layar kembali ke desktop */
+
+    window.addEventListener('resize', function() {
+
+        if (window.innerWidth > 991) {
+            closeSidebar();
+        }
+
     });
 
 </script>
+
 
 @stack('scripts')
 

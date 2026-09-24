@@ -12,6 +12,62 @@
     </p>
 </div>
 
+<div class="card border-0 shadow-sm mb-4">
+    <div class="card-body">
+
+        <form action="{{ route('stok-keluar.index') }}" method="GET">
+
+            <div class="row g-2">
+
+                <div class="col-md-10">
+                    <div class="input-group">
+
+                        <span class="input-group-text bg-white">
+                            <i class="bi bi-search"></i>
+                        </span>
+
+                        <input
+                            type="text"
+                            name="search"
+                            value="{{ request('search') }}"
+                            class="form-control"
+                            placeholder="Cari kode barang atau nama barang..."
+                        >
+
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary w-100"
+                    >
+                        <i class="bi bi-search"></i>
+                        Cari
+                    </button>
+
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
+</div>
+
+@if(request('search'))
+    <div class="mt-2">
+        <a
+            href="{{ route('stok-keluar.index') }}"
+            class="btn btn-sm btn-outline-secondary"
+        >
+            <i class="bi bi-x-circle"></i>
+            Reset Pencarian
+        </a>
+    </div>
+@endif
+
 <div class="row g-4">
 
     @forelse($barang as $item)
