@@ -137,6 +137,18 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         [LaporanController::class, 'exportStokMasukWord']
     )->name('admin.riwayat-stok-masuk.word');
 
+    Route::get('/admin/riwayat-stok-masuk/{id}/edit',
+        [LaporanController::class, 'editStokMasuk']
+    )->name('admin.riwayat-stok-masuk.edit');
+
+    Route::put('/admin/riwayat-stok-masuk/{id}',
+        [LaporanController::class, 'updateStokMasuk']
+    )->name('admin.riwayat-stok-masuk.update');
+
+    Route::delete('/admin/riwayat-stok-masuk/{id}',
+        [LaporanController::class, 'deleteStokMasuk']
+    )->name('admin.riwayat-stok-masuk.delete');
+
 
     /*
     |--------------------------------------------------------------------------
@@ -155,6 +167,18 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/riwayat-stok-keluar/word',
         [LaporanController::class, 'exportStokKeluarWord']
     )->name('admin.riwayat-stok-keluar.word');
+
+    Route::get('/admin/riwayat-stok-keluar/{id}/edit',
+    [LaporanController::class, 'editStokKeluar']
+    )->name('admin.riwayat-stok-keluar.edit');
+
+    Route::put('/admin/riwayat-stok-keluar/{id}',
+        [LaporanController::class, 'updateStokKeluar']
+    )->name('admin.riwayat-stok-keluar.update');
+
+    Route::delete('/admin/riwayat-stok-keluar/{id}',
+        [LaporanController::class, 'deleteStokKeluar']
+    )->name('admin.riwayat-stok-keluar.delete');
 
 });
 

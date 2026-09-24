@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Barang;
 use App\Models\StokMasuk;
 use App\Models\StokKeluar;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpWord\PhpWord;
@@ -57,6 +59,91 @@ class LaporanController extends Controller
         );
     }
 
+    public function editStokMasuk($id)
+    {
+        $stokMasuk = StokMasuk::with('barang')->findOrFail($id);
+
+        $barang = Barang::orderBy('nama_barang')->get();
+
+        return view(
+            'admin.riwayat-stok-masuk-edit',
+            compact('stokMasuk', 'barang')
+        );
+    }
+
+    public function updateStokMasuk(Request $request, $id)
+    {
+        $request->validate([
+            'barang_id' => 'required|exists:barang,id',
+            'jumlah' => 'required|integer|min:1',
+            'nomor_do' => 'required|string|max:100',
+            'tanggal_request' => 'required|date',
+            'nama_request' => 'required|string|max:150',
+            'pengambil' => 'required|string|max:150',
+            'keterangan' => 'nullable|string',
+        ]);
+
+        DB::transaction(function () use ($request, $id) {
+
+            $stokMasuk = StokMasuk::lockForUpdate()->findOrFail($id);
+
+            $barangLama = Barang::lockForUpdate()
+                ->findOrFail($stokMasuk->barang_id);
+
+            $barangBaru = Barang::lockForUpdate()
+                ->findOrFail($request->barang_id);
+
+            // Kembalikan stok dari transaksi lama
+            $barangLama->decrement('stok', $stokMasuk->jumlah);
+
+            // Tambahkan stok berdasarkan transaksi baru
+            $barangBaru->increment('stok', $request->jumlah);
+
+            $stokMasuk->update([
+                'barang_id' => $request->barang_id,
+                'jumlah' => $request->jumlah,
+                'nomor_do' => $request->nomor_do,
+                'tanggal_request' => $request->tanggal_request,
+                'nama_request' => $request->nama_request,
+                'pengambil' => $request->pengambil,
+                'keterangan' => $request->keterangan,
+            ]);
+        });
+
+        return redirect()
+            ->route('admin.riwayat-stok-masuk')
+            ->with('success', 'Data stok masuk berhasil diperbarui.');
+    }
+
+    public function deleteStokMasuk($id)
+    {
+        DB::transaction(function () use ($id) {
+
+            $stokMasuk = StokMasuk::lockForUpdate()->findOrFail($id);
+
+            $barang = Barang::lockForUpdate()
+                ->findOrFail($stokMasuk->barang_id);
+
+            if ($barang->stok < $stokMasuk->jumlah) {
+                abort(
+                    redirect()
+                        ->route('admin.riwayat-stok-masuk')
+                        ->with(
+                            'error',
+                            'Data tidak dapat dihapus karena stok saat ini tidak mencukupi.'
+                        )
+                );
+            }
+
+            $barang->decrement('stok', $stokMasuk->jumlah);
+
+            $stokMasuk->delete();
+        });
+
+        return redirect()
+            ->route('admin.riwayat-stok-masuk')
+            ->with('success', 'Data stok masuk berhasil dihapus.');
+    }
 
     /*
     |--------------------------------------------------------------------------
@@ -103,6 +190,89 @@ class LaporanController extends Controller
         );
     }
 
+    public function editStokKeluar($id)
+    {
+        $stokKeluar = StokKeluar::with('barang')->findOrFail($id);
+
+        $barang = Barang::orderBy('nama_barang')->get();
+
+        return view(
+            'admin.riwayat-stok-keluar-edit',
+            compact('stokKeluar', 'barang')
+        );
+    }
+
+    public function updateStokKeluar(Request $request, $id)
+    {
+        $request->validate([
+            'barang_id' => 'required|exists:barang,id',
+            'jumlah' => 'required|integer|min:1',
+            'gerbang_tol' => 'required|string|max:100',
+            'nomor_gardu' => 'required|string|max:50',
+            'keterangan' => 'nullable|string',
+        ]);
+
+        DB::transaction(function () use ($request, $id) {
+
+            $stokKeluar = StokKeluar::lockForUpdate()->findOrFail($id);
+
+            $barangLama = Barang::lockForUpdate()
+                ->findOrFail($stokKeluar->barang_id);
+
+            $barangBaru = Barang::lockForUpdate()
+                ->findOrFail($request->barang_id);
+
+            // Kembalikan stok dari transaksi keluar lama
+            $barangLama->increment('stok', $stokKeluar->jumlah);
+
+            // Pastikan stok cukup untuk transaksi baru
+            if ($barangBaru->stok < $request->jumlah) {
+                abort(
+                    redirect()
+                        ->route('admin.riwayat-stok-keluar')
+                        ->with(
+                            'error',
+                            'Stok tidak mencukupi untuk perubahan transaksi.'
+                        )
+                );
+            }
+
+            // Kurangi stok berdasarkan transaksi baru
+            $barangBaru->decrement('stok', $request->jumlah);
+
+            $stokKeluar->update([
+                'barang_id' => $request->barang_id,
+                'jumlah' => $request->jumlah,
+                'gerbang_tol' => $request->gerbang_tol,
+                'nomor_gardu' => $request->nomor_gardu,
+                'keterangan' => $request->keterangan,
+            ]);
+        });
+
+        return redirect()
+            ->route('admin.riwayat-stok-keluar')
+            ->with('success', 'Data stok keluar berhasil diperbarui.');
+    }
+
+    public function deleteStokKeluar($id)
+    {
+        DB::transaction(function () use ($id) {
+
+            $stokKeluar = StokKeluar::lockForUpdate()->findOrFail($id);
+
+            $barang = Barang::lockForUpdate()
+                ->findOrFail($stokKeluar->barang_id);
+
+            // Kembalikan stok yang sebelumnya dikeluarkan
+            $barang->increment('stok', $stokKeluar->jumlah);
+
+            $stokKeluar->delete();
+        });
+
+        return redirect()
+            ->route('admin.riwayat-stok-keluar')
+            ->with('success', 'Data stok keluar berhasil dihapus.');
+    }
 
     /*
     |--------------------------------------------------------------------------

@@ -243,6 +243,7 @@
                         <th>Nama Request</th>
                         <th>Keterangan</th>
                         <th>Diambil Oleh</th>
+                        <th>Aksi</th>
                     </tr>
 
                 </thead>
@@ -317,6 +318,37 @@
                             <i class="bi bi-person-circle me-1"></i>
                             {{ $item->user->name ?? '-' }}
                         </td>
+
+                        <td>
+                        <div class="d-flex gap-1">
+
+                            <a
+                                href="{{ route('admin.riwayat-stok-masuk.edit', $item->id) }}"
+                                class="btn btn-sm btn-warning"
+                                title="Edit"
+                            >
+                                <i class="bi bi-pencil"></i>
+                            </a>
+
+                            <form
+                                action="{{ route('admin.riwayat-stok-masuk.delete', $item->id) }}"
+                                method="POST"
+                                onsubmit="return confirm('Yakin ingin menghapus data stok masuk ini? Stok barang akan ikut dikurangi.')"
+                            >
+                                @csrf
+                                @method('DELETE')
+
+                                <button
+                                    type="submit"
+                                    class="btn btn-sm btn-danger"
+                                    title="Hapus"
+                                >
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </form>
+
+                        </div>
+                    </td>
 
                     </tr>
 
