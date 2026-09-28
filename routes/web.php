@@ -57,7 +57,7 @@ Route::middleware('auth')->group(function () {
 |--------------------------------------------------------------------------
 */
 
-Route::middleware(['auth', 'role:admin'])->group(function () {
+Route::middleware(['auth', 'no-cache', 'role:admin'])->group(function () {
 
     // Dashboard Admin
     Route::get('/admin/dashboard',
@@ -189,7 +189,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 |--------------------------------------------------------------------------
 */
 
-Route::middleware(['auth', 'role:teknisi'])->group(function () {
+Route::middleware(['auth', 'no-cache', 'role:teknisi'])->group(function () {
 
     // Dashboard Teknisi
     Route::get('/teknisi/dashboard',
