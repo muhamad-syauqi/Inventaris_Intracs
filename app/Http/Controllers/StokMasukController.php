@@ -13,7 +13,8 @@ class StokMasukController extends Controller
     {
         $barang = Barang::orderBy('nama_barang')->get();
 
-        $teknisi = \App\Models\User::where('role', 'teknisi')
+        $teknisi = \App\Models\User::whereIn('role', ['teknisi', 'admin'])
+            ->orderBy('role')
             ->orderBy('name')
             ->get();
 

@@ -157,6 +157,7 @@
             <div class="mb-3">
                 <label for="pengambil" class="form-label">
                     Pengambil
+                    <span class="text danger">*</span>
                 </label>
 
                 <select
@@ -165,7 +166,7 @@
                     class="form-select"
                     required
                 >
-                    <option value="">-- Pilih Teknisi --</option>
+                    <option value="">-- Pilih Pengambil --</option>
 
                     @foreach($teknisi as $item)
                         <option
