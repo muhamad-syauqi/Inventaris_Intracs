@@ -101,6 +101,11 @@ Route::middleware(['auth', 'no-cache', 'role:admin'])->group(function () {
         [BarangController::class, 'update']
     )->name('barang.update');
 
+    // Hapus barang
+    Route::delete('/barang/{id}', 
+        [BarangController::class, 'destroy'])
+    ->name('barang.destroy');
+
 
     /*
     |--------------------------------------------------------------------------

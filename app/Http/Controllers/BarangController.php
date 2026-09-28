@@ -140,4 +140,20 @@ class BarangController extends Controller
             ->route('barang.index')
             ->with('success', 'Data barang berhasil diperbarui.');
     }
+
+    public function destroy($id)
+    {
+        $barang = Barang::findOrFail($id);
+
+        // Cek apakah barang masih memiliki riwayat stok masuk/keluar
+        if ($barang->stokMasuk()->exists() || $barang->stokKeluar()->exists()) {
+            return back()->with('error', 'Barang tidak dapat dihapus karena masih memiliki riwayat stok.');
+        }
+
+        $barang->delete();
+
+        return redirect()
+            ->route('barang.index')
+            ->with('success', 'Barang berhasil dihapus.');
+    }
 }

@@ -340,12 +340,12 @@
                         <td class="text-center pe-4">
 
                             <div class="btn-group"
-                                 role="group">
+                                role="group">
 
                                 {{-- DETAIL --}}
                                 <a href="{{ route('barang.show', $item->id) }}"
-                                   class="btn btn-sm btn-outline-info"
-                                   title="Lihat Detail">
+                                class="btn btn-sm btn-outline-info"
+                                title="Lihat Detail">
 
                                     <i class="bi bi-eye"></i>
 
@@ -354,12 +354,32 @@
 
                                 {{-- EDIT --}}
                                 <a href="{{ route('barang.edit', $item->id) }}"
-                                   class="btn btn-sm btn-outline-primary"
-                                   title="Edit Barang">
+                                class="btn btn-sm btn-outline-primary"
+                                title="Edit Barang">
 
                                     <i class="bi bi-pencil"></i>
 
                                 </a>
+
+
+                                {{-- HAPUS --}}
+                                <form action="{{ route('barang.destroy', $item->id) }}"
+                                    method="POST"
+                                    class="d-inline"
+                                    onsubmit="return confirm('Yakin ingin menghapus barang {{ $item->nama_barang }}?')">
+
+                                    @csrf
+                                    @method('DELETE')
+
+                                    <button type="submit"
+                                            class="btn btn-sm btn-outline-danger"
+                                            title="Hapus Barang">
+
+                                        <i class="bi bi-trash"></i>
+
+                                    </button>
+
+                                </form>
 
                             </div>
 
