@@ -56,18 +56,33 @@ class BarangController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'kode_barang' => 'required|string|max:50|unique:barang,kode_barang',
-            'nama_barang' => 'required|string|max:255|unique:barang,nama_barang',
+            'kode_barang' => 'required|string|max:100',
+            'nama_barang' => 'required|string|max:255',
             'jenis_barang' => 'required|in:New,Repair',
             'kategori_id' => 'required|exists:categories,id',
             'satuan' => 'required|string|max:50',
-        ], [
-            'kode_barang.unique' =>
-                'Kode barang sudah digunakan. Silakan gunakan kode yang berbeda.',
-
-            'nama_barang.unique' =>
-                'Nama barang sudah tersedia. Silakan gunakan nama barang yang berbeda.',
         ]);
+            $kodeSudahAda = Barang::where('kode_barang', $request->kode_barang)
+                ->where('jenis_barang', $request->jenis_barang)
+                ->where('kategori_id', $request->kategori_id)
+                ->exists();
+
+            $namaSudahAda = Barang::where('nama_barang', $request->nama_barang)
+                ->where('jenis_barang', $request->jenis_barang)
+                ->where('kategori_id', $request->kategori_id)
+                ->exists();
+
+            if ($kodeSudahAda) {
+                return back()
+                    ->withErrors(['kode_barang' => 'Kode barang sudah digunakan untuk jenis dan kategori tersebut.'])
+                    ->withInput();
+            }
+
+            if ($namaSudahAda) {
+                return back()
+                    ->withErrors(['nama_barang' => 'Nama barang sudah digunakan untuk jenis dan kategori tersebut.'])
+                    ->withInput();
+            }
 
         Barang::create([
             'kode_barang' => $request->kode_barang,
