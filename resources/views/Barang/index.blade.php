@@ -193,6 +193,10 @@
                         </th>
 
                         <th>
+                            Jenis
+                        </th>
+
+                        <th>
                             Kategori
                         </th>
 
@@ -264,6 +268,19 @@
 
                             </div>
 
+                        </td>
+
+                        {{-- JENIS --}}
+                        <td>
+                            @if($item->jenis_barang === 'New')
+                                <span class="badge bg-success">
+                                    New
+                                </span>
+                            @else
+                                <span class="badge bg-warning text-dark">
+                                    Repair
+                                </span>
+                            @endif
                         </td>
 
 
@@ -391,7 +408,7 @@
 
                     <tr>
 
-                        <td colspan="7"
+                        <td colspan="8"
                             class="text-center py-5">
 
                             <div class="mb-3">

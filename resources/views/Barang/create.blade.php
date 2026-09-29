@@ -66,6 +66,37 @@
 
         </div>
 
+        <div class="mb-3">
+            <label for="jenis_barang" class="form-label fw-semibold">
+                Jenis Barang <span class="text-danger">*</span>
+            </label>
+
+            <select name="jenis_barang"
+                    id="jenis_barang"
+                    class="form-select"
+                    required>
+
+                <option value="">-- Pilih Jenis Barang --</option>
+
+                <option value="New"
+                    {{ old('jenis_barang') == 'New' ? 'selected' : '' }}>
+                    New
+                </option>
+
+                <option value="Repair"
+                    {{ old('jenis_barang') == 'Repair' ? 'selected' : '' }}>
+                    Repair
+                </option>
+
+            </select>
+
+            @error('jenis_barang')
+                <div class="text-danger small mt-1">
+                    {{ $message }}
+                </div>
+            @enderror
+        </div>
+
 
         <div class="mb-3">
 

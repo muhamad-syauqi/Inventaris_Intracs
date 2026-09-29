@@ -58,6 +58,7 @@ class BarangController extends Controller
         $request->validate([
             'kode_barang' => 'required|string|max:50|unique:barang,kode_barang',
             'nama_barang' => 'required|string|max:255|unique:barang,nama_barang',
+            'jenis_barang' => 'required|in:New,Repair',
             'kategori_id' => 'required|exists:categories,id',
             'satuan' => 'required|string|max:50',
         ], [
@@ -71,6 +72,7 @@ class BarangController extends Controller
         Barang::create([
             'kode_barang' => $request->kode_barang,
             'nama_barang' => $request->nama_barang,
+            'jenis_barang' => $request->jenis_barang,
             'kategori_id' => $request->kategori_id,
             'satuan' => $request->satuan,
             'stok' => 0,
@@ -116,6 +118,9 @@ class BarangController extends Controller
             'nama_barang' =>
                 'required|string|max:255|unique:barang,nama_barang,' . $barang->id,
 
+            'jenis_barang' =>
+                'required|in:New,Repair',
+
             'kategori_id' =>
                 'required|exists:categories,id',
 
@@ -132,6 +137,7 @@ class BarangController extends Controller
         $barang->update([
             'kode_barang' => $request->kode_barang,
             'nama_barang' => $request->nama_barang,
+            'jenis_barang' => $request->jenis_barang,
             'kategori_id' => $request->kategori_id,
             'satuan' => $request->satuan,
         ]);
