@@ -12,10 +12,10 @@ class StokKeluarController extends Controller
 
     public function index(Request $request)
     {
-        // Daftar barang untuk dipilih
-        $queryBarang = Barang::orderBy('nama_barang');
+        $queryBarang = Barang::with('category')
+            ->orderBy('nama_barang');
 
-        // Pencarian berdasarkan kode atau nama barang
+        // Search kode / nama barang
         if ($request->filled('search')) {
             $queryBarang->where(function ($q) use ($request) {
                 $q->where('kode_barang', 'like', '%' . $request->search . '%')
@@ -23,16 +23,23 @@ class StokKeluarController extends Controller
             });
         }
 
+        // Filter jenis barang
+        if ($request->filled('jenis_barang')) {
+            $queryBarang->where('jenis_barang', $request->jenis_barang);
+        }
+
+        // Filter kategori
+        if ($request->filled('kategori_id')) {
+            $queryBarang->where('kategori_id', $request->kategori_id);
+        }
+
         $barang = $queryBarang
             ->paginate(12)
             ->withQueryString();
 
-
         // Riwayat stok keluar
-        $queryStokKeluar = StokKeluar::with(['barang', 'user'])
-            ->latest();
+        $queryStokKeluar = StokKeluar::with(['barang', 'user'])->latest();
 
-        // Teknisi hanya melihat transaksi miliknya
         if (auth()->user()->role === 'teknisi') {
             $queryStokKeluar->where('user_id', auth()->id());
         }
@@ -41,10 +48,18 @@ class StokKeluarController extends Controller
             ->paginate(10, ['*'], 'riwayat_page')
             ->withQueryString();
 
+        // Data kategori untuk filter
+        $kategori = \App\Models\Category::whereIn(
+            'nama_kategori',
+            ['Proyek', 'Maintenance']
+        )
+        ->orderBy('nama_kategori')
+        ->get();
 
         return view('Stok_Keluar.index', compact(
             'barang',
-            'stokKeluar'
+            'stokKeluar',
+            'kategori'
         ));
     }
 
