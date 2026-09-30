@@ -236,6 +236,7 @@
                         <th>No</th>
                         <th>Tanggal Input</th>
                         <th>Barang</th>
+                        <th>Jenis</th>
                         <th>Kategori</th>
                         <th>Jumlah</th>
                         <th>Nomor DO</th>
@@ -278,6 +279,16 @@
                             <small class="text-muted">
                                 {{ $item->barang->kode_barang }}
                             </small>
+                        </td>
+
+                        <td>
+                            @if($item->barang && $item->barang->jenis_barang === 'New')
+                                <span class="badge bg-success">New</span>
+                            @elseif($item->barang && $item->barang->jenis_barang === 'Repair')
+                                <span class="badge bg-warning text-dark">Repair</span>
+                            @else
+                                <span class="text-muted">-</span>
+                            @endif
                         </td>
 
                         <td>

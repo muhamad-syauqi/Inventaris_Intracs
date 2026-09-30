@@ -24,6 +24,7 @@ class LaporanController extends Controller
     {
         $query = StokMasuk::with([
             'barang.category',
+            'barang',
             'user'
         ])->latest();
 
@@ -155,6 +156,7 @@ class LaporanController extends Controller
     {
         $query = StokKeluar::with([
             'barang.category',
+            'barang',
             'user'
         ])->latest();
 
@@ -284,6 +286,7 @@ class LaporanController extends Controller
     {
         $query = StokMasuk::with([
             'barang.category',
+            'barang',
             'user'
         ])->latest();
 
@@ -305,6 +308,7 @@ class LaporanController extends Controller
             'Tanggal & Jam',
             'Kode Barang',
             'Nama Barang',
+            'Jenis',
             'Kategori',
             'Jumlah',
             'Satuan',
@@ -327,56 +331,75 @@ class LaporanController extends Controller
         foreach ($data as $index => $item) {
 
             $sheet->setCellValue("A{$row}", $index + 1);
+
             $sheet->setCellValue(
                 "B{$row}",
                 $item->created_at?->format('d-m-Y H:i')
             );
+
             $sheet->setCellValue(
                 "C{$row}",
                 $item->barang->kode_barang ?? '-'
             );
+
             $sheet->setCellValue(
                 "D{$row}",
                 $item->barang->nama_barang ?? '-'
             );
+
             $sheet->setCellValue(
                 "E{$row}",
+                $item->barang->jenis_barang ?? '-'
+            );
+
+            $sheet->setCellValue(
+                "F{$row}",
                 $item->barang->category->nama_kategori ?? '-'
             );
-            $sheet->setCellValue("F{$row}", $item->jumlah);
+
             $sheet->setCellValue(
                 "G{$row}",
-                $item->barang->satuan ?? '-'
+                $item->jumlah
             );
+
             $sheet->setCellValue(
                 "H{$row}",
-                $item->nomor_do ?? '-'
+                $item->barang->satuan ?? '-'
             );
+
             $sheet->setCellValue(
                 "I{$row}",
+                $item->nomor_do ?? '-'
+            );
+
+            $sheet->setCellValue(
+                "J{$row}",
                 $item->tanggal_request
                     ? \Carbon\Carbon::parse(
                         $item->tanggal_request
                     )->format('d-m-Y')
                     : '-'
             );
-            $sheet->setCellValue(
-                "J{$row}",
-                $item->nama_request ?? '-'
-            );
+
             $sheet->setCellValue(
                 "K{$row}",
-                $item->keterangan ?? '-'
+                $item->nama_request ?? '-'
             );
+
             $sheet->setCellValue(
                 "L{$row}",
+                $item->keterangan ?? '-'
+            );
+
+            $sheet->setCellValue(
+                "M{$row}",
                 $item->user->name ?? '-'
             );
 
             $row++;
         }
 
-        foreach (range('A', 'L') as $column) {
+        foreach (range('A', 'M') as $column) {
             $sheet->getColumnDimension($column)
                 ->setAutoSize(true);
         }
@@ -406,6 +429,7 @@ class LaporanController extends Controller
     {
         $query = StokKeluar::with([
             'barang.category',
+            'barang',
             'user'
         ])->latest();
 
@@ -427,6 +451,7 @@ class LaporanController extends Controller
             'Tanggal & Jam',
             'Kode Barang',
             'Nama Barang',
+            'Jenis',
             'Kategori',
             'Jumlah',
             'Satuan',
@@ -448,43 +473,61 @@ class LaporanController extends Controller
         foreach ($data as $index => $item) {
 
             $sheet->setCellValue("A{$row}", $index + 1);
+
             $sheet->setCellValue(
                 "B{$row}",
                 $item->created_at?->format('d-m-Y H:i')
             );
+
             $sheet->setCellValue(
                 "C{$row}",
                 $item->barang->kode_barang ?? '-'
             );
+
             $sheet->setCellValue(
                 "D{$row}",
                 $item->barang->nama_barang ?? '-'
             );
+
             $sheet->setCellValue(
                 "E{$row}",
+                $item->barang->jenis_barang ?? '-'
+            );
+
+            $sheet->setCellValue(
+                "F{$row}",
                 $item->barang->category->nama_kategori ?? '-'
             );
-            $sheet->setCellValue("F{$row}", $item->jumlah);
+
             $sheet->setCellValue(
                 "G{$row}",
-                $item->barang->satuan ?? '-'
+                $item->jumlah
             );
+
             $sheet->setCellValue(
                 "H{$row}",
-                $item->gerbang_tol ?? '-'
+                $item->barang->satuan ?? '-'
             );
+
             $sheet->setCellValue(
                 "I{$row}",
+                $item->gerbang_tol ?? '-'
+            );
+
+            $sheet->setCellValue(
+                "J{$row}",
                 $item->nomor_gardu
                     ? 'Gardu ' . $item->nomor_gardu
                     : '-'
             );
-            $sheet->setCellValue(
-                "J{$row}",
-                $item->keterangan ?? '-'
-            );
+
             $sheet->setCellValue(
                 "K{$row}",
+                $item->keterangan ?? '-'
+            );
+
+            $sheet->setCellValue(
+                "L{$row}",
                 $item->user->name ?? '-'
             );
 
@@ -521,6 +564,7 @@ class LaporanController extends Controller
     {
         $query = StokMasuk::with([
             'barang.category',
+            'barang',
             'user'
         ])->latest();
 
@@ -578,6 +622,7 @@ class LaporanController extends Controller
             'No',
             'Tanggal',
             'Barang',
+            'jenis',
             'Jumlah',
             'DO',
             'Tgl Request',
@@ -607,6 +652,11 @@ class LaporanController extends Controller
             $table->addCell(1800)
                 ->addText(
                     $item->barang->nama_barang ?? '-'
+                );
+
+            $table->addCell(1000)
+                ->addText(
+                    $item->barang->jenis_barang ?? '-'
                 );
 
             $table->addCell(800)
@@ -675,6 +725,7 @@ class LaporanController extends Controller
     {
         $query = StokKeluar::with([
             'barang.category',
+            'barang',
             'user'
         ])->latest();
 
@@ -710,6 +761,7 @@ class LaporanController extends Controller
             'No',
             'Tanggal',
             'Barang',
+            'Jenis',
             'Jumlah',
             'Gerbang Tol',
             'Gardu',
@@ -739,6 +791,11 @@ class LaporanController extends Controller
             $table->addCell(1800)
                 ->addText(
                     $item->barang->nama_barang ?? '-'
+                );
+
+            $table->addCell(1000)
+                ->addText(
+                    $item->barang->jenis_barang ?? '-'
                 );
 
             $table->addCell(800)
