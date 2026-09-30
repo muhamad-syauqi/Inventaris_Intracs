@@ -14,7 +14,8 @@ class PublicDashboardController extends Controller
     $barangTersedia = Barang::where('stok', '>', 0)->count();
     $barangHabis = Barang::where('stok', 0)->count();
 
-    $query = Barang::with('category');
+    $query = Barang::with('category')
+        ->where('stok', '>', 0);
 
     if ($request->filled('search')) {
         $query->where(function ($q) use ($request) {

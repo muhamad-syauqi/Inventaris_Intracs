@@ -17,15 +17,98 @@
     >
 
     <style>
+        :root {
+            --blue-dark: #03151d;
+            --blue-deep: #062b3a;
+            --blue: #0b5874;
+            --blue-main: #0d789e;
+            --blue-light: #28b8e8;
+            --cyan: #63dcff;
+
+            --text: #eefaff;
+            --muted: #8baab7;
+
+            --glass: rgba(8, 35, 46, .68);
+            --glass-border: rgba(82, 190, 226, .18);
+        }
+
         * {
             box-sizing: border-box;
         }
 
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
             margin: 0;
-            background: #f5f8fc;
-            color: #172033;
+            color: var(--text);
             font-family: "Segoe UI", Arial, sans-serif;
+            background:
+                radial-gradient(
+                    circle at 15% 10%,
+                    rgba(15, 132, 174, .20),
+                    transparent 28%
+                ),
+                radial-gradient(
+                    circle at 85% 35%,
+                    rgba(25, 174, 219, .13),
+                    transparent 30%
+                ),
+                var(--blue-dark);
+            overflow-x: hidden;
+        }
+
+        /* =========================
+           BACKGROUND ANIMATION
+        ========================= */
+
+        .background-glow {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .glow {
+            position: absolute;
+            width: 420px;
+            height: 420px;
+            border-radius: 50%;
+            filter: blur(90px);
+            opacity: .18;
+            animation: floatGlow 12s ease-in-out infinite alternate;
+        }
+
+        .glow.one {
+            background: #087ca3;
+            top: -180px;
+            left: -100px;
+        }
+
+        .glow.two {
+            background: #20c4f0;
+            right: -150px;
+            top: 35%;
+            animation-delay: 2s;
+        }
+
+        .glow.three {
+            background: #07516d;
+            left: 30%;
+            bottom: -230px;
+            animation-delay: 4s;
+        }
+
+        @keyframes floatGlow {
+            from {
+                transform: translate(0, 0) scale(1);
+            }
+
+            to {
+                transform: translate(70px, -40px) scale(1.2);
+            }
         }
 
         /* =========================
@@ -33,64 +116,106 @@
         ========================= */
 
         .navbar-custom {
-            height: 76px;
-            background: rgba(255,255,255,.96);
-            border-bottom: 1px solid #e8edf5;
             position: sticky;
-            top: 0;
+            top: 14px;
             z-index: 1000;
-            backdrop-filter: blur(10px);
+            margin: 14px auto 0;
+            width: min(1180px, calc(100% - 30px));
+
+            background: rgba(4, 25, 34, .72);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+
+            box-shadow:
+                0 15px 50px rgba(0, 0, 0, .25),
+                inset 0 1px rgba(255, 255, 255, .05);
+
+            animation: navbarIn .7s ease;
+        }
+
+        @keyframes navbarIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .navbar-inner {
-            height: 100%;
+            min-height: 72px;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            padding: 0 18px;
         }
 
         .brand {
             display: flex;
             align-items: center;
             gap: 12px;
+            color: white;
             text-decoration: none;
-            color: #172033;
         }
 
         .brand-logo {
-            height: 44px;
-            width: auto;
+            width: 45px;
+            height: 45px;
             object-fit: contain;
+            filter:
+                drop-shadow(0 0 10px rgba(53, 202, 245, .35));
         }
 
         .brand-name {
-            font-size: 19px;
-            font-weight: 700;
-            letter-spacing: -.3px;
+            font-size: 18px;
+            font-weight: 750;
         }
 
         .brand-subtitle {
-            font-size: 11px;
-            color: #8792a5;
             display: block;
-            margin-top: -2px;
+            color: var(--muted);
+            font-size: 11px;
         }
 
         .login-btn {
-            border: none;
-            background: #1769e0;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+
+            padding: 10px 18px;
+            border-radius: 12px;
+
             color: white;
-            padding: 10px 20px;
-            border-radius: 10px;
-            font-weight: 600;
             text-decoration: none;
-            transition: .2s;
+            font-weight: 700;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #07506a,
+                    #0d8bb5
+                );
+
+            border: 1px solid rgba(95, 215, 247, .28);
+
+            box-shadow:
+                0 0 20px rgba(21, 160, 205, .15);
+
+            transition: .25s;
         }
 
         .login-btn:hover {
-            background: #0e56bf;
             color: white;
-            transform: translateY(-1px);
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 0 30px rgba(35, 191, 235, .35);
         }
 
         /* =========================
@@ -99,85 +224,162 @@
 
         .hero {
             position: relative;
+            min-height: 570px;
+            display: flex;
+            align-items: center;
             overflow: hidden;
-            background: linear-gradient(135deg, #0e56bf 0%, #1769e0 50%, #4b9cff 100%);
-            color: white;
-            padding: 72px 0 85px;
-        }
-
-        .hero::before {
-            content: "";
-            position: absolute;
-            width: 450px;
-            height: 450px;
-            border-radius: 50%;
-            background: rgba(255,255,255,.08);
-            right: -120px;
-            top: -220px;
-        }
-
-        .hero::after {
-            content: "";
-            position: absolute;
-            width: 280px;
-            height: 280px;
-            border-radius: 50%;
-            background: rgba(255,255,255,.06);
-            left: -100px;
-            bottom: -160px;
+            padding: 100px 0 130px;
         }
 
         .hero-content {
             position: relative;
-            z-index: 2;
-            max-width: 760px;
+            z-index: 3;
+            max-width: 730px;
+
+            animation: heroIn 1s ease;
+        }
+
+        @keyframes heroIn {
+            from {
+                opacity: 0;
+                transform: translateY(35px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .hero-label {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            padding: 7px 13px;
+
+            padding: 8px 14px;
+            margin-bottom: 22px;
+
             border-radius: 30px;
-            background: rgba(255,255,255,.14);
-            border: 1px solid rgba(255,255,255,.2);
-            font-size: 13px;
-            margin-bottom: 20px;
+            color: #8de7ff;
+
+            background: rgba(17, 125, 162, .13);
+            border: 1px solid rgba(69, 195, 232, .20);
+
+            box-shadow:
+                0 0 25px rgba(19, 145, 187, .08);
+        }
+
+        .hero-label i {
+            color: var(--cyan);
         }
 
         .hero h1 {
-            font-size: clamp(36px, 5vw, 58px);
-            line-height: 1.08;
-            font-weight: 800;
-            letter-spacing: -1.5px;
-            margin-bottom: 18px;
+            margin: 0 0 20px;
+
+            font-size: clamp(42px, 6vw, 70px);
+            line-height: 1.02;
+            font-weight: 850;
+            letter-spacing: -2.5px;
+        }
+
+        .hero h1 span {
+            background:
+                linear-gradient(
+                    90deg,
+                    #ffffff,
+                    #63dcff,
+                    #159dcc
+                );
+
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
         }
 
         .hero p {
-            font-size: 17px;
-            line-height: 1.7;
-            color: rgba(255,255,255,.88);
             max-width: 650px;
-            margin-bottom: 28px;
+            color: #a5c0cb;
+            font-size: 17px;
+            line-height: 1.8;
+            margin-bottom: 30px;
         }
 
         .hero-button {
             display: inline-flex;
             align-items: center;
-            gap: 9px;
-            background: white;
-            color: #1769e0;
-            padding: 12px 20px;
-            border-radius: 11px;
-            font-weight: 700;
+            gap: 10px;
+
+            padding: 13px 20px;
+            border-radius: 13px;
+
+            color: white;
             text-decoration: none;
-            transition: .2s;
+            font-weight: 700;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #07536e,
+                    #0e91bb
+                );
+
+            border: 1px solid rgba(100, 218, 250, .28);
+
+            box-shadow:
+                0 10px 35px rgba(0, 135, 180, .20);
+
+            transition: .25s;
         }
 
         .hero-button:hover {
-            color: #0e56bf;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0,0,0,.15);
+            color: white;
+            transform: translateY(-3px);
+
+            box-shadow:
+                0 15px 45px rgba(0, 169, 220, .35);
+        }
+
+        /* Decorative lines */
+
+        .hero-orb {
+            position: absolute;
+            width: 530px;
+            height: 530px;
+            border-radius: 50%;
+
+            right: -130px;
+            top: 30px;
+
+            border: 1px solid rgba(69, 201, 238, .16);
+
+            box-shadow:
+                0 0 80px rgba(16, 152, 199, .08),
+                inset 0 0 80px rgba(16, 152, 199, .05);
+
+            animation: rotateOrb 18s linear infinite;
+        }
+
+        .hero-orb::before,
+        .hero-orb::after {
+            content: "";
+            position: absolute;
+            inset: 45px;
+            border-radius: 50%;
+            border: 1px solid rgba(75, 208, 242, .12);
+        }
+
+        .hero-orb::after {
+            inset: 100px;
+        }
+
+        @keyframes rotateOrb {
+            from {
+                transform: rotate(0);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         /* =========================
@@ -185,91 +387,134 @@
         ========================= */
 
         .stats-wrapper {
-            margin-top: -42px;
             position: relative;
             z-index: 10;
+            margin-top: -55px;
         }
 
         .stat-card {
+            position: relative;
             height: 100%;
-            background: white;
-            border-radius: 16px;
-            padding: 22px;
-            border: 1px solid #e8edf5;
-            box-shadow: 0 10px 30px rgba(27,55,95,.08);
-            transition: .2s;
+
+            padding: 23px;
+            border-radius: 19px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(14, 54, 69, .78),
+                    rgba(5, 28, 38, .74)
+                );
+
+            border: 1px solid var(--glass-border);
+
+            backdrop-filter: blur(18px);
+
+            box-shadow:
+                0 20px 45px rgba(0, 0, 0, .20);
+
+            overflow: hidden;
+
+            transition: .3s;
+        }
+
+        .stat-card::before {
+            content: "";
+            position: absolute;
+            width: 130px;
+            height: 130px;
+            right: -70px;
+            top: -70px;
+
+            background: rgba(34, 186, 232, .12);
+            border-radius: 50%;
+            filter: blur(10px);
         }
 
         .stat-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 15px 35px rgba(27,55,95,.12);
+            transform: translateY(-7px);
+
+            border-color: rgba(62, 202, 239, .35);
+
+            box-shadow:
+                0 25px 55px rgba(0, 0, 0, .28),
+                0 0 30px rgba(16, 159, 204, .08);
         }
 
         .stat-icon {
-            width: 46px;
-            height: 46px;
-            border-radius: 12px;
+            width: 48px;
+            height: 48px;
+
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 21px;
-            margin-bottom: 15px;
-        }
 
-        .icon-blue {
-            background: #e8f1ff;
-            color: #1769e0;
+            border-radius: 14px;
+            margin-bottom: 18px;
+
+            font-size: 21px;
+
+            background: rgba(24, 148, 187, .14);
+            color: var(--cyan);
+
+            border: 1px solid rgba(64, 198, 235, .14);
         }
 
         .icon-green {
-            background: #e8f8ef;
-            color: #15945b;
+            color: #54e6aa;
+            background: rgba(42, 198, 133, .10);
         }
 
         .icon-orange {
-            background: #fff3df;
-            color: #e99000;
+            color: #ffc766;
+            background: rgba(241, 168, 51, .10);
         }
 
         .icon-red {
-            background: #ffebed;
-            color: #df3b4c;
+            color: #ff7181;
+            background: rgba(232, 65, 87, .10);
         }
 
         .stat-number {
-            font-size: 29px;
-            font-weight: 800;
-            color: #172033;
+            font-size: 30px;
             line-height: 1;
+            font-weight: 850;
+            color: white;
         }
 
         .stat-label {
-            color: #7c8799;
-            font-size: 13px;
             margin-top: 8px;
+            color: var(--muted);
+            font-size: 13px;
         }
 
         /* =========================
-           MAIN CONTENT
+           MAIN
         ========================= */
 
         .section {
-            padding: 65px 0;
+            padding: 90px 0;
         }
 
         .section-heading {
-            margin-bottom: 28px;
+            margin-bottom: 30px;
         }
 
         .section-heading h2 {
-            font-size: 28px;
-            font-weight: 800;
-            margin-bottom: 7px;
+            margin-bottom: 8px;
+
+            font-size: 31px;
+            font-weight: 850;
+            letter-spacing: -.8px;
+        }
+
+        .section-heading h2 span {
+            color: var(--cyan);
         }
 
         .section-heading p {
-            color: #7c8799;
             margin: 0;
+            color: var(--muted);
         }
 
         /* =========================
@@ -277,11 +522,18 @@
         ========================= */
 
         .search-card {
-            background: white;
-            border: 1px solid #e8edf5;
-            border-radius: 16px;
-            padding: 18px;
-            margin-bottom: 25px;
+            padding: 15px;
+            margin-bottom: 24px;
+
+            border-radius: 18px;
+
+            background: rgba(7, 35, 46, .68);
+            border: 1px solid var(--glass-border);
+
+            backdrop-filter: blur(18px);
+
+            box-shadow:
+                0 15px 40px rgba(0, 0, 0, .16);
         }
 
         .search-form {
@@ -290,100 +542,170 @@
         }
 
         .search-input {
-            height: 48px;
-            border: 1px solid #dfe5ee;
-            border-radius: 10px;
-            padding: 0 16px;
             flex: 1;
+            height: 50px;
+
+            padding: 0 17px;
+
+            color: white;
+            background: rgba(2, 19, 26, .70);
+
+            border: 1px solid rgba(99, 201, 230, .15);
+            border-radius: 13px;
+
             outline: none;
         }
 
+        .search-input::placeholder {
+            color: #6f8b97;
+        }
+
         .search-input:focus {
-            border-color: #1769e0;
-            box-shadow: 0 0 0 3px rgba(23,105,224,.1);
+            border-color: rgba(63, 203, 241, .50);
+
+            box-shadow:
+                0 0 0 4px rgba(23, 159, 202, .08),
+                0 0 25px rgba(23, 159, 202, .08);
         }
 
         .search-btn {
-            border: none;
-            background: #1769e0;
-            color: white;
+            height: 50px;
+
+            border: 0;
+            border-radius: 13px;
+
             padding: 0 22px;
-            border-radius: 10px;
-            font-weight: 600;
+
+            color: white;
+            font-weight: 700;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #07536d,
+                    #0c8caf
+                );
+
+            box-shadow:
+                0 8px 25px rgba(7, 142, 185, .16);
+
+            transition: .25s;
+        }
+
+        .search-btn:hover {
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 12px 30px rgba(10, 169, 219, .28);
         }
 
         /* =========================
-           INVENTORY TABLE
+           TABLE
         ========================= */
 
         .inventory-card {
-            background: white;
-            border: 1px solid #e8edf5;
-            border-radius: 16px;
             overflow: hidden;
-            box-shadow: 0 5px 20px rgba(27,55,95,.04);
+
+            border-radius: 20px;
+
+            background: rgba(7, 32, 42, .72);
+            border: 1px solid var(--glass-border);
+
+            backdrop-filter: blur(18px);
+
+            box-shadow:
+                0 20px 50px rgba(0, 0, 0, .18);
         }
 
         .table {
             margin: 0;
+            color: white;
         }
 
         .table thead th {
-            background: #f8faff;
-            color: #68758a;
-            font-size: 12px;
+            padding: 17px 19px;
+
+            color: #83a5b2;
+            background: rgba(11, 68, 87, .35);
+
+            border-bottom: 1px solid rgba(89, 192, 222, .12);
+
+            font-size: 11px;
             text-transform: uppercase;
-            letter-spacing: .5px;
-            font-weight: 700;
-            padding: 16px 18px;
-            border-bottom: 1px solid #e8edf5;
+            letter-spacing: .8px;
         }
 
         .table tbody td {
-            padding: 17px 18px;
+            padding: 18px 19px;
             vertical-align: middle;
-            border-color: #edf1f6;
+
+            color: #dcecf2;
+
+            background: transparent;
+            border-color: rgba(105, 174, 197, .08);
+        }
+
+        .table tbody tr {
+            transition: .25s;
+        }
+
+        .table tbody tr:hover td {
+            background: rgba(20, 145, 184, .07);
         }
 
         .item-name {
-            font-weight: 700;
-            color: #202b3d;
+            color: white;
+            font-weight: 750;
         }
 
         .item-code {
-            color: #8792a5;
+            margin-top: 4px;
+            color: #718f9c;
             font-size: 12px;
-            margin-top: 3px;
         }
 
         .category-badge {
             display: inline-block;
-            background: #eef4ff;
-            color: #1769e0;
-            padding: 5px 9px;
-            border-radius: 7px;
+
+            padding: 6px 10px;
+
+            border-radius: 8px;
+
+            color: #70dcfa;
+            background: rgba(21, 143, 182, .12);
+
+            border: 1px solid rgba(69, 196, 232, .12);
+
             font-size: 12px;
-            font-weight: 600;
+            font-weight: 650;
         }
 
         .stock-number {
-            font-weight: 800;
+            color: white;
             font-size: 17px;
+            font-weight: 800;
         }
 
         .stock-unit {
+            color: #718f9c;
             font-size: 12px;
-            color: #8792a5;
         }
+
+        /* =========================
+           STATUS
+        ========================= */
 
         .status {
             display: inline-flex;
             align-items: center;
             gap: 7px;
-            padding: 6px 10px;
+
+            padding: 7px 11px;
+
             border-radius: 30px;
-            font-size: 12px;
-            font-weight: 700;
+
+            font-size: 11px;
+            font-weight: 750;
         }
 
         .status-dot {
@@ -391,21 +713,26 @@
             height: 7px;
             border-radius: 50%;
             background: currentColor;
+
+            box-shadow: 0 0 9px currentColor;
         }
 
         .status-available {
-            color: #128052;
-            background: #e8f8ef;
+            color: #58e7ad;
+            background: rgba(44, 198, 133, .10);
+            border: 1px solid rgba(69, 226, 161, .12);
         }
 
         .status-low {
-            color: #c47700;
-            background: #fff4df;
+            color: #ffc766;
+            background: rgba(238, 163, 45, .10);
+            border: 1px solid rgba(244, 184, 83, .12);
         }
 
         .status-empty {
-            color: #d23849;
-            background: #ffebed;
+            color: #ff6f7e;
+            background: rgba(232, 64, 85, .10);
+            border: 1px solid rgba(240, 80, 99, .12);
         }
 
         /* =========================
@@ -413,21 +740,33 @@
         ========================= */
 
         .empty-state {
-            padding: 60px 20px;
+            padding: 70px 20px;
             text-align: center;
-            color: #8994a7;
+            color: var(--muted);
         }
 
         .empty-icon {
-            width: 65px;
-            height: 65px;
-            border-radius: 50%;
-            background: #f0f4fa;
+            width: 70px;
+            height: 70px;
+
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 15px;
+
+            margin: 0 auto 17px;
+
+            border-radius: 50%;
+
+            color: var(--cyan);
+            background: rgba(25, 146, 185, .10);
+
+            border: 1px solid rgba(70, 198, 233, .12);
+
             font-size: 27px;
+        }
+
+        .empty-state h5 {
+            color: white;
         }
 
         /* =========================
@@ -435,31 +774,52 @@
         ========================= */
 
         footer {
-            background: #111827;
-            color: white;
-            padding: 35px 0;
-            margin-top: 20px;
+            position: relative;
+            overflow: hidden;
+
+            padding: 45px 0;
+
+            background: rgba(2, 15, 21, .92);
+            border-top: 1px solid rgba(84, 184, 214, .10);
         }
 
         .footer-brand {
             display: flex;
             align-items: center;
             gap: 10px;
-            font-weight: 700;
+
+            color: white;
+            font-weight: 750;
         }
 
         .footer-logo {
-            height: 34px;
-            width: auto;
-            background: white;
-            padding: 3px;
-            border-radius: 6px;
+            width: 38px;
+            height: 38px;
+            object-fit: contain;
+
+            filter:
+                drop-shadow(0 0 10px rgba(49, 197, 238, .30));
         }
 
         .footer-text {
-            color: #9ca8ba;
+            margin-top: 9px;
+            color: #66828e;
             font-size: 13px;
-            margin-top: 10px;
+        }
+
+        /* =========================
+           REVEAL ANIMATION
+        ========================= */
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(25px);
+            transition: .7s ease;
+        }
+
+        .reveal.show {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         /* =========================
@@ -469,15 +829,22 @@
         @media (max-width: 767px) {
 
             .navbar-custom {
-                height: 68px;
+                width: calc(100% - 20px);
+                top: 10px;
+                margin-top: 10px;
+            }
+
+            .navbar-inner {
+                min-height: 64px;
             }
 
             .brand-logo {
-                height: 36px;
+                width: 38px;
+                height: 38px;
             }
 
             .brand-name {
-                font-size: 16px;
+                font-size: 15px;
             }
 
             .brand-subtitle {
@@ -485,71 +852,73 @@
             }
 
             .login-btn {
-                padding: 8px 13px;
-                font-size: 13px;
+                padding: 8px 12px;
+                font-size: 12px;
             }
 
             .hero {
-                padding: 55px 0 75px;
+                min-height: auto;
+                padding: 80px 0 105px;
             }
 
             .hero h1 {
-                font-size: 38px;
+                font-size: 40px;
+                letter-spacing: -1.5px;
             }
 
             .hero p {
                 font-size: 15px;
             }
 
+            .hero-orb {
+                width: 330px;
+                height: 330px;
+                right: -180px;
+                top: 100px;
+                opacity: .6;
+            }
+
             .stats-wrapper {
-                margin-top: -30px;
+                margin-top: -45px;
             }
 
             .stat-card {
-                padding: 17px;
+                padding: 18px;
             }
 
             .stat-number {
-                font-size: 24px;
+                font-size: 25px;
             }
 
             .section {
-                padding: 45px 0;
+                padding: 65px 0;
             }
 
             .section-heading h2 {
-                font-size: 24px;
+                font-size: 25px;
             }
 
             .search-form {
                 flex-direction: column;
             }
 
-            .search-input {
-                width: 100%;
-            }
-
             .search-btn {
-                height: 45px;
-            }
-
-            .table {
-                min-width: 760px;
+                width: 100%;
             }
 
             .inventory-card {
                 overflow-x: auto;
             }
+
+            .table {
+                min-width: 760px;
+            }
         }
 
         @media (max-width: 400px) {
 
-            .brand-name {
-                font-size: 14px;
-            }
-
             .hero h1 {
-                font-size: 32px;
+                font-size: 34px;
             }
 
             .hero-button {
@@ -557,19 +926,31 @@
                 justify-content: center;
             }
         }
-    </style>
-</head>
 
-<body>
+        </style>
+    </head>
+
+    <body>
+
+    <div class="background-glow">
+        <div class="glow one"></div>
+        <div class="glow two"></div>
+        <div class="glow three"></div>
+    </div>
+
 
 <!-- =========================
      NAVBAR
 ========================= -->
 
 <nav class="navbar-custom">
-    <div class="container navbar-inner">
 
-        <a href="{{ route('public.dashboard') }}" class="brand">
+    <div class="navbar-inner">
+
+        <a
+            href="{{ route('public.dashboard') }}"
+            class="brand"
+        >
 
             <img
                 src="{{ asset('images/intracs.png') }}"
@@ -589,12 +970,17 @@
 
         </a>
 
-        <a href="{{ route('login') }}" class="login-btn">
+
+        <a
+            href="{{ route('login') }}"
+            class="login-btn"
+        >
             <i class="bi bi-box-arrow-in-right"></i>
             Login
         </a>
 
     </div>
+
 </nav>
 
 
@@ -604,28 +990,37 @@
 
 <section class="hero">
 
+    <div class="hero-orb"></div>
+
     <div class="container">
 
         <div class="hero-content">
 
             <div class="hero-label">
-                <i class="bi bi-box-seam"></i>
-                Sistem Inventaris
+                <i class="bi bi-shield-check"></i>
+                Sistem Inventaris Intracs
             </div>
 
+
             <h1>
-                Informasi Ketersediaan
-                Barang Secara Mudah
+                Kelola Inventaris
+                <span>Lebih Modern.</span>
             </h1>
 
+
             <p>
-                Pantau ketersediaan barang inventaris secara cepat
-                dan terorganisir. Gunakan pencarian untuk menemukan
-                barang yang dibutuhkan.
+                Pantau ketersediaan barang inventaris secara cepat,
+                terorganisir, dan mudah. Cari barang berdasarkan
+                nama atau kode untuk mendapatkan informasi stok.
             </p>
 
-            <a href="#inventaris" class="hero-button">
+
+            <a
+                href="#inventaris"
+                class="hero-button"
+            >
                 Lihat Inventaris
+
                 <i class="bi bi-arrow-down"></i>
             </a>
 
@@ -646,10 +1041,11 @@
 
         <div class="row g-3">
 
-            <div class="col-6 col-lg-3">
+            <div class="col-6 col-lg-3 reveal">
+
                 <div class="stat-card">
 
-                    <div class="stat-icon icon-blue">
+                    <div class="stat-icon">
                         <i class="bi bi-box-seam"></i>
                     </div>
 
@@ -662,10 +1058,12 @@
                     </div>
 
                 </div>
+
             </div>
 
 
-            <div class="col-6 col-lg-3">
+            <div class="col-6 col-lg-3 reveal">
+
                 <div class="stat-card">
 
                     <div class="stat-icon icon-green">
@@ -681,10 +1079,12 @@
                     </div>
 
                 </div>
+
             </div>
 
 
-            <div class="col-6 col-lg-3">
+            <div class="col-6 col-lg-3 reveal">
+
                 <div class="stat-card">
 
                     <div class="stat-icon icon-orange">
@@ -700,10 +1100,12 @@
                     </div>
 
                 </div>
+
             </div>
 
 
-            <div class="col-6 col-lg-3">
+            <div class="col-6 col-lg-3 reveal">
+
                 <div class="stat-card">
 
                     <div class="stat-icon icon-red">
@@ -719,6 +1121,7 @@
                     </div>
 
                 </div>
+
             </div>
 
         </div>
@@ -732,14 +1135,17 @@
      INVENTORY
 ========================= -->
 
-<section class="section" id="inventaris">
+<section
+    class="section"
+    id="inventaris"
+>
 
     <div class="container">
 
-        <div class="section-heading">
+        <div class="section-heading reveal">
 
             <h2>
-                Ketersediaan Inventaris
+                Ketersediaan <span>Inventaris</span>
             </h2>
 
             <p>
@@ -751,7 +1157,7 @@
 
         <!-- SEARCH -->
 
-        <div class="search-card">
+        <div class="search-card reveal">
 
             <form
                 action="{{ route('public.dashboard') }}"
@@ -767,9 +1173,15 @@
                     placeholder="Cari nama barang atau kode barang..."
                 >
 
-                <button type="submit" class="search-btn">
+
+                <button
+                    type="submit"
+                    class="search-btn"
+                >
+
                     <i class="bi bi-search"></i>
                     Cari
+
                 </button>
 
             </form>
@@ -779,7 +1191,7 @@
 
         <!-- TABLE -->
 
-        <div class="inventory-card">
+        <div class="inventory-card reveal">
 
             @if($barang->count())
 
@@ -796,6 +1208,7 @@
 
                     </thead>
 
+
                     <tbody>
 
                         @foreach($barang as $item)
@@ -809,7 +1222,8 @@
                                     </div>
 
                                     <div class="item-code">
-                                        Kode: {{ $item->kode_barang }}
+                                        Kode:
+                                        {{ $item->kode_barang }}
                                     </div>
 
                                 </td>
@@ -844,22 +1258,31 @@
                                     @if($item->stok <= 0)
 
                                         <span class="status status-empty">
+
                                             <span class="status-dot"></span>
+
                                             Habis
+
                                         </span>
 
                                     @elseif($item->stok <= 5)
 
                                         <span class="status status-low">
+
                                             <span class="status-dot"></span>
+
                                             Stok Menipis
+
                                         </span>
 
                                     @else
 
                                         <span class="status status-available">
+
                                             <span class="status-dot"></span>
+
                                             Tersedia
+
                                         </span>
 
                                     @endif
@@ -936,22 +1359,66 @@
 
         </div>
 
+
         <div class="footer-text">
-            Sistem informasi inventaris untuk membantu pemantauan
-            ketersediaan barang secara terorganisir.
+            Sistem informasi inventaris untuk membantu
+            pemantauan ketersediaan barang secara terorganisir.
         </div>
+
 
         <div class="footer-text">
             Cabang Purbaleunyi dan Sekitarnya.
         </div>
 
+
         <div class="footer-text">
-            © {{ date('Y') }} Inventaris Intracs. All rights reserved.
+            © {{ date('Y') }}
+            Inventaris Intracs.
+            All rights reserved.
         </div>
 
     </div>
-
 </footer>
+
+
+<script>
+    /*
+    ==========================================
+    REVEAL ANIMATION
+    ==========================================
+    */
+
+    const revealElements =
+        document.querySelectorAll('.reveal');
+
+    const observer =
+        new IntersectionObserver(
+            (entries) => {
+
+                entries.forEach((entry) => {
+
+                    if (entry.isIntersecting) {
+
+                        entry.target.classList.add('show');
+
+                        observer.unobserve(entry.target);
+                    }
+
+                });
+
+            },
+            {
+                threshold: .12
+            }
+        );
+
+
+    revealElements.forEach((element) => {
+
+        observer.observe(element);
+
+    });
+</script>
 
 
 </body>

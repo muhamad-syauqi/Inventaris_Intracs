@@ -13,6 +13,7 @@ class StokKeluarController extends Controller
     public function index(Request $request)
     {
         $queryBarang = Barang::with('category')
+            ->where('stok', '>', 0)
             ->orderBy('nama_barang');
 
         // Search kode / nama barang
