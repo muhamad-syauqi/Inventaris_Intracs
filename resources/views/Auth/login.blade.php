@@ -602,6 +602,154 @@
                 animation-iteration-count: 1 !important;
             }
         }
+
+        
+    /* =========================================
+        PORTFOLIO WATERMARK
+        ========================================= */
+
+        .portfolio-watermark {
+            position: fixed;
+            z-index: 99999;
+
+            left: 50%;
+            bottom: 18px;
+
+            transform: translateX(-50%);
+
+            display: flex;
+            align-items: center;
+            gap: 9px;
+
+            padding: 7px 12px;
+
+            color: rgba(210, 235, 245, .55);
+            text-decoration: none;
+
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: .4px;
+
+            background: rgba(3, 20, 28, .45);
+
+            border: 1px solid rgba(55, 190, 235, .15);
+            border-radius: 12px;
+
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+
+            box-shadow:
+                0 5px 20px rgba(0, 0, 0, .18);
+
+            transition:
+                .3s ease;
+
+            animation: watermarkIn .9s ease .5s both;
+        }
+
+        .portfolio-watermark img {
+            width: 28px;
+            height: 28px;
+
+            object-fit: contain;
+
+            opacity: .68;
+
+            filter:
+                drop-shadow(
+                    0 0 8px
+                    rgba(45, 200, 245, .35)
+                );
+
+            transition: .3s ease;
+        }
+
+        .portfolio-watermark span {
+            white-space: nowrap;
+        }
+
+        .portfolio-watermark strong {
+            color: #54d4ff;
+            font-weight: 700;
+        }
+
+        /* Hover */
+
+        .portfolio-watermark:hover {
+            color: #ffffff;
+
+            text-decoration: none;
+
+            transform:
+                translateX(-50%)
+                translateY(-3px);
+
+            background: rgba(5, 43, 57, .72);
+
+            border-color:
+                rgba(70, 210, 250, .40);
+
+            box-shadow:
+                0 8px 30px rgba(0, 0, 0, .25),
+                0 0 25px rgba(25, 180, 230, .18);
+        }
+
+        .portfolio-watermark:hover img {
+            opacity: 1;
+
+            transform: scale(1.12);
+
+            filter:
+                drop-shadow(
+                    0 0 14px
+                    rgba(55, 215, 255, .75)
+                );
+        }
+
+        .portfolio-watermark:hover strong {
+            color: #70deff;
+        }
+
+
+        /* Animation */
+
+        @keyframes watermarkIn {
+
+            from {
+                opacity: 0;
+
+                transform:
+                    translateX(-50%)
+                    translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+
+                transform:
+                    translateX(-50%)
+                    translateY(0);
+            }
+        }
+
+
+        /* Mobile */
+
+        @media (max-width: 576px) {
+
+            .portfolio-watermark {
+                bottom: 12px;
+
+                padding: 6px 9px;
+
+                font-size: 10px;
+            }
+
+            .portfolio-watermark img {
+                width: 23px;
+                height: 23px;
+            }
+        }
     </style>
 </head>
 
@@ -721,6 +869,24 @@
         </p>
     </main>
 </div>
+
+    <a
+        href="https://muhamad-syauqi.github.io/My_Portofolio/"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="portfolio-watermark"
+        aria-label="Kunjungi portfolio"
+    >
+        <img
+            src="{{ asset('images/watermark-logo.png') }}"
+            alt="Portfolio"
+        >
+
+        <span>
+            Personal made by
+            <strong>@M.Syauqi</strong>
+        </span>
+    </a>
 
 <script>
     // Show / hide password
