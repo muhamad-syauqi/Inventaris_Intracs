@@ -127,41 +127,59 @@ class BarangController extends Controller
         $barang = Barang::findOrFail($id);
 
         $request->validate([
-            'kode_barang' =>
-                'required|string|max:50|unique:barang,kode_barang,' . $barang->id,
-
-            'nama_barang' =>
-                'required|string|max:255|unique:barang,nama_barang,' . $barang->id,
-
-            'jenis_barang' =>
-                'required|in:New,Repair',
-
-            'kategori_id' =>
-                'required|exists:categories,id',
-
-            'satuan' =>
-                'required|string|max:50',
-        ], [
-            'kode_barang.unique' =>
-                'Kode barang sudah digunakan oleh barang lain.',
-
-            'nama_barang.unique' =>
-                'Nama barang sudah digunakan oleh barang lain.',
+            'kode_barang' => 'required|string|max:100',
+            'nama_barang' => 'required|string|max:255',
+            'jenis_barang' => 'required|in:New,Repair',
+            'kategori_id' => 'required|exists:categories,id',
+            'satuan' => 'required|string|max:50',
+            'stok' => 'required|integer|min:0',
         ]);
 
+        // Cek kode barang berdasarkan jenis + kategori
+        $kodeSudahAda = Barang::where('kode_barang', $request->kode_barang)
+            ->where('jenis_barang', $request->jenis_barang)
+            ->where('kategori_id', $request->kategori_id)
+            ->where('id', '!=', $id)
+            ->exists();
+
+        // Cek nama barang berdasarkan jenis + kategori
+        $namaSudahAda = Barang::where('nama_barang', $request->nama_barang)
+            ->where('jenis_barang', $request->jenis_barang)
+            ->where('kategori_id', $request->kategori_id)
+            ->where('id', '!=', $id)
+            ->exists();
+
+        if ($kodeSudahAda) {
+            return back()
+                ->withErrors([
+                    'kode_barang' => 'Kode barang sudah digunakan untuk jenis dan kategori tersebut.'
+                ])
+                ->withInput();
+        }
+
+        if ($namaSudahAda) {
+            return back()
+                ->withErrors([
+                    'nama_barang' => 'Nama barang sudah digunakan untuk jenis dan kategori tersebut.'
+                ])
+                ->withInput();
+        }
+
+        // Tambahkan stok baru ke stok lama
         $barang->update([
             'kode_barang' => $request->kode_barang,
             'nama_barang' => $request->nama_barang,
             'jenis_barang' => $request->jenis_barang,
             'kategori_id' => $request->kategori_id,
             'satuan' => $request->satuan,
+            'stok' => $request->stok,
         ]);
 
         return redirect()
             ->route('barang.index')
-            ->with('success', 'Data barang berhasil diperbarui.');
+            ->with('success', 'Data barang berhasil diperbarui dan stok berhasil ditambahkan.');
     }
-
+    
     public function destroy($id)
     {
         $barang = Barang::findOrFail($id);
