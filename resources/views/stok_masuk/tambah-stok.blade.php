@@ -154,38 +154,22 @@
                 >
             </div>
 
+           
             <div class="mb-3">
-                <label for="pengambil" class="form-label">
-                    Pengambil
-                    <span class="text danger">*</span>
+                <label for="pengambil" class="form-label">Nama Pengambil
+                    <span class="text-danger">*</span>
                 </label>
-
-                <select
+                <input
+                    type="text"
                     name="pengambil"
                     id="pengambil"
-                    class="form-select"
+                    class="form-control"
+                    value="{{ old('pengambil') }}"
+                    placeholder="Masukkan nama pengambil"
+                    maxlength="150"
                     required
                 >
-                    <option value="">-- Pilih Pengambil --</option>
-
-                    @foreach($teknisi as $item)
-                        <option
-                            value="{{ $item->name }}"
-                            {{ old('pengambil') == $item->name ? 'selected' : '' }}
-                        >
-                            {{ $item->name }}
-                        </option>
-                    @endforeach
-
-                </select>
-
-                @error('pengambil')
-                    <div class="text-danger small mt-1">
-                        {{ $message }}
-                    </div>
-                @enderror
             </div>
-
             <div class="col-12 col-md-6">
                 <label class="form-label">
                     Keterangan
