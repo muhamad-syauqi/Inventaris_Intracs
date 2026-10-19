@@ -109,13 +109,37 @@
                         Pengambil
                     </label>
 
-                    <input
-                        type="text"
+                    @php
+                        $pengambilTerpilih = old('pengambil', $stokMasuk->pengambil);
+                        $daftarPengambil = $teknisi->pluck('name')->push('Teknisi Ruas Cipali');
+                    @endphp
+
+                    <select
                         name="pengambil"
-                        class="form-control"
-                        value="{{ old('pengambil', $stokMasuk->pengambil) }}"
+                        class="form-select @error('pengambil') is-invalid @enderror"
                         required
                     >
+                        <option value="">-- Pilih Pengambil --</option>
+
+                        @foreach($daftarPengambil as $nama)
+                            <option value="{{ $nama }}"
+                                {{ $pengambilTerpilih == $nama ? 'selected' : '' }}>
+                                {{ $nama }}
+                            </option>
+                        @endforeach
+
+                        @if($pengambilTerpilih && !$daftarPengambil->contains($pengambilTerpilih))
+                            <option value="{{ $pengambilTerpilih }}" selected>
+                                {{ $pengambilTerpilih }}
+                            </option>
+                        @endif
+                    </select>
+
+                    @error('pengambil')
+                        <div class="text-danger small mt-1">
+                            {{ $message }}
+                        </div>
+                    @enderror
                 </div>
 
                 <div class="mb-4">

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Barang;
 use App\Models\StokMasuk;
+use App\Models\User;
 use App\Models\StokKeluar;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -66,9 +67,13 @@ class LaporanController extends Controller
 
         $barang = Barang::orderBy('nama_barang')->get();
 
+        $teknisi = User::where('role', 'teknisi')
+            ->orderBy('name')
+            ->get();
+
         return view(
             'admin.riwayat-stok-masuk-edit',
-            compact('stokMasuk', 'barang')
+            compact('stokMasuk', 'barang', 'teknisi')
         );
     }
 

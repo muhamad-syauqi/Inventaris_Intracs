@@ -327,7 +327,7 @@
 
                         <td>
                             <i class="bi bi-person-circle me-1"></i>
-                            {{ $item->user->name ?? '-' }}
+                            {{ $item->pengambil ?? '-' }}
                         </td>
 
                         <td>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Barang;
 use App\Models\StokMasuk;
 use Illuminate\Http\Request;
@@ -13,8 +14,7 @@ class StokMasukController extends Controller
     {
         $barang = Barang::orderBy('nama_barang')->get();
 
-        $teknisi = \App\Models\User::whereIn('role', ['teknisi', 'admin'])
-            ->orderBy('role')
+        $teknisi = User::where('role', 'teknisi')
             ->orderBy('name')
             ->get();
 
@@ -67,4 +67,5 @@ class StokMasukController extends Controller
                 'Stok berhasil ditambahkan.'
             );
     }
+    
 }
