@@ -11,15 +11,19 @@ use Illuminate\Support\Facades\DB;
 class StokMasukController extends Controller
 {
     public function tambahStokPage()
-    {
-        $barang = Barang::orderBy('nama_barang')->get();
+{
+    $barang = Barang::orderBy('nama_barang')->get();
 
-        $teknisi = User::where('role', 'teknisi')
-            ->orderBy('name')
-            ->get();
+    $teknisi = User::whereIn('role', ['teknisi', 'admin'])
+        ->where('email', '!=', 'Suparman@gmail.com')
+        ->orderBy('name')
+        ->get();
 
-        return view('stok_masuk.tambah-stok', compact('barang', 'teknisi'));
-    }
+    return view(
+        'stok_masuk.tambah-stok',
+        compact('barang', 'teknisi')
+    );
+}
 
 
     public function tambahStok(Request $request)
