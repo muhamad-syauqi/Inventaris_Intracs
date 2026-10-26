@@ -216,6 +216,7 @@ class LaporanController extends Controller
             'jumlah' => 'required|integer|min:1',
             'gerbang_tol' => 'required|string|max:100',
             'nomor_gardu' => 'required|string|max:50',
+            'nomor_seri' => 'required|string|max:100',
             'keterangan' => 'nullable|string',
         ]);
 
@@ -252,6 +253,7 @@ class LaporanController extends Controller
                 'jumlah' => $request->jumlah,
                 'gerbang_tol' => $request->gerbang_tol,
                 'nomor_gardu' => $request->nomor_gardu,
+                'nomor_seri' => $request->nomor_seri,
                 'keterangan' => $request->keterangan,
             ]);
         });
@@ -462,6 +464,7 @@ class LaporanController extends Controller
             'Satuan',
             'Gerbang Tol',
             'Nomor Gardu',
+            'Nomor Seri',
             'Keterangan',
             'Dikeluarkan Oleh',
         ];
@@ -528,18 +531,23 @@ class LaporanController extends Controller
 
             $sheet->setCellValue(
                 "K{$row}",
-                $item->keterangan ?? '-'
+                $item->nomor_seri ?? '-'
             );
 
             $sheet->setCellValue(
                 "L{$row}",
+                $item->keterangan ?? '-'
+            );
+
+            $sheet->setCellValue(
+                "M{$row}",
                 $item->user->name ?? '-'
             );
 
             $row++;
         }
 
-        foreach (range('A', 'K') as $column) {
+        foreach (range('A', 'M') as $column) {
             $sheet->getColumnDimension($column)
                 ->setAutoSize(true);
         }
@@ -770,6 +778,7 @@ class LaporanController extends Controller
             'Jumlah',
             'Gerbang Tol',
             'Gardu',
+            'Nomor Seri',
             'Keterangan',
             'Dikeluarkan Oleh',
         ];
@@ -819,6 +828,11 @@ class LaporanController extends Controller
                     $item->nomor_gardu
                         ? 'Gardu ' . $item->nomor_gardu
                         : '-'
+                );
+
+            $table->addCell(1600)
+                ->addText(
+                    $item->nomor_seri ?? '-'
                 );
 
             $table->addCell(1800)

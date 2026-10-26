@@ -17,6 +17,7 @@ class StokKeluar extends Model
         'jumlah',
         'gerbang_tol',
         'nomor_gardu',
+        'nomor_seri',
         'keterangan',
     ];
 

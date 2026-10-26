@@ -78,6 +78,7 @@ class StokKeluarController extends Controller
             'jumlah' => 'required|integer|min:1',
             'gerbang_tol' => 'required|string|max:100',
             'nomor_gardu' => 'required|string|max:50',
+            'nomor_seri' => 'required|string|max:100',
             'keterangan' => 'nullable|string',
         ]);
 
@@ -100,6 +101,7 @@ class StokKeluarController extends Controller
                 'jumlah' => $request->jumlah,
                 'gerbang_tol' => $request->gerbang_tol,
                 'nomor_gardu' => $request->nomor_gardu,
+                'nomor_seri' => $request->nomor_seri,
                 'keterangan' => $request->keterangan,
             ]);
 

@@ -87,6 +87,29 @@
                     @enderror
                 </div>
 
+                
+                {{-- Nomor Seri --}}
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">
+                        Nomor Seri <span class="text-danger">*</span>
+                    </label>
+
+                    <input
+                        type="text"
+                        name="nomor_seri"
+                        class="form-control"
+                        value="{{ old('nomor_seri') }}"
+                        maxlength="100"
+                        placeholder="Masukkan nomor seri barang"
+                        required
+                    >
+
+                    @error('nomor_seri')
+                        <small class="text-danger">{{ $message }}</small>
+                    @enderror
+                </div>
+
+
                 {{-- Gerbang Tol --}}
                 <div class="mb-3">
                     <label class="form-label fw-semibold">

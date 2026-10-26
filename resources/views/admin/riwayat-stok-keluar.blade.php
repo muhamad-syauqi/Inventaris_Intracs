@@ -238,6 +238,7 @@
                         <th>Jumlah</th>
                         <th>Gerbang Tol</th>
                         <th>Nomor Gardu</th>
+                        <th>Nomor Seri</th>
                         <th>Keterangan</th>
                         <th>Dikeluarkan Oleh</th>
                         <th>Aksi</th>
@@ -310,6 +311,10 @@
                             <span class="badge bg-secondary">
                                 Gardu {{ $item->nomor_gardu ?? '-' }}
                             </span>
+                        </td>
+
+                        <td>
+                            {{ $item->nomor_seri ?? '-' }}
                         </td>
 
                         <td>

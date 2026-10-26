@@ -90,6 +90,23 @@
                     >
                 </div>
 
+                
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">
+                        Nomor Seri
+                    </label>
+
+                    <input
+                        type="text"
+                        name="nomor_seri"
+                        class="form-control"
+                        maxlength="100"
+                        value="{{ old('nomor_seri', $stokKeluar->nomor_seri) }}"
+                        required
+                    >
+                </div>
+
+
                 <div class="mb-4">
                     <label class="form-label fw-semibold">
                         Keterangan
